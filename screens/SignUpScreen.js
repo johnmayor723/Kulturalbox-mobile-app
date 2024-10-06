@@ -15,7 +15,7 @@ const SignUpScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../assets/Logo1.png')} // Add your logo image here
+                source={require('../assets/Logo1.jpg')} // Add your logo image here
                 style={styles.logo}
             />
             <Text style={styles.welcomeText}>Join PantryHub</Text>
