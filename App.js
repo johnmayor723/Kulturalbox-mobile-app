@@ -31,11 +31,11 @@ function BottomTabNavigator() {
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ color, size }) => {
                     let iconName;
-                    if (route.name === 'Home') {
+                    if (route.name === 'TabHome') {
                         iconName = 'home';
-                    } else if (route.name === 'Profile') {
+                    } else if (route.name === 'TabProfile') {
                         iconName = 'person';
-                    } else if (route.name === 'Cart') {
+                    } else if (route.name === 'TabCart') {
                         iconName = 'cart';
                     }
                     return <Ionicons name={iconName} size={size} color={color} />;
@@ -43,11 +43,12 @@ function BottomTabNavigator() {
                 tabBarActiveTintColor: '#1E90FF',  // Active icon color
                 tabBarInactiveTintColor: 'gray',   // Inactive icon color
                 tabBarStyle: { backgroundColor: '#fff' },  // Tab bar background color
+                headerShown: false  // Disable the header for the inner tab navigator
             })}
         >
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Profile" component={UserProfileScreen} />
-            <Tab.Screen name="Cart" component={CartScreen} />
+            <Tab.Screen name="TabHome" component={HomeScreen} options={{ title: "Home" }} />
+            <Tab.Screen name="TabProfile" component={UserProfileScreen} options={{ title: "Profile" }} />
+            <Tab.Screen name="TabCart" component={CartScreen} options={{ title: "Cart" }} />
         </Tab.Navigator>
     );
 }
@@ -55,10 +56,22 @@ function BottomTabNavigator() {
 // Drawer Navigator Component
 function DrawerNavigator() {
     return (
-        <Drawer.Navigator initialRouteName="Home">
-            <Drawer.Screen name="Home" component={BottomTabNavigator} />
-            <Drawer.Screen name="Profile" component={UserProfileScreen} />
-            <Drawer.Screen name="Cart" component={CartScreen} />
+        <Drawer.Navigator initialRouteName="DrawerHome">
+            <Drawer.Screen 
+                name="DrawerHome" 
+                component={BottomTabNavigator} 
+                options={{ title: "Home", headerShown: true }}  // Keep header with hamburger menu
+            />
+            <Drawer.Screen 
+                name="DrawerProfile" 
+                component={UserProfileScreen} 
+                options={{ title: "Profile", headerShown: true }}  // Keep header with hamburger menu
+            />
+            <Drawer.Screen 
+                name="DrawerCart" 
+                component={CartScreen} 
+                options={{ title: "Cart", headerShown: true }}  // Keep header with hamburger menu
+            />
         </Drawer.Navigator>
     );
 }
@@ -84,11 +97,11 @@ export default function App() {
                     options={{ headerShown: false }}  // Hides the header
                 />
                 <Stack.Screen
-                    name="Main"  // Changed from "Home" to "Main"
+                    name="MainDrawer"
                     component={DrawerNavigator}
-                    options={{ headerShown: false }}  // Hides the header
+                    options={{ headerShown: false }}  // Disable the header for the main drawer stack
                 />
             </Stack.Navigator>
         </NavigationContainer>
     );
-                            }
+        }
