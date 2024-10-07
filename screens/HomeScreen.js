@@ -5,16 +5,16 @@ import { Ionicons } from '@expo/vector-icons';
 // Dummy categories and products with local images from the assets folder
 const dummyCategories = ['Fruits', 'Vegetables', 'Dairy', 'Bakery', 'Beverages'];
 const dummyProducts = [
-    { id: '1', title: 'Apple', price: '500', image: require('../assets/a1.jpg') },
-    { id: '2', title: 'Banana', price: '200', image: require('../assets/a2.jpg') },
-    { id: '3', title: 'Milk', price: '800', image: require('../assets/a3.jpg') },
-    { id: '4', title: 'Bread', price: '300', image: require('../assets/a4.jpg') },
-    { id: '5', title: 'Orange Juice', price: '1000', image: require('../assets/a5.jpg') },
-    { id: '6', title: 'Carrots', price: '400', image: require('../assets/a6.jpg') },
-    { id: '7', title: 'Yogurt', price: '600', image: require('../assets/a7.jpg') },
-    { id: '8', title: 'Butter', price: '700', image: require('../assets/a8.jpg') },
-    { id: '9', title: 'Grapes', price: '900', image: require('../assets/a9.jpg') },
-    { id: '10', title: 'Soda', price: '150', image: require('../assets/a10.jpg') }
+    { id: '1', title: 'Apple', price: '500', image: require('../assets/a1.jpeg') },
+    { id: '2', title: 'Tomato', price: '200', image: require('../assets/a2.jpeg') },
+    { id: '3', title: 'Pepper', price: '800', image: require('../assets/a3.jpeg') },
+    { id: '4', title: 'Ugu', price: '300', image: require('../assets/a4.jpeg') },
+    { id: '5', title: 'Beef', price: '1000', image: require('../assets/a5.jpeg') },
+    { id: '6', title: 'Onions', price: '400', image: require('../assets/a6.jpeg') },
+    { id: '7', title: 'Ponmo', price: '600', image: require('../assets/a7.jpeg') },
+    { id: '8', title: 'Tete', price: '700', image: require('../assets/a8.jpg') },
+    { id: '9', title: 'beans', price: '900', image: require('../assets/a9.jpg') },
+    { id: '10', title: 'yam', price: '150', image: require('../assets/a10.jpg') }
 ];
 
 const HomeScreen = ({ navigation }) => {
