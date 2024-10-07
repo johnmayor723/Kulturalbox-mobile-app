@@ -23,9 +23,7 @@ const CartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Top Bar */}
-      <View style={styles.topBar}>
-        <Text style={styles.logo}>PantryHub</Text>
-      </View>
+      
       <Text style={styles.title}>Your Cart</Text>
       <FlatList
         data={dummyCart}
