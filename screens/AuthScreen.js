@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#1E90FF', // Blue background
+        backgroundColor: 'white', // Blue background
     },
     logo: {
         width: 120,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     welcomeText: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#FFA500', // Orange text
+        color: '#2D7B30', // green text
         marginBottom: 30,
     },
     form: {
