@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#1E90FF', // Blue background
+        backgroundColor: 'white', // white background
     },
     logo: {
         width: 120,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     welcomeText: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#FFA500', // Orange text
+        color: '#2D7B30', // green text
         marginBottom: 30,
     },
     form: {
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     signupButton: {
-        backgroundColor: '#FFA500', // Orange button
+        backgroundColor: "#2D7B30", // green button
         padding: 15,
         borderRadius: 8,
         alignItems: 'center',
