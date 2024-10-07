@@ -84,11 +84,11 @@ export default function App() {
                     options={{ headerShown: false }}  // Hides the header
                 />
                 <Stack.Screen
-                    name="Home"
+                    name="Main"  // Changed from "Home" to "Main"
                     component={DrawerNavigator}
                     options={{ headerShown: false }}  // Hides the header
                 />
             </Stack.Navigator>
         </NavigationContainer>
     );
-}
+                            }
