@@ -47,7 +47,7 @@ const HomeScreen = () => {
             {/* Hero Section */}
             <View style={styles.heroSection}>
                 <Text style={styles.heroText}>Welcome to PantryHub</Text>
-                <Image source={require('../assets/hero.jpg')} style={styles.heroImage} />
+                <Image source={require('../assets/hero.jpep')} style={styles.heroImage} />
             </View>
 
             {/* Categories Section */}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
     heroImage: {
         width: '100%',
-        height: 200,
+        height: 170,
         borderRadius: 10,
     },
     categoriesContainer: {
