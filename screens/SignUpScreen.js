@@ -7,7 +7,7 @@ const SignupScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleSignup = () => {
-    navigation.navigate('Home'); // Navigate to Home on signup
+    navigation.navigate('Main'); // Navigate to Home on signup
   };
 
   return (
