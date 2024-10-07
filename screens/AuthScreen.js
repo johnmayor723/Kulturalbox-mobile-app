@@ -6,7 +6,7 @@ const AuthScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    navigation.navigate('Home'); // Navigate to Home on login
+    navigation.navigate('Main'); // Navigate to Home on login
   };
 
   return (
