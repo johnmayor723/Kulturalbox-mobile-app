@@ -46,7 +46,7 @@ function BottomTabNavigator() {
             })}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Profile" component={UserProfileScreen} />
             <Tab.Screen name="Cart" component={CartScreen} />
         </Tab.Navigator>
     );
