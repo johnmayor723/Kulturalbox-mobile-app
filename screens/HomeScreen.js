@@ -47,7 +47,7 @@ const HomeScreen = () => {
             {/* Hero Section */}
             <View style={styles.heroSection}>
                 <Text style={styles.heroText}>Welcome to PantryHub</Text>
-                <Image source={require('../assets/hero.jpep')} style={styles.heroImage} />
+                <Image source={require('../assets/hero.jpeg')} style={styles.heroImage} />
             </View>
 
             {/* Categories Section */}
