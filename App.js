@@ -97,7 +97,7 @@ export default function App() {
                     options={{ headerShown: false }}  // Hides the header
                 />
                 <Stack.Screen
-                    name="MainDrawer"
+                    name="Main"
                     component={DrawerNavigator}
                     options={{ headerShown: false }}  // Disable the header for the main drawer stack
                 />
