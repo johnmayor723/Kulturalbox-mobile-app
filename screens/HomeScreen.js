@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       {/* Top bar */}
       <View style={styles.topBar}>
-        <Image source={require('../assets/Logo1.jpg)} style={styles.logo} />
+        <Image source={require('../assets/Logo1.jpg')} style={styles.logo} />
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Ionicons name="menu" size={30} color="#2D7B30" />
         </TouchableOpacity>
