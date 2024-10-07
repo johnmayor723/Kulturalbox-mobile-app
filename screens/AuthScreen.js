@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white', // Blue background
+        backgroundColor: '#fff', // Blue background
     },
     logo: {
         width: 120,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     signupText: {
-        color: '#fff',
+        color: '#2D7B30', //green text
         marginTop: 20,
         fontSize: 16,
     },
