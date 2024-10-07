@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white', // white background
+        backgroundColor: '#fff', // white background
     },
     logo: {
         width: 120,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     loginText: {
-        color: '#fff',
+        color: '#1E90FF', //green text
         marginTop: 20,
         fontSize: 16,
     },
