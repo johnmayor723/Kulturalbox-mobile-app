@@ -42,7 +42,7 @@ const AuthScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       {/* Navigate to Signup */}
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.signupText}>Don't have an account? Sign up here</Text>
       </TouchableOpacity>
     </View>
