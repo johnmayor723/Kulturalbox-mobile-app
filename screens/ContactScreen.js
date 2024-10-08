@@ -1,89 +1,100 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 
 const ContactScreen = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleEnquirySubmit = () => {
+    // Submit form logic here
+    console.log('Enquiry submitted:', { name, email, message });
+  };
+
   return (
-    <View style={styles.container}>
-      {/* Hero Section */}
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.heroSection}>
         <Text style={styles.heroText}>Contact Us</Text>
       </View>
-
-      {/* Contact Information */}
-      <View style={styles.contactInfo}>
-        <Text style={styles.contactTitle}>Get in Touch</Text>
-
-        <View style={styles.contactItem}>
-          <Ionicons name="call" size={24} color="#Ff7e00" />
-          <Text style={styles.contactText}>+1 123 456 7890</Text>
-        </View>
-
-        <View style={styles.contactItem}>
-          <Ionicons name="mail" size={24} color="#Ff7e00" />
-          <Text style={styles.contactText}>info@fooddeck.com</Text>
-        </View>
-
-        <View style={styles.contactItem}>
-          <Ionicons name="location" size={24} color="#Ff7e00" />
-          <Text style={styles.contactText}>123 Food Street, Grocery City</Text>
-        </View>
+      
+      {/* Contact Info Section */}
+      <View style={styles.infoSection}>
+        <Text style={styles.infoText}>Phone: +123456789</Text>
+        <Text style={styles.infoText}>Email: contact@fooddeck.com</Text>
+        <Text style={styles.infoText}>Address: 123 FoodDeck Lane</Text>
       </View>
 
-      {/* Contact Button */}
-      <TouchableOpacity style={styles.contactButton}>
-        <Text style={styles.buttonText}>Send a Message</Text>
-      </TouchableOpacity>
-    </View>
+      {/* Enquiry Section */}
+      <View style={styles.enquirySection}>
+        <Text style={styles.enquiryTitle}>Send us a message</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Your Name"
+          value={name}
+          onChangeText={setName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Your Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Your Message"
+          value={message}
+          onChangeText={setMessage}
+        />
+        <Button title="Submit" onPress={handleEnquirySubmit} />
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    padding: 20,
     backgroundColor: '#fff',
   },
   heroSection: {
     height: 150,
-    backgroundColor: '#Ff7e00',
+    backgroundColor: '#FF7E00',
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
   },
   heroText: {
     fontSize: 24,
     color: '#fff',
     fontWeight: 'bold',
   },
-  contactInfo: {
+  infoSection: {
+    marginBottom: 30,
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#2D7B30',
+    marginBottom: 5,
+  },
+  enquirySection: {
     padding: 20,
+    borderColor: '#FF7E00',
+    borderWidth: 1,
+    borderRadius: 10,
   },
-  contactTitle: {
-    fontSize: 20,
-    color: '#2D7B30',
-    marginBottom: 20,
-    fontWeight: 'bold',
+  enquiryTitle: {
+    fontSize: 18,
+    color: '#FF7E00',
+    marginBottom: 10,
   },
-  contactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  contactText: {
-    fontSize: 16,
-    color: '#2D7B30',
-    marginLeft: 10,
-  },
-  contactButton: {
-    backgroundColor: '#Ff7e00',
-    padding: 15,
-    margin: 20,
-    borderRadius: 25,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  input: {
+    borderWidth: 1,
+    borderColor: '#2D7B30',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: '#F0F0F0',
   },
 });
 
