@@ -31,7 +31,30 @@ const OrderTrackingScreen = () => {
       <View style={styles.enquirySection}>
         <Text style={styles.enquiryTitle}>Have a question? Send us a message</Text>
         {/* Add your enquiry form here */}
+           <View style={styles.enquirySection}>
+        <Text style={styles.enquiryTitle}>Send us a message</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Your Name"
+          value={name}
+          onChangeText={setName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Your Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Your Message"
+          value={message}
+          onChangeText={setMessage}
+        />
+        <Button title="Submit" onPress={handleEnquirySubmit} />
       </View>
+  
+      
     </ScrollView>
   );
 };
