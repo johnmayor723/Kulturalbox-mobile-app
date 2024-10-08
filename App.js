@@ -53,7 +53,7 @@ function BottomTabNavigator() {
               />
              
         </Tab.Navigator>
-        </Tab.Navigator>
+        
     );
 }
 
