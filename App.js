@@ -14,6 +14,9 @@ import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import CartScreen from './screens/CartScreen';
+import ContactUsScreen from './screens/ContactUsScreen';
+import OrderTrackingScreen from './screens/OrderTrackingScreen'; // Import Order Tracking Screen
+
 
 // Stack Navigator
 const Stack = createStackNavigator();
@@ -72,6 +75,8 @@ function DrawerNavigator() {
                 component={CartScreen} 
                 options={{ title: "Cart", headerShown: true }}  // Keep header with hamburger menu
             />
+                <Drawer.Screen name="Contact Us" component={ContactUsScreen} />
+            <Drawer.Screen name="Order Tracking" component={OrderTrackingScreen} /> {/* Add Order Tracking */}
         </Drawer.Navigator>
     );
 }
@@ -101,6 +106,17 @@ export default function App() {
                     component={DrawerNavigator}
                     options={{ headerShown: false }}  // Disable the header for the main drawer stack
                 />
+                <Stack.Screen
+                    name="Contact Us"
+                    component={ContactUsScreen}
+                    options={{ headerShown: false }}  // Disable the header for the main drawer stack
+                />
+                <Stack.Screen
+                    name="Order Tracking"
+                    component={OrderTrackingScreen}
+                    options={{ headerShown: false }}  // Disable the header for the main drawer stack
+                />
+                    
             </Stack.Navigator>
         </NavigationContainer>
     );
