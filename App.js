@@ -67,7 +67,7 @@ function DrawerNavigator() {
              <Drawer.Screen 
                 name="DrawerHome" 
                 component={BottomTabNavigator} 
-                options={{ title: "Menu", headerShown: false }}  // Keep header with hamburger menu
+                options={{ title: "Menu", headerShown: true }}  // Keep header with hamburger menu
             />
             
             
