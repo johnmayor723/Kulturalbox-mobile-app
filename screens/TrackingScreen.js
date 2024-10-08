@@ -55,6 +55,7 @@ const navigation = useNavigation();
         />
         <Button title="Submit" onPress={handleEnquirySubmit} />
       </View>
+      </View>
   
       
     </ScrollView>
