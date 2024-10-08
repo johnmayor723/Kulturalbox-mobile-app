@@ -119,7 +119,7 @@ export default function App() {
                     options={{ headerShown: false }}  // Disable the header for the main drawer stack
                 />
                 <Stack.Screen
-                    name="Order Payment"
+                    name="Payment"
                     component={PaymentScreen}
                     options={{ headerShown: false }}  // Disable the header for the main drawer stack
                 />
