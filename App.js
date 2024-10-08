@@ -15,7 +15,9 @@ import HomeScreen from './screens/HomeScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import CartScreen from './screens/CartScreen';
 import ContactScreen from './screens/ContactScreen';
-import PaymentScreeen from "./screens/PaymentScreeen";
+import PaymentScreeen from "./screens/PaymentScreen";
+import OrderTrackingScreeen from "./screens/OrderTrackingScreen";
+
 
 // Stack Navigator
 const Stack = createStackNavigator();
@@ -81,6 +83,11 @@ function DrawerNavigator() {
                 name="DrawerContact" 
                 component={ContactScreen} 
                 options={{ title: "Contact Us", headerShown: true }}  // Keep header with hamburger menu
+            />
+           <Drawer.Screen 
+                name="DrawerTracking" 
+                component={OrderTrackingScreen} 
+                options={{ title: "Order Tracking", headerShown: true }}  // Keep header with hamburger menu
             />
         </Drawer.Navigator>
     );
