@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 
 
-const OrderTrackingScreen = () => {
+const TrackingScreen = () => {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [orderStatus] = useState('Delivered');  // Hardcoded for now
 const navigation = useNavigation();
