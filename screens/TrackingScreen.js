@@ -26,7 +26,7 @@ const navigation = useNavigation();
           value={trackingNumber}
           onChangeText={setTrackingNumber}
         />
-        <Button title="Track Order" onPress={handleTrackOrder} />
+        <Button title="Track Order" onPress={handleTracking} />
       </View>
 
       {/* Enquiry Section */}
