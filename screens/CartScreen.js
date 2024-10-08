@@ -82,4 +82,5 @@ const styles = StyleSheet.create({
   input: { height: 40, borderColor: '#ccc', borderWidth: 1, marginBottom: 10, paddingLeft: 8, borderRadius: 5 }
 });
 
+// Ensure this is at the very end of the file.
 export default CartScreen;
