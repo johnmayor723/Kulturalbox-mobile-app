@@ -14,7 +14,7 @@ import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import CartScreen from './screens/CartScreen';
-import ContactUsScreen from './screens/ContactScreen';
+import ContactScreen from './screens/ContactScreen';
 import OrderTrackingScreen from './screens/OrderTrackingScreen'; // Import Order Tracking Screen
 import PaymentScreen from './screens/PaymentScreen';  // Import Payment Screen
 
@@ -79,7 +79,7 @@ function DrawerNavigator() {
             />
             <Drawer.Screen
                  name="Contact"
-                 component={ContactUsScreen}
+                 component={ContactScreen}
                  options={{ title: "Contact Us", headerShown: true }}  // Keep header with hamburger menu
             />
             <Drawer.Screen 
