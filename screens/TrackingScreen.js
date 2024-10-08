@@ -9,7 +9,7 @@ const OrderTrackingScreen = () => {
 const navigation = useNavigation();
   const handleTracking = () => {
     // Navigate to Tracking Results screen without validation
-    navigation.navigate('Tracking Results');
+    navigation.navigate('Tracking Result');
   };
 
   return (
