@@ -6,13 +6,13 @@ const CartScreen = ({ navigation }) => {
     { id: 1, name: 'Apples', price: 2.99, quantity: 2 },
     { id: 2, name: 'Bananas', price: 1.99, quantity: 5 }
   ]);
-  const ContactScreen = () => {
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const handleEnquirySubmit = () => {
     
-  }
+  
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
   const handleCheckout = () => {
