@@ -46,7 +46,7 @@ const HomeScreen = () => {
         <View style={styles.container}>
             {/* Hero Section */}
             <View style={styles.heroSection}>
-                <Text style={styles.heroText}>Welcome to FoodDeck</Text>
+        
                 <Image source={require('../assets/hero.jpeg')} style={styles.heroImage} />
             </View>
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
     heroImage: {
         width: '100%',
-        height: 170,
+        height: 150,
         borderRadius: 10,
     },
     categoriesContainer: {
