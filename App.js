@@ -64,11 +64,17 @@ function BottomTabNavigator() {
 function DrawerNavigator() {
     return (
         <Drawer.Navigator initialRouteName="DrawerHome">
+             <Drawer.Screen 
+                name="Menu" 
+                component={BottomTabNavigator} 
+                options={{ title: "Menu", headerShown: false }}  // Keep header with hamburger menu
+            />
             <Drawer.Screen 
                 name="DrawerHome" 
-                component={BottomTabNavigator} 
-                options={{ title: "Home", headerShown: true }}  // Keep header with hamburger menu
+                component={HomeScreen} 
+                options={{ title: "Home", headerShown: false }}  // Keep header with hamburger menu
             />
+            
             <Drawer.Screen 
                 name="DrawerProfile" 
                 component={UserProfileScreen} 
@@ -89,6 +95,7 @@ function DrawerNavigator() {
                 component={OrderTrackingScreen} 
                 options={{ title: "Order Tracking", headerShown: true }}  // Keep header with hamburger menu
             />
+            
         </Drawer.Navigator>
     );
 }
