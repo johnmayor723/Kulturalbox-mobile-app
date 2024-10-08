@@ -40,7 +40,7 @@ function BottomTabNavigator() {
                     }
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: 'green',  // Active icon color
+                tabBarActiveTintColor: '#FF7E00',  // Active icon color
                 tabBarInactiveTintColor: 'gray',   // Inactive icon color
                 tabBarStyle: { backgroundColor: '#fff' },  // Tab bar background color
                 headerShown: false  // Disable the header for the inner tab navigator
@@ -60,7 +60,7 @@ function DrawerNavigator() {
             <Drawer.Screen 
                 name="DrawerHome" 
                 component={BottomTabNavigator} 
-                options={{ title: "Home", headerShown: false }}  // Keep header with hamburger menu
+                options={{ title: "Home", headerShown: true }}  // Keep header with hamburger menu
             />
             <Drawer.Screen 
                 name="DrawerProfile" 
