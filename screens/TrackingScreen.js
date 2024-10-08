@@ -6,11 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 const TrackingScreen = () => {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [orderStatus] = useState('Delivered');  // Hardcoded for now
-  const ContactScreen = () => {
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-};
 const navigation = useNavigation();
   const handleTracking = () => {
     // Navigate to Tracking Results screen without validation
