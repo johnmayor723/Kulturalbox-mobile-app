@@ -6,25 +6,28 @@ const CartScreen = ({ navigation }) => {
     { id: 1, name: 'Apples', price: 2.99, quantity: 2 },
     { id: 2, name: 'Bananas', price: 1.99, quantity: 5 }
   ]);
-  
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+
   const handleEnquirySubmit = () => {
-    
-  
+    // Here you can handle the form submission, like sending the data to the backend or showing an alert
+    console.log('Enquiry Submitted:', { name, email, message });
+  };
+
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  
+
   const handleCheckout = () => {
     navigation.navigate('Payment');
   };
-  
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.heroSection}>
         <Text style={styles.heroText}>Your Cart</Text>
       </View>
-      
+
       <View style={styles.cartItemsSection}>
         {cartItems.map(item => (
           <View key={item.id} style={styles.cartItem}>
@@ -42,9 +45,6 @@ const CartScreen = ({ navigation }) => {
       {/* Enquiry Section */}
       <View style={styles.enquirySection}>
         <Text style={styles.enquiryTitle}>Have a question? Send us a message</Text>
-        {/* Add your form here like in the contact screen */}
-       <View style={styles.enquirySection}>
-        <Text style={styles.enquiryTitle}>Send us a message</Text>
         <TextInput
           style={styles.input}
           placeholder="Your Name"
@@ -65,10 +65,7 @@ const CartScreen = ({ navigation }) => {
         />
         <Button title="Submit" onPress={handleEnquirySubmit} />
       </View>
-      </View>
     </ScrollView>
-    
-  
   );
 };
 
@@ -80,8 +77,9 @@ const styles = StyleSheet.create({
   cartItem: { flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, borderColor: '#ccc' },
   totalSection: { padding: 20 },
   totalText: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
-  enquirySection: { padding: 20, borderColor: '#FF7E00', borderWidth: 1, borderRadius: 10 },
-  enquiryTitle: { fontSize: 18, color: '#FF7E00', marginBottom: 10 }
+  enquirySection: { padding: 20, borderColor: '#FF7E00', borderWidth: 1, borderRadius: 10, marginTop: 20 },
+  enquiryTitle: { fontSize: 18, color: '#FF7E00', marginBottom: 10 },
+  input: { height: 40, borderColor: '#ccc', borderWidth: 1, marginBottom: 10, paddingLeft: 8, borderRadius: 5 }
 });
 
 export default CartScreen;
