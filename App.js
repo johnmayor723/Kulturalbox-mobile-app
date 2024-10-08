@@ -16,6 +16,8 @@ import UserProfileScreen from './screens/UserProfileScreen';
 import CartScreen from './screens/CartScreen';
 import ContactUsScreen from './screens/ContactUsScreen';
 import OrderTrackingScreen from './screens/OrderTrackingScreen'; // Import Order Tracking Screen
+import PaymentScreen from './screens/PaymentScreen';  // Import Payment Screen
+
 
 
 // Stack Navigator
@@ -114,6 +116,11 @@ export default function App() {
                 <Stack.Screen
                     name="Order Tracking"
                     component={OrderTrackingScreen}
+                    options={{ headerShown: false }}  // Disable the header for the main drawer stack
+                />
+                <Stack.Screen
+                    name="Order Payment"
+                    component={PaymentScreen}
                     options={{ headerShown: false }}  // Disable the header for the main drawer stack
                 />
                     
