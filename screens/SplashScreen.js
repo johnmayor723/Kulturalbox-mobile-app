@@ -31,14 +31,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff', // Customize the background color
     },
     logo: {
-        width: 400,
-        height: 400,
+        width: 250,
+        height: 250,
         marginBottom: 20,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: 'green', // Customize the text color
+        color: '#FF7E00', // Customize the text color
     },
 });
 
