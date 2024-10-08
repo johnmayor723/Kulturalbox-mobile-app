@@ -1,111 +1,57 @@
-// CartScreen.js
-
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
+import { View, Text, Button, StyleSheet, ScrollView } from 'react-native';
 
 const CartScreen = ({ navigation }) => {
-  // Example cart items
-  const [cartItems, setCartItems] = useState([
-    { id: '1', name: 'Organic Apples', quantity: 2, price: 4.99 },
-    { id: '2', name: 'Bananas', quantity: 3, price: 2.99 },
+  const [cartItems] = useState([
+    { id: 1, name: 'Apples', price: 2.99, quantity: 2 },
+    { id: 2, name: 'Bananas', price: 1.99, quantity: 5 }
   ]);
-
-  // Calculate the total amount
-  const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-  // Handle payment navigation
-  const handlePayment = () => {
-    navigation.navigate('Payment');  // Navigate to Payment Screen
+  
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  
+  const handleCheckout = () => {
+    navigation.navigate('Payment');
   };
-
+  
   return (
-    <View style={styles.container}>
-      {/* Hero Section */}
-      <View style={styles.hero}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.heroSection}>
         <Text style={styles.heroText}>Your Cart</Text>
       </View>
-
-      {/* Cart Items */}
-      <View style={styles.cartItemsContainer}>
-        <FlatList
-          data={cartItems}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.cartItem}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemQuantity}>Qty: {item.quantity}</Text>
-              <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
-            </View>
-          )}
-        />
-        {/* Total Amount */}
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
-        </View>
-
-        {/* Payment Button */}
-        <View style={styles.paymentButtonContainer}>
-          <Button
-            title="Proceed to Payment"
-            onPress={handlePayment}
-            color="#Ff7e00" // Amber-orange button color
-          />
-        </View>
+      
+      <View style={styles.cartItemsSection}>
+        {cartItems.map(item => (
+          <View key={item.id} style={styles.cartItem}>
+            <Text>{item.name} x{item.quantity}</Text>
+            <Text>${(item.price * item.quantity).toFixed(2)}</Text>
+          </View>
+        ))}
       </View>
-    </View>
+
+      <View style={styles.totalSection}>
+        <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
+        <Button title="Proceed to Payment" onPress={handleCheckout} />
+      </View>
+
+      {/* Enquiry Section */}
+      <View style={styles.enquirySection}>
+        <Text style={styles.enquiryTitle}>Have a question? Send us a message</Text>
+        {/* Add your form here like in the contact screen */}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  hero: {
-    height: 150,
-    backgroundColor: '#Ff7e00',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  heroText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  cartItemsContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-  },
-  cartItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  itemName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  itemQuantity: {
-    fontSize: 16,
-  },
-  itemPrice: {
-    fontSize: 16,
-  },
-  totalContainer: {
-    marginTop: 20,
-    borderTopWidth: 1,
-    borderColor: '#ccc',
-    paddingTop: 10,
-  },
-  totalText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2D7B30',
-    textAlign: 'right',
-  },
-  paymentButtonContainer: {
-    marginTop: 20,
-  },
+  container: { flexGrow: 1, padding: 20, backgroundColor: '#fff' },
+  heroSection: { height: 150, backgroundColor: '#FF7E00', justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+  heroText: { fontSize: 24, color: '#fff', fontWeight: 'bold' },
+  cartItemsSection: { marginBottom: 20 },
+  cartItem: { flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, borderColor: '#ccc' },
+  totalSection: { padding: 20 },
+  totalText: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+  enquirySection: { padding: 20, borderColor: '#FF7E00', borderWidth: 1, borderRadius: 10 },
+  enquiryTitle: { fontSize: 18, color: '#FF7E00', marginBottom: 10 }
 });
 
 export default CartScreen;
