@@ -14,11 +14,7 @@ import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import CartScreen from './screens/CartScreen';
-import ContactScreen from './screens/ContactScreen';
-import OrderTrackingScreen from './screens/OrderTrackingScreen'; // Import Order Tracking Screen
-import PaymentScreen from './screens/PaymentScreen';  // Import Payment Screen
-
-
+import ContactScreen from './screens/ContactScreen'
 
 // Stack Navigator
 const Stack = createStackNavigator();
@@ -53,7 +49,10 @@ function BottomTabNavigator() {
         >
             <Tab.Screen name="TabHome" component={HomeScreen} options={{ title: "Home" }} />
             <Tab.Screen name="TabProfile" component={UserProfileScreen} options={{ title: "Profile" }} />
-            <Tab.Screen name="TabCart" component={CartScreen} options={{ title: "Cart" }} />
+            <Tab.Screen name="TabCart" component={CartScreen} options={{ title: "Cart" }} 
+              />
+             
+        </Tab.Navigator>
         </Tab.Navigator>
     );
 }
@@ -77,16 +76,11 @@ function DrawerNavigator() {
                 component={CartScreen} 
                 options={{ title: "Cart", headerShown: true }}  // Keep header with hamburger menu
             />
-            <Drawer.Screen
-                 name="Contact"
-                 component={ContactScreen}
-                 options={{ title: "Contact Us", headerShown: true }}  // Keep header with hamburger menu
+             <Drawer.Screen 
+                name="DrawerContact" 
+                component={ContactScreen} 
+                options={{ title: "Contact Us", headerShown: true }}  // Keep header with hamburger menu
             />
-            <Drawer.Screen 
-                 name="Tracking" 
-                 component={OrderTrackingScreen}
-                 options={{ title: "Order Tracking", headerShown: true }}  // Keep header with hamburger menu
-            /> {/* Add Order Tracking */}
         </Drawer.Navigator>
     );
 }
@@ -116,14 +110,6 @@ export default function App() {
                     component={DrawerNavigator}
                     options={{ headerShown: false }}  // Disable the header for the main drawer stack
                 />
-                
-
-                <Stack.Screen
-                    name="Payment"
-                    component={PaymentScreen}
-                    options={{ headerShown: false }}  // Disable the header for the main drawer stack
-                />
-                    
             </Stack.Navigator>
         </NavigationContainer>
     );
