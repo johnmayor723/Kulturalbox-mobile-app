@@ -18,6 +18,8 @@ import ContactScreen from './screens/ContactScreen';
 import PaymentScreen from "./screens/PaymentScreen";
 import OrderTrackingScreen from "./screens/OrderTrackingScreen";
 
+import TrackingScreen from "./screens/TrackingScreen";
+
 
 // Stack Navigator
 const Stack = createStackNavigator();
@@ -88,8 +90,8 @@ function DrawerNavigator() {
             />
            <Drawer.Screen 
                 name="DrawerTracking" 
-                component={OrderTrackingScreen} 
-                options={{ title: "Order Tracking", headerShown: true }}  // Keep header with hamburger menu
+                component={TrackingScreen} 
+                options={{ title: "Tracking", headerShown: true }}  // Keep header with hamburger menu
             />
             
         </Drawer.Navigator>
@@ -119,6 +121,11 @@ export default function App() {
                  <Stack.Screen
                     name="Payment"
                     component={PaymentScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Tracking Result"
+                    component={OrderTrackingScreen}
                     options={{ headerShown:true }}  // Hides the header
                 />
                 <Stack.Screen
