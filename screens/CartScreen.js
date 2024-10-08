@@ -60,8 +60,8 @@ const CartScreen = ({ navigation }) => {
         <Button title="Submit" onPress={handleEnquirySubmit} />
       </View>
     </ScrollView>
-      </View>
-    </ScrollView>
+    
+  
   );
 };
 
