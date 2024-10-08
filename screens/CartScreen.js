@@ -37,7 +37,7 @@ const CartScreen = ({ navigation }) => {
       <View style={styles.enquirySection}>
         <Text style={styles.enquiryTitle}>Have a question? Send us a message</Text>
         {/* Add your form here like in the contact screen */}
-    <View style={styles.enquirySection}>
+       <View style={styles.enquirySection}>
         <Text style={styles.enquiryTitle}>Send us a message</Text>
         <TextInput
           style={styles.input}
@@ -58,6 +58,7 @@ const CartScreen = ({ navigation }) => {
           onChangeText={setMessage}
         />
         <Button title="Submit" onPress={handleEnquirySubmit} />
+      </View>
       </View>
     </ScrollView>
     
