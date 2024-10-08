@@ -16,7 +16,7 @@ const SignupScreen = ({ navigation }) => {
       <Image source={require('../assets/Logo1.png')} style={styles.logo} />
 
       {/* Welcome text */}
-      <Text style={styles.welcomeText}>Join PantryHub</Text>
+      <Text style={styles.welcomeText}>Join FoodDeck</Text>
 
       {/* Name Input */}
       <TextInput
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     color: '#2D7B30',
   },
   button: {
-    backgroundColor: '#2D7B30',
+    backgroundColor: '#FF7E00',
     padding: 15,
     borderRadius: 25,
     width: '100%',
