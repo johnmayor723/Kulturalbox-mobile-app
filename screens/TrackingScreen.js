@@ -6,6 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 const TrackingScreen = () => {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [orderStatus] = useState('Delivered');  // Hardcoded for now
+  const ContactScreen = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+};
 const navigation = useNavigation();
   const handleTracking = () => {
     // Navigate to Tracking Results screen without validation
@@ -53,7 +58,7 @@ const navigation = useNavigation();
           value={message}
           onChangeText={setMessage}
         />
-        <Button title="Submit" onPress={handleEnquirySubmit} />
+        <Button title="Submit" onPress={} />
       </View>
       </View>
   
