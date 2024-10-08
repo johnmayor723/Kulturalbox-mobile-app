@@ -65,15 +65,11 @@ function DrawerNavigator() {
     return (
         <Drawer.Navigator initialRouteName="DrawerHome">
              <Drawer.Screen 
-                name="Menu" 
+                name="DrawerHome" 
                 component={BottomTabNavigator} 
                 options={{ title: "Menu", headerShown: false }}  // Keep header with hamburger menu
             />
-            <Drawer.Screen 
-                name="DrawerHome" 
-                component={HomeScreen} 
-                options={{ title: "Home", headerShown: false }}  // Keep header with hamburger menu
-            />
+            
             
             <Drawer.Screen 
                 name="DrawerProfile" 
