@@ -15,7 +15,7 @@ import HomeScreen from './screens/HomeScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import CartScreen from './screens/CartScreen';
 import ContactScreen from './screens/ContactScreen';
-import PaymentScreeen from "./screens.PaymentScreeen";
+import PaymentScreeen from "./screens/PaymentScreeen";
 
 // Stack Navigator
 const Stack = createStackNavigator();
