@@ -1,57 +1,39 @@
-// CartScreen.js
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
-
-const CartScreen = ({ navigation }) => {
-  // Example cart items
-  const [cartItems, setCartItems] = useState([
-    { id: '1', name: 'Organic Apples', quantity: 2, price: 4.99 },
-    { id: '2', name: 'Bananas', quantity: 3, price: 2.99 },
-  ]);
-
-  // Calculate the total amount
-  const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-  // Handle payment navigation
-  const handlePayment = () => {
-    navigation.navigate('Payment');  // Navigate to Payment Screen
-  };
-
+const ContactScreen = () => {
   return (
     <View style={styles.container}>
       {/* Hero Section */}
-      <View style={styles.hero}>
-        <Text style={styles.heroText}>Your Cart</Text>
+      <View style={styles.heroSection}>
+        <Text style={styles.heroText}>Contact Us</Text>
       </View>
 
-      {/* Cart Items */}
-      <View style={styles.cartItemsContainer}>
-        <FlatList
-          data={cartItems}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.cartItem}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemQuantity}>Qty: {item.quantity}</Text>
-              <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
-            </View>
-          )}
-        />
-        {/* Total Amount */}
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
+      {/* Contact Information */}
+      <View style={styles.contactInfo}>
+        <Text style={styles.contactTitle}>Get in Touch</Text>
+
+        <View style={styles.contactItem}>
+          <Ionicons name="call" size={24} color="#Ff7e00" />
+          <Text style={styles.contactText}>+1 123 456 7890</Text>
         </View>
 
-        {/* Payment Button */}
-        <View style={styles.paymentButtonContainer}>
-          <Button
-            title="Proceed to Payment"
-            onPress={handlePayment}
-            color="#Ff7e00" // Amber-orange button color
-          />
+        <View style={styles.contactItem}>
+          <Ionicons name="mail" size={24} color="#Ff7e00" />
+          <Text style={styles.contactText}>info@fooddeck.com</Text>
+        </View>
+
+        <View style={styles.contactItem}>
+          <Ionicons name="location" size={24} color="#Ff7e00" />
+          <Text style={styles.contactText}>123 Food Street, Grocery City</Text>
         </View>
       </View>
+
+      {/* Contact Button */}
+      <TouchableOpacity style={styles.contactButton}>
+        <Text style={styles.buttonText}>Send a Message</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -61,51 +43,48 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  hero: {
+  heroSection: {
     height: 150,
     backgroundColor: '#Ff7e00',
     justifyContent: 'center',
     alignItems: 'center',
   },
   heroText: {
-    color: '#fff',
     fontSize: 24,
+    color: '#fff',
     fontWeight: 'bold',
   },
-  cartItemsContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 20,
+  contactInfo: {
+    padding: 20,
   },
-  cartItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  itemName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  itemQuantity: {
-    fontSize: 16,
-  },
-  itemPrice: {
-    fontSize: 16,
-  },
-  totalContainer: {
-    marginTop: 20,
-    borderTopWidth: 1,
-    borderColor: '#ccc',
-    paddingTop: 10,
-  },
-  totalText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  contactTitle: {
+    fontSize: 20,
     color: '#2D7B30',
-    textAlign: 'right',
+    marginBottom: 20,
+    fontWeight: 'bold',
   },
-  paymentButtonContainer: {
-    marginTop: 20,
+  contactItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  contactText: {
+    fontSize: 16,
+    color: '#2D7B30',
+    marginLeft: 10,
+  },
+  contactButton: {
+    backgroundColor: '#Ff7e00',
+    padding: 15,
+    margin: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
-export default CartScreen;
+export default ContactScreen;
