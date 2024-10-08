@@ -16,7 +16,10 @@ const navigation = useNavigation();
     // Navigate to Tracking Results screen without validation
     navigation.navigate('Tracking Result');
   };
-
+const handleEnquirySubmit = () => {
+    // Here you can handle the form submission, like sending the data to the backend or showing an alert
+    console.log('Enquiry Submitted:', { name, email, message });
+  };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.heroSection}>
@@ -58,7 +61,7 @@ const navigation = useNavigation();
           value={message}
           onChangeText={setMessage}
         />
-        <Button title="Submit" onPress={} />
+        <Button title="Submit" onPress={handleEnquirySubmit} />
       </View>
       </View>
   
