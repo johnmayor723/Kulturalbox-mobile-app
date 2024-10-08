@@ -1,4 +1,4 @@
-// screens/SplashScreen.js
+⁸// screens/SplashScreen.js
 
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
@@ -31,14 +31,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff', // Customize the background color
     },
     logo: {
-        width: 150,
-        height: 150,
+        width: 400,
+        height: 400,
         marginBottom: 20,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#000', // Customize the text color
+        color: 'green', // Customize the text color
     },
 });
 
