@@ -1,4 +1,4 @@
-// App.js
+//App.js
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,7 +14,8 @@ import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import CartScreen from './screens/CartScreen';
-import ContactScreen from './screens/ContactScreen'
+import ContactScreen from './screens/ContactScreen';
+import PaymentScreeen from "./screens.PaymentScreeen";
 
 // Stack Navigator
 const Stack = createStackNavigator();
@@ -53,7 +54,7 @@ function BottomTabNavigator() {
               />
              
         </Tab.Navigator>
-        
+        </Tab.Navigator>
     );
 }
 
@@ -104,6 +105,11 @@ export default function App() {
                     name="SignUp"
                     component={SignUpScreen}
                     options={{ headerShown: false }}  // Hides the header
+                />
+                 <Stack.Screen
+                    name="Payment"
+                    component={PaymentScreen}
+                    options={{ headerShown:true }}  // Hides the header
                 />
                 <Stack.Screen
                     name="Main"
