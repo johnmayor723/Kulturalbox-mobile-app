@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 
 const OrderTrackingScreen = () => {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [orderStatus] = useState('Delivered');  // Hardcoded for now
-
-  const handleTrackOrder = () => {
-    console.log('Tracking Number:', trackingNumber);
-    // Navigate to a detailed order status page
+const navigation = useNavigation();
+  const handleTracking = () => {
+    // Navigate to Tracking Results screen without validation
+    navigation.navigate('Tracking Results');
   };
 
   return (
