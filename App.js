@@ -17,7 +17,7 @@ import CartScreen from './screens/CartScreen';
 import ContactScreen from './screens/ContactScreen';
 import PaymentScreen from "./screens/PaymentScreen";
 import OrderTrackingScreen from "./screens/OrderTrackingScreen";
-
+import HelpScreen from "./screens/HelpScreen";
 import TrackingScreen from "./screens/TrackingScreen";
 import ItemScreen from "./screens/ItemScreen.js";
 
@@ -86,8 +86,8 @@ function DrawerNavigator() {
             />
              <Drawer.Screen 
                 name="DrawerContact" 
-                component={ContactScreen} 
-                options={{ title: "Contact Us", headerShown: true }}  // Keep header with hamburger menu
+                component={HelpScreen} 
+                options={{ title: "Help", headerShown: true }}  // Keep header with hamburger menu
             />
            <Drawer.Screen 
                 name="DrawerTracking" 
