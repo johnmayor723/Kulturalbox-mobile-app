@@ -1,134 +1,162 @@
-// OrderTrackingScreen.js
-
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons'; // Using FontAwesome icons
 
 const OrderTrackingScreen = () => {
-  // Simulate order status for now (later fetched from API)
-  const [orderStatus, setOrderStatus] = useState('Delivered');
-  const [orderDetails, setOrderDetails] = useState({
-    id: '12345',
-    items: [
-      { id: '1', name: 'Organic Apples', quantity: 3, price: 4.99 },
-      { id: '2', name: 'Bananas', quantity: 2, price: 2.99 },
-    ],
-    total: 15.95,
-  });
+  const [status] = useState('Shipped'); // Change this value to 'Processing', 'Shipped', or 'Delivered' to test different status visuals
 
-  // Status levels (e.g., Pending, Shipped, Delivered)
-  const statusSteps = ['Pending', 'Shipped', 'Delivered'];
+  // Dummy product data
+  const products = [
+    { id: 1, image: require('../assets/a1.jpeg'), name: 'Product 1', price: '$10' },
+    { id: 2, image: require('../assets/a2.jpeg'), name: 'Product 2', price: '$15' },
+    { id: 3, image: require('../assets/a3.jpeg'), name: 'Product 3', price: '$20' },
+    { id: 4, image: require('../assets/a4.jpeg'), name: 'Product 4', price: '$25' },
+    { id: 5, image: require('../assets/a5.jpeg'), name: 'Product 5', price: '$30' },
+    { id: 6, image: require('../assets/a6.jpeg'), name: 'Product 6', price: '$35' },
+    { id: 7, image: require('../assets/a7.jpeg'), name: 'Product 7', price: '$40' },
+    { id: 8, image: require('../assets/a8.jpg'), name: 'Product 8', price: '$45' },
+    { id: 9, image: require('../assets/a9.jpg'), name: 'Product 9', price: '$50' },
+    { id: 10, image: require('../assets/a10.jpg'), name: 'Product 10', price: '$55' },
+  ];
+
+  // Define colors for status steps based on tracking status
+  const getCircleColor = (step) => {
+    if (status === 'Delivered') return '#4CAF50'; // All green
+    if (status === 'Shipped' && step < 3) return '#4CAF50'; // First two green, last one orange
+    if (status === 'Processing' && step < 2) return '#4CAF50'; // Only first green, others orange
+    return '#FF7E00'; // Amber orange
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Hero Section */}
-      <View style={styles.hero}>
-        <Text style={styles.heroText}>Order Tracking</Text>
-      </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Tracking Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Tracking Details</Text>
 
-      {/* Activity Status Bar */}
-      <View style={styles.statusBar}>
-        {statusSteps.map((status, index) => (
-          <View key={index} style={styles.statusStep}>
-            <Ionicons
-              name={status === orderStatus ? 'checkmark-circle' : 'ellipse'}
-              size={32}
-              color={status === orderStatus ? '#2D7B30' : '#999'}
-            />
-            <Text
-              style={[
-                styles.statusText,
-                { color: status === orderStatus ? '#2D7B30' : '#999' },
-              ]}
-            >
-              {status}
-            </Text>
+        {/* Status Indicator */}
+        <View style={styles.statusContainer}>
+          <View style={styles.statusItem}>
+            <FontAwesome name="hourglass-start" size={24} color={getCircleColor(1)} />
+            <View style={[styles.circle, { backgroundColor: getCircleColor(1) }]} />
+            <Text style={styles.statusText}>Processing</Text>
           </View>
-        ))}
+          <View style={[styles.pipe, { backgroundColor: getCircleColor(1) }]} />
+          <View style={styles.statusItem}>
+            <FontAwesome name="truck" size={24} color={getCircleColor(2)} />
+            <View style={[styles.circle, { backgroundColor: getCircleColor(2) }]} />
+            <Text style={styles.statusText}>Shipped</Text>
+          </View>
+          <View style={[styles.pipe, { backgroundColor: getCircleColor(2) }]} />
+          <View style={styles.statusItem}>
+            <FontAwesome name="check-circle" size={24} color={getCircleColor(3)} />
+            <View style={[styles.circle, { backgroundColor: getCircleColor(3) }]} />
+            <Text style={styles.statusText}>Delivered</Text>
+          </View>
+        </View>
+
+        {/* Order Details Section */}
+        <View style={styles.orderDetails}>
+          <Text style={styles.orderDetailHeader}>Order Details</Text>
+          <Text style={styles.orderDetailText}>Order Number: 123456789</Text>
+          <Text style={styles.orderDetailText}>Order Date: 01-10-2024</Text>
+          <Text style={styles.orderDetailText}>Total Amount: $100.00</Text>
+        </View>
       </View>
 
-      {/* Order Details */}
-      <View style={styles.orderDetailsContainer}>
-        <Text style={styles.detailsTitle}>Order Details</Text>
-        <Text style={styles.detailsText}>Order ID: {orderDetails.id}</Text>
-        <FlatList
-          data={orderDetails.items}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.orderItem}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemQuantity}>Qty: {item.quantity}</Text>
-              <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+      {/* Products Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Products You Might Like</Text>
+        <View style={styles.productGrid}>
+          {products.map((product) => (
+            <View key={product.id} style={styles.productItem}>
+              <Image source={product.image} style={styles.productImage} />
+              <Text style={styles.productName}>{product.name}</Text>
+              <Text style={styles.productPrice}>{product.price}</Text>
             </View>
-          )}
-        />
-        <Text style={styles.total}>Total: ${orderDetails.total.toFixed(2)}</Text>
+          ))}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flexGrow: 1,
+    backgroundColor: '#D3D3D3', // Light grey background
+    paddingVertical: 20,
   },
-  hero: {
-    height: 150,
-    backgroundColor: '#Ff7e00',
-    justifyContent: 'center',
-    alignItems: 'center',
+  section: {
+    backgroundColor: '#fff', // White background for sections
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
   },
-  heroText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  statusBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 20,
-  },
-  statusStep: {
-    alignItems: 'center',
-  },
-  statusText: {
-    marginTop: 5,
-    fontSize: 16,
-  },
-  orderDetailsContainer: {
-    paddingHorizontal: 16,
-  },
-  detailsTitle: {
+  sectionHeader: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#2D7B30',
   },
-  detailsText: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  orderItem: {
+  statusContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 20,
   },
-  itemName: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  statusItem: {
+    alignItems: 'center',
   },
-  itemQuantity: {
-    fontSize: 16,
+  circle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
-  itemPrice: {
-    fontSize: 16,
+  pipe: {
+    width: 50,
+    height: 5,
+    backgroundColor: '#FF7E00', // Default to orange
   },
-  total: {
+  statusText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#333',
+  },
+  orderDetails: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#F5F5F5', // Light background for order details
+    borderRadius: 8,
+  },
+  orderDetailHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 10,
-    color: '#2D7B30',
+    marginBottom: 5,
+  },
+  orderDetailText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  productGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  productItem: {
+    width: '30%',
+    marginBottom: 20,
+  },
+  productImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 10,
+  },
+  productName: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  productPrice: {
+    fontSize: 12,
+    color: '#FF7E00',
   },
 });
 
