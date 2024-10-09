@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 
 //const navigation = useNavigation();
 
-const HelpSectionScreen = ({ navigation }) => {
+const HelpScreen = ({ navigation }) => {
   // Sample FAQs data
   const faqs = [
     { question: 'How do I create an account?', answer: 'To create an account, go to the registration page...' },
@@ -116,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HelpSectionScreen;
+export default HelpScreen;
