@@ -100,16 +100,16 @@ const styles = StyleSheet.create({
     categoryButton: {
         backgroundColor: '#F0F0F0',
         borderRadius: 15,
-        padding: 10,
+        padding: 8,
         marginRight: 10,
         alignItems: 'center',
         width: 80,
     },
     categoryIcon: {
-        fontSize: 24,
+        fontSize: 20,
     },
     categoryText: {
-        marginTop: 5,
+        marginTop: 3,
         textAlign: 'center',
     },
     featuredTitle: {
