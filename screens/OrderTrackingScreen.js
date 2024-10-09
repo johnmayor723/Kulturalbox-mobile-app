@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
   },
   productGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
   productItem: {
