@@ -85,29 +85,6 @@ const CartScreen = ({ navigation }) => {
           ))}
         </View>
 
-        {/* Enquiry Section */}
-        <View style={styles.enquirySection}>
-          <Text style={styles.enquiryTitle}>Have a question? Send us a message</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Your Name"
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Your Email"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Your Message"
-            value={message}
-            onChangeText={setMessage}
-          />
-          <Button title="Submit" onPress={handleEnquirySubmit} />
-        </View>
       </ScrollView>
 
       {/* Fixed Bottom Tab */}
@@ -122,8 +99,8 @@ const CartScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   heroSection: {
-    height: 100,
-    backgroundColor: '#FF7E00',
+    height: 50,
+    backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
@@ -176,26 +153,6 @@ const styles = StyleSheet.create({
   },
   productDetails: {
     marginLeft: 10,
-  },
-  enquirySection: {
-    padding: 20,
-    borderColor: '#FF7E00',
-    borderWidth: 1,
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  enquiryTitle: {
-    fontSize: 18,
-    color: '#FF7E00',
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 8,
-    borderRadius: 5,
   },
   bottomTab: {
     padding: 20,
