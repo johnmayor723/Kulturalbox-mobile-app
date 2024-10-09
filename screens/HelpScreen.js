@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 
 
-const navigation = useNavigation();
+//const navigation = useNavigation();
 
 const HelpSectionScreen = ({ navigation }) => {
   // Sample FAQs data
