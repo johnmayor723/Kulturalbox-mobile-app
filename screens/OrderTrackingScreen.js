@@ -4,19 +4,31 @@ import { FontAwesome } from '@expo/vector-icons'; // Using FontAwesome icons
 
 const OrderTrackingScreen = () => {
   const [status] = useState('Shipped'); // Change this value to 'Processing', 'Shipped', or 'Delivered' to test different status visuals
+const a1 = require("../assets/a1.jpeg")
+const a2 = require("../assets/a2.jpeg")
+const a3 = require("../assets/a3.jpeg")
+const a4 = require("../assets/a4.jpeg")
+const a5 = require("../assets/a5.jpeg")
+const a6 = require("../assets/a6.jpeg")
+const a7 = require("../assets/a7.jpeg")
+const a8 = require("../assets/a8.jpg")
+const a9 = require("../assets/a9.jpg")
+const a10 = require("../assets/a10.jpg")
 
+
+  
   // Dummy product data
   const products = [
-    { id: 1, image: require('../assets/a1.jpeg'), name: 'Product 1', price: '$10' },
-    { id: 2, image: require('../assets/a2.jpeg'), name: 'Product 2', price: '$15' },
-    { id: 3, image: require('../assets/a3.jpeg'), name: 'Product 3', price: '$20' },
-    { id: 4, image: require('../assets/a4.jpeg'), name: 'Product 4', price: '$25' },
-    { id: 5, image: require('../assets/a5.jpeg'), name: 'Product 5', price: '$30' },
-    { id: 6, image: require('../assets/a6.jpeg'), name: 'Product 6', price: '$35' },
-    { id: 7, image: require('../assets/a7.jpeg'), name: 'Product 7', price: '$40' },
-    { id: 8, image: require('../assets/a8.jpg'), name: 'Product 8', price: '$45' },
-    { id: 9, image: require('../assets/a9.jpg'), name: 'Product 9', price: '$50' },
-    { id: 10, image: require('../assets/a10.jpg'), name: 'Product 10', price: '$55' },
+    { id: 1, image: "a1.jpeg", name: 'Product 1', price: '$10' },
+    { id: 2, image: "a2.jpep", name: 'Product 2', price: '$15' },
+    { id: 3, image: "a3.jpeg", name: 'Product 3', price: '$20' },
+    { id: 4, image: "a4.jpeg", name: 'Product 4', price: '$25' },
+    { id: 5, image: "a5.jpeg", name: 'Product 5', price: '$30' },
+    { id : 6, image: "a6.jpeg", name: 'Product 6', price: '$35' },
+    { id: 7, image: "a7.jpeg", name: 'Product 7', price: '$40' },
+    { id: 8, image: 'a8.jpg', name: 'Product 8', price: '$45' },
+    { id: 9, image: 'a9.jpg', name: 'Product 9', price: '$50' },
+    { id: 10, image:'a10.jpg', name: 'Product 10', price: '$55' },
   ];
 
   // Define colors for status steps based on tracking status
