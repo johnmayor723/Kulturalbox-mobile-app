@@ -1,129 +1,126 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-//import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Navigation hook
 
-// Importing images from the assets folder
-const images = {
-  a1: require('../assets/a1.jpeg'),
-  a2: require('../assets/a2.jpeg'),
-  a3: require('../assets/a3.jpeg'),
-  a4: require('../assets/a4.jpeg'),
-  a5: require('../assets/a5.jpeg'),
-  a6: require('../assets/a6.jpeg'),
-  a7: require('../assets/a7.jpeg'),
-  a8: require('../assets/a8.jpg'),
-  a9: require('../assets/a9.jpg'),
-  a10: require('../assets/a10.jpg'),
-};
+const TrackingScreen = () => {
+  const navigation = useNavigation(); // Use the navigation hook to navigate between screens
+  const [orderNumber, setOrderNumber] = useState('');
 
-
-//const navigation = useNavigation();
-const TrackingScreen = ({ navigation }) => {
-  const [trackingNumber, setTrackingNumber] = useState('');
-
-  const handleTrackingSubmit = () => {
-    // Handle tracking submission, e.g., navigate to Tracking Result screen
-    navigation.navigate('TrackingResult', { trackingNumber });
-  };
-
-  // Suggested products
-  const suggestedProducts = [
-    { id: 1, name: 'Oranges', price: 3.99, image: images.a3 },
-    { id: 2, name: 'Grapes', price: 4.99, image: images.a4 },
-    { id: 3, name: 'Mangoes', price: 5.99, image: images.a5 },
-    { id: 4, name: 'Pineapples', price: 3.49, image: images.a6 },
-    { id: 5, name: 'Strawberries', price: 4.99, image: images.a7 },
-    { id: 6, name: 'Blueberries', price: 6.99, image: images.a8 },
-    { id: 7, name: 'Watermelons', price: 7.99, image: images.a9 },
-    { id: 8, name: 'Peaches', price: 5.49, image: images.a10 },
+  // Dummy product data
+  const products = [
+    { id: 1, image: require('../assets/a1.jpeg'), name: 'Product 1', price: '$10' },
+    { id: 2, image: require('../assets/a2.jpeg'), name: 'Product 2', price: '$15' },
+    { id: 3, image: require('../assets/a3.jpeg'), name: 'Product 3', price: '$20' },
+    { id: 4, image: require('../assets/a4.jpeg'), name: 'Product 4', price: '$25' },
+    { id: 5, image: require('../assets/a5.jpeg'), name: 'Product 5', price: '$30' },
+    { id: 6, image: require('../assets/a6.jpeg'), name: 'Product 6', price: '$35' },
+    { id: 7, image: require('../assets/a7.jpeg'), name: 'Product 7', price: '$40' },
+    { id: 8, image: require('../assets/a8.jpg'), name: 'Product 8', price: '$45' },
+    { id: 9, image: require('../assets/a9.jpg'), name: 'Product 9', price: '$50' },
+    { id: 10, image: require('../assets/a10.jpg'), name: 'Product 10', price: '$55' },
   ];
 
+  // Render product item function
+  const renderProductItem = ({ item }) => (
+    <View style={styles.productItem}>
+      <Image source={item.image} style={styles.productImage} />
+      <Text style={styles.productName}>{item.name}</Text>
+      <Text style={styles.productPrice}>{item.price}</Text>
+    </View>
+  );
+
+  // Navigate to TrackingResultsScreen when track button is pressed
+  const handleTrackOrder = () => {
+    // Navigate to the TrackingResultsScreen (dummy for now)
+    navigation.navigate('TrackingResult');
+  };
+
   return (
-    <View style={styles.container}>
-      {/* Fixed Green Top Bar */}
-      <View style={styles.heroSection}>
-        <Text style={styles.heroText}>Track Your Order</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Tracking Form Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Track Your Order</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your order number"
+          value={orderNumber}
+          onChangeText={setOrderNumber}
+        />
+        <TouchableOpacity style={styles.trackButton} onPress={handleTrackOrder}>
+          <Text style={styles.trackButtonText}>Track Order</Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Tracking Form */}
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.trackingForm}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Tracking Number"
-            value={trackingNumber}
-            onChangeText={setTrackingNumber}
-          />
-          <Button title="Track Order" onPress={handleTrackingSubmit} />
-        </View>
-
-        {/* Products You May Like Section */}
-        <View style={styles.suggestedProductsSection}>
-          <Text style={styles.sectionTitle}>Products You May Like</Text>
-          {suggestedProducts.map(product => (
-            <TouchableOpacity key={product.id} style={styles.suggestedProduct}>
-              <Image source={product.image} style={styles.productImage} />
-              <View style={styles.productDetails}>
-                <Text>{product.name}</Text>
-                <Text>${product.price.toFixed(2)}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
+      {/* Recommended Products Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Products You Might Like</Text>
+        <FlatList
+          data={products}
+          renderItem={renderProductItem}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal={false}
+          numColumns={3} // Single column without flexWrap
+          contentContainerStyle={styles.productGrid}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  heroSection: {
-    height: 100,
-    backgroundColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  heroText: {
-    fontSize: 24,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  scrollContainer: {
-    padding: 20,
+  container: {
     flexGrow: 1,
+    backgroundColor: '#D3D3D3', // Light grey background
+    paddingVertical: 20,
   },
-  trackingForm: {
-    marginBottom: 20,
+  section: {
+    backgroundColor: '#fff', // White background for sections
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
+  },
+  sectionHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: '#CCCCCC',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 8,
-    borderRadius: 5,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 15,
   },
-  suggestedProductsSection: {
-    marginVertical: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  suggestedProduct: {
-    flexDirection: 'row',
+  trackButton: {
+    backgroundColor: '#4CAF50', // Green button
+    padding: 15,
+    borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 10,
+  },
+  trackButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  productGrid: {
+    flexDirection: 'column', // Single column layout
+  },
+  productItem: {
+    marginBottom: 20,
   },
   productImage: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
+    width: '100%',
+    height: 100,
+    borderRadius: 10,
   },
-  productDetails: {
-    marginLeft: 10,
+  productName: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  productPrice: {
+    fontSize: 12,
+    color: '#FF7E00', // Amber orange text for price
   },
 });
 
