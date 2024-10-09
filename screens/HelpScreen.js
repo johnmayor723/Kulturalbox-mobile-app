@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 const HelpScreen = ({ navigation }) => {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
   // Sample FAQs data
   const faqs = [
     { question: 'How do I create an account?', answer: 'To create an account, go to the registration page...' },
@@ -9,8 +11,6 @@ const HelpScreen = ({ navigation }) => {
     { question: 'How can I track my order?', answer: 'You can track your order using the tracking page...' },
     { question: 'What payment methods are accepted?', answer: 'We accept credit cards, debit cards, and PayPal...' },
   ];
-
-  const [expandedIndex, setExpandedIndex] = useState(null);
 
   const toggleFAQ = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -25,17 +25,20 @@ const HelpScreen = ({ navigation }) => {
       {/* First Section */}
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>Get Help</Text>
-        {['Accounts', 'Logistics Query', 'Shopping Guide', 'Payments', 'Return and Refund'].map((title, index) => (
+        {['Accounts', 'Logistics Query', 'Shopping Guide', 'Payments'].map((title, index) => (
           <TouchableOpacity key={index} style={styles.subsection} onPress={handleSubsectionPress}>
             <View style={styles.iconContainer}>
-              <Text style={styles.icon}>🔍</Text> {/* Emoji wrapped inside Text component */}
+              <Text style={styles.icon}>🔍</Text> {/* Replace with an actual icon */}
             </View>
-            <Text style={styles.subsectionTitle}>{title}</Text>
+            <View style={styles.subsectionContent}>
+              <Text style={styles.subsectionTitle}>{title}</Text>
+              <Text style={styles.subsectionDescription}>Dummy description for {title} section</Text>
+            </View>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Second Section */}
+      {/* Second Section - FAQs */}
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>FAQs</Text>
         {faqs.map((faq, index) => (
@@ -58,18 +61,19 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: '#D3D3D3', // Light grey background
-    paddingVertical: 20,
+    paddingVertical: 20, // No padding to the sides, padding to the top and bottom
   },
   section: {
     backgroundColor: '#fff', // White background for sections
     borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
+    padding: 15, // Padding inside the section
+    marginVertical: 10, // Space between sections
   },
   sectionHeader: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#333', // Grey title in outer container
   },
   subsection: {
     flexDirection: 'row',
@@ -86,11 +90,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    fontSize: 30,
+    fontSize: 30, // Adjust icon size
+  },
+  subsectionContent: {
+    marginLeft: 10,
   },
   subsectionTitle: {
-    marginLeft: 10,
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  subsectionDescription: {
+    fontSize: 14,
+    color: '#666', // Lighter color for descriptions
   },
   faqQuestion: {
     paddingVertical: 10,
