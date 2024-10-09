@@ -130,7 +130,7 @@ export default function App() {
                     options={{ headerShown:true }}  // Hides the header
                 />
                 <Stack.Screen
-                    name="Tracking Result"
+                    name="TrackingResult"
                     component={OrderTrackingScreen}
                     options={{ headerShown:true }}  // Hides the header
                 />
