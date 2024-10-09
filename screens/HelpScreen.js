@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#008000', // Green for section header
   },
   subsection: {
     flexDirection: 'row',
@@ -138,6 +139,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#008000', // Green for subsection title
   },
   subsectionDesc: {
     marginLeft: 10,
@@ -150,11 +152,13 @@ const styles = StyleSheet.create({
   faqText: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#FF7E00', // Amber orange for FAQ questions
   },
   faqAnswer: {
     fontSize: 14,
     marginBottom: 10,
     paddingLeft: 10,
+    color: '#008000', // Green for FAQ answers
   },
   separator: {
     height: 1,
