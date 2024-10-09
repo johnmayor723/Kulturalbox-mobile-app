@@ -19,6 +19,7 @@ import PaymentScreen from "./screens/PaymentScreen";
 import OrderTrackingScreen from "./screens/OrderTrackingScreen";
 
 import TrackingScreen from "./screens/TrackingScreen";
+import ItemScreen from "./screens/ItemScreen.js";
 
 
 // Stack Navigator
@@ -117,6 +118,11 @@ export default function App() {
                     name="SignUp"
                     component={SignUpScreen}
                     options={{ headerShown: false }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Single Product"
+                    component={ItemScreen}
+                    options={{ headerShown:true }}  // Hides the header
                 />
                  <Stack.Screen
                     name="Payment"
