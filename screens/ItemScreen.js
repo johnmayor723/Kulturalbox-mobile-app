@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     topBar: {
-        height: 50,
+        height: 40,
         backgroundColor: 'green',
         justifyContent: 'center',
         alignItems: 'center',
