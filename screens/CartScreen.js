@@ -90,7 +90,7 @@ const CartScreen = ({ navigation }) => {
       {/* Fixed Bottom Tab */}
       <View style={styles.bottomTab}>
         <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
-        <Button title="Proceed to Payment" onPress={handleCheckout} />
+        <Button  title="Proceed to Payment" onPress={handleCheckout} style={styles.bottomTabBtn} />
       </View>
     </View>
   );
@@ -163,6 +163,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  bottomTabBtn:{
+    backgroundColor:'green',
+},
   totalText: {
     fontSize: 18,
     fontWeight: 'bold',
