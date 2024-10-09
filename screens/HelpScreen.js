@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-//import { useNavigation } from '@react-navigation/native';
-
-
-//const navigation = useNavigation();
 
 const HelpScreen = ({ navigation }) => {
   // Sample FAQs data
@@ -21,7 +17,6 @@ const HelpScreen = ({ navigation }) => {
   };
 
   const handleSubsectionPress = () => {
-    // Navigate to contact page (this can be updated later)
     navigation.navigate('Contact');
   };
 
@@ -33,7 +28,7 @@ const HelpScreen = ({ navigation }) => {
         {['Accounts', 'Logistics Query', 'Shopping Guide', 'Payments', 'Return and Refund'].map((title, index) => (
           <TouchableOpacity key={index} style={styles.subsection} onPress={handleSubsectionPress}>
             <View style={styles.iconContainer}>
-              <Text style={styles.icon}>🔍</Text> {/* Replace with your icon */}
+              <Text style={styles.icon}>🔍</Text> {/* Emoji wrapped inside Text component */}
             </View>
             <Text style={styles.subsectionTitle}>{title}</Text>
           </TouchableOpacity>
