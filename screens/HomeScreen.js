@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 // Dummy product data
 const dummyProducts = [
@@ -24,17 +25,21 @@ const categories = [
 ];
 
 const HomeScreen = () => {
+    const navigation = useNavigation();
+
+    // Render each product item
     const renderItem = ({ item }) => (
-        <View style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Single Product', { product: item })}>
             <Image source={item.image} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{item.title}</Text>
             <Text style={styles.cardPrice}>₦{item.price}</Text>
             <TouchableOpacity style={styles.addButton}>
                 <Text style={styles.buttonText}>Add to Cart</Text>
             </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
     );
 
+    // Render categories
     const renderCategory = ({ item }) => (
         <TouchableOpacity style={styles.categoryButton}>
             <Text style={styles.categoryIcon}>{item.icon}</Text>
@@ -46,7 +51,6 @@ const HomeScreen = () => {
         <View style={styles.container}>
             {/* Hero Section */}
             <View style={styles.heroSection}>
-        
                 <Image source={require('../assets/hero.jpeg')} style={styles.heroImage} />
             </View>
 
@@ -85,12 +89,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 16,
     },
-    heroText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#2D7B30',
-        marginBottom: 8,
-    },
     heroImage: {
         width: '100%',
         height: 150,
@@ -127,7 +125,7 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 5,
         elevation: 3,
-        width: '48%', // Each card takes up almost half the width
+        width: '48%',
     },
     cardImage: {
         width: '100%',
