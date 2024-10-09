@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 
 // Importing images from the assets folder
 const images = {
@@ -17,7 +17,7 @@ const images = {
 };
 
 
-const navigation = useNavigation();
+//const navigation = useNavigation();
 const TrackingScreen = ({ navigation }) => {
   const [trackingNumber, setTrackingNumber] = useState('');
 
