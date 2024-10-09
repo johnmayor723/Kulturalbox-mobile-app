@@ -3,16 +3,16 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, Touchable
 
 // Importing images from the assets folder
 const images = {
-  a1: require('./assets/a1.jpeg'),
-  a2: require('./assets/a2.jpeg'),
-  a3: require('./assets/a3.jpeg'),
-  a4: require('./assets/a4.jpeg'),
-  a5: require('./assets/a5.jpeg'),
-  a6: require('./assets/a6.jpeg'),
-  a7: require('./assets/a7.jpeg'),
-  a8: require('./assets/a8.jpg'),
-  a9: require('./assets/a9.jpg'),
-  a10: require('./assets/a10.jpg'),
+  a1: require('../assets/a1.jpeg'),
+  a2: require('../assets/a2.jpeg'),
+  a3: require('../assets/a3.jpeg'),
+  a4: require('../assets/a4.jpeg'),
+  a5: require('../assets/a5.jpeg'),
+  a6: require('../assets/a6.jpeg'),
+  a7: require('../assets/a7.jpeg'),
+  a8: require('../assets/a8.jpg'),
+  a9: require('../assets/a9.jpg'),
+  a10: require('../assets/a10.jpg'),
 };
 
 const CartScreen = ({ navigation }) => {
