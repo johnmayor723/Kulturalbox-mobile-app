@@ -40,7 +40,7 @@ const TrackingScreen = ({ navigation }) => {
       </View>
 
       {/* Second Section - Recommended Products */}
-      <View style={styles.recommendedSection}>
+      <View >
         <Text style={styles.sectionHeader}>Products You May Like</Text>
         <FlatList
           data={products}
