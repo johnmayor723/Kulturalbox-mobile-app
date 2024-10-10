@@ -1,15 +1,20 @@
 import React from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 // Dummy data for categories and recommended products
 const categories = ['Fruits', 'Vegetables', 'Dairy', 'Meat', 'Snacks'];
 const recommendedProducts = [
-    { id: '1', name: 'Product 1', price: '$10', stock: 'In Stock', rating: 4.5, image: require('../assets/a1.jpeg') },
-    { id: '2', name: 'Product 2', price: '$15', stock: 'In Stock', rating: 4.0, image: require('../assets/a2.jpeg') },
-    { id: '3', name: 'Product 3', price: '$12', stock: 'Out of Stock', rating: 4.8, image: require('../assets/a3.jpeg') },
-    { id: '4', name: 'Product 4', price: '$20', stock: 'In Stock', rating: 4.3, image: require('../assets/a4.jpeg') },
-    { id: '5', name: 'Product 5', price: '$25', stock: 'In Stock', rating: 4.6, image: require('../assets/a5.jpeg') },
+    { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
+    { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
+    { id: '3', name: 'Product 3', image: require('../assets/a3.jpeg') },
+    { id: '4', name: 'Product 4', image: require('../assets/a4.jpeg') },
+    { id: '5', name: 'Product 5', image: require('../assets/a5.jpeg') },
+    { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
+    { id: '7', name: 'Product 7', image: require('../assets/a7.jpeg') },
+    { id: '8', name: 'Product 8', image: require('../assets/a8.jpg') },
+    { id: '9', name: 'Product 9', image: require('../assets/a9.jpg') },
+    { id: '10', name: 'Product 10', image: require('../assets/a10.jpg') },
 ];
 
 const CategoriesScreen = ({ navigation }) => {
@@ -19,24 +24,8 @@ const CategoriesScreen = ({ navigation }) => {
             <View style={styles.productCard}>
                 <TouchableOpacity onPress={() => navigation.navigate('Single Product', { productId: item.id })}>
                     <Image source={item.image} style={styles.productImage} />
-                </TouchableOpacity>
-                <View style={styles.productInfo}>
                     <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productPrice}>{item.price}</Text>
-                    <Text style={styles.productStock}>{item.stock}</Text>
-                    <View style={styles.productRatings}>
-                        <FontAwesome name="star" size={14} color="#FF7E00" />
-                        <Text>{item.rating}</Text>
-                    </View>
-                    <View style={styles.productActions}>
-                        <TouchableOpacity>
-                            <Ionicons name="heart-outline" size={24} color="gray" style={styles.wishlistIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.addToCartButton}>
-                            <Text style={styles.addToCartText}>Add to Cart</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                </TouchableOpacity>
             </View>
         );
     };
@@ -55,30 +44,32 @@ const CategoriesScreen = ({ navigation }) => {
             {/* Margin below the search form */}
             <View style={styles.marginBottom} />
 
-            {/* White Section for Categories and Recommended Products */}
+            {/* Main Content Section with Categories and Recommended Products */}
             <View style={styles.contentSection}>
-                {/* Categories Header */}
-                <Text style={styles.categoriesHeader}>Categories</Text>
-
-                {/* Categories Section */}
                 <View style={styles.categoriesSection}>
+                    {/* Categories Header */}
+                    <Text style={styles.sectionTitle}>Categories</Text>
+
+                    {/* Categories List */}
                     {categories.map((category, index) => (
-                        <TouchableOpacity key={index} style={styles.categoryBox} onPress={() => {/* Navigate to respective category screen */}}>
+                        <TouchableOpacity key={index} style={styles.categoryBox} onPress={() => {/* Navigate to category screen */}}>
                             <Text style={styles.categoryText}>{category}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
 
                 {/* Recommended Products Section */}
-                <Text style={styles.productsHeader}>Recommended Products</Text>
-                <FlatList
-                    data={recommendedProducts}
-                    renderItem={renderProduct}
-                    keyExtractor={item => item.id}
-                    numColumns={2}  // Changed to 2 columns
-                    columnWrapperStyle={styles.productRow}
-                    showsVerticalScrollIndicator={false}
-                />
+                <View style={styles.productsSection}>
+                    <Text style={styles.sectionTitle}>Recommended Products</Text>
+                    <FlatList
+                        data={recommendedProducts}
+                        renderItem={renderProduct}
+                        keyExtractor={item => item.id}
+                        numColumns={3}  // Set to 3 columns per row
+                        columnWrapperStyle={styles.productRow}
+                        showsVerticalScrollIndicator={false}
+                    />
+                </View>
             </View>
         </View>
     );
@@ -114,20 +105,19 @@ const styles = StyleSheet.create({
     },
     contentSection: {
         flex: 1,
+        flexDirection: 'row',  // Row to align categories and recommended products
         backgroundColor: 'white',
+    },
+    categoriesSection: {
+        width: '30%',  // Categories take 30% of the screen width
+        backgroundColor: '#F0F0F0',  // Light gray background for categories
         padding: 10,
     },
-    categoriesHeader: {
+    sectionTitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
         color: '#333',
-    },
-    categoriesSection: {
-        width: '100%',
-        backgroundColor: '#F0F0F0', // Light gray background for categories
-        padding: 10,
-        marginBottom: 10,
     },
     categoryBox: {
         paddingVertical: 15,
@@ -138,27 +128,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#333',
     },
-    productsHeader: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        color: '#333',
+    productsSection: {
+        width: '70%',  // Recommended products take 70% of the screen width
+        padding: 10,
     },
     productRow: {
         justifyContent: 'space-between',
         marginBottom: 15,
     },
     productCard: {
-        width: '48%', // Adjusted for 2 columns
-        backgroundColor: 'white',
-        borderRadius: 8,
-        overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 2,
-        padding: 10,
+        width: '30%',  // Adjusted for 3 columns
+        alignItems: 'center',
         marginBottom: 10,
     },
     productImage: {
@@ -166,44 +146,12 @@ const styles = StyleSheet.create({
         height: 100,
         resizeMode: 'cover',
     },
-    productInfo: {
-        marginTop: 10,
-    },
     productName: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 5,
         color: '#333',
-    },
-    productPrice: {
-        fontSize: 14,
-        color: '#FF7E00',
-    },
-    productStock: {
-        fontSize: 12,
-        color: 'gray',
-    },
-    productRatings: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 5,
-    },
-    productActions: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    wishlistIcon: {
-        marginRight: 10,
-    },
-    addToCartButton: {
-        backgroundColor: '#FF7E00',
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-    },
-    addToCartText: {
-        color: 'white',
-        fontSize: 14,
     },
 });
 
