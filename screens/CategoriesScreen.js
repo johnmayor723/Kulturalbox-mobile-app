@@ -52,28 +52,33 @@ const CategoriesScreen = ({ navigation }) => {
                 <Ionicons name="chatbubble-ellipses-outline" size={24} color="gray" style={styles.chatIcon} />
             </View>
 
-            {/* Categories Section */}
+            {/* Margin below the search form */}
+            <View style={styles.marginBottom} />
+
+            {/* White Section for Categories and Recommended Products */}
             <View style={styles.contentSection}>
+                {/* Categories Header */}
+                <Text style={styles.categoriesHeader}>Categories</Text>
+
+                {/* Categories Section */}
                 <View style={styles.categoriesSection}>
                     {categories.map((category, index) => (
-                        <View key={index} style={styles.categoryBox}>
+                        <TouchableOpacity key={index} style={styles.categoryBox} onPress={() => {/* Navigate to respective category screen */}}>
                             <Text style={styles.categoryText}>{category}</Text>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                 </View>
 
                 {/* Recommended Products Section */}
-                <View style={styles.productsSection}>
-                    <Text style={styles.productsHeader}>Recommended Products</Text>
-                    <FlatList
-                        data={recommendedProducts}
-                        renderItem={renderProduct}
-                        keyExtractor={item => item.id}
-                        numColumns={3}
-                        columnWrapperStyle={styles.productRow}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
+                <Text style={styles.productsHeader}>Recommended Products</Text>
+                <FlatList
+                    data={recommendedProducts}
+                    renderItem={renderProduct}
+                    keyExtractor={item => item.id}
+                    numColumns={2}  // Changed to 2 columns
+                    columnWrapperStyle={styles.productRow}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
         </View>
     );
@@ -104,15 +109,25 @@ const styles = StyleSheet.create({
     chatIcon: {
         marginLeft: 10,
     },
+    marginBottom: {
+        height: 10, // Small margin below the search form
+    },
     contentSection: {
-        flexDirection: 'row',
         flex: 1,
-        marginTop: 10,
+        backgroundColor: 'white',
+        padding: 10,
+    },
+    categoriesHeader: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        color: '#333',
     },
     categoriesSection: {
-        width: '25%',
-        backgroundColor: '#F0F0F0', // Light gray background
+        width: '100%',
+        backgroundColor: '#F0F0F0', // Light gray background for categories
         padding: 10,
+        marginBottom: 10,
     },
     categoryBox: {
         paddingVertical: 15,
@@ -122,10 +137,6 @@ const styles = StyleSheet.create({
     categoryText: {
         fontSize: 16,
         color: '#333',
-    },
-    productsSection: {
-        flex: 1,
-        padding: 10,
     },
     productsHeader: {
         fontSize: 18,
@@ -138,7 +149,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     productCard: {
-        width: '30%', // To display 3 per row
+        width: '48%', // Adjusted for 2 columns
         backgroundColor: 'white',
         borderRadius: 8,
         overflow: 'hidden',
@@ -148,6 +159,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 2,
         padding: 10,
+        marginBottom: 10,
     },
     productImage: {
         width: '100%',
