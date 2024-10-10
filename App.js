@@ -20,6 +20,8 @@ import OrderTrackingScreen from "./screens/OrderTrackingScreen";
 import HelpScreen from "./screens/HelpScreen";
 import TrackingScreen from "./screens/TrackingScreen";
 import ItemScreen from "./screens/ItemScreen.js";
+import CategoriesScreen from "./screens/CategoriesScreen.js";
+
 
 
 // Stack Navigator
@@ -40,6 +42,8 @@ function BottomTabNavigator() {
                     let iconName;
                     if (route.name === 'TabHome') {
                         iconName = 'home';
+                    } else if (route.name === 'Categories') {
+                       iconName = 'grid-outline';
                     } else if (route.name === 'TabProfile') {
                         iconName = 'person';
                     } else if (route.name === 'TabCart') {
@@ -54,6 +58,7 @@ function BottomTabNavigator() {
             })}
         >
             <Tab.Screen name="TabHome" component={HomeScreen} options={{ title: "Home" }} />
+            <Tab.Screen name="TabCategories" component={CategoriesScreen} options={{ title: "Categories" }} />
             <Tab.Screen name="TabProfile" component={UserProfileScreen} options={{ title: "Profile" }} />
             <Tab.Screen name="TabCart" component={CartScreen} options={{ title: "Cart" }} 
               />
