@@ -3,7 +3,6 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } 
 import { Ionicons } from '@expo/vector-icons';
 
 // Dummy data for categories and products
-//const categories = ['Fruits', 'Vegetables', 'Dairy', 'Meat', 'Snacks'];
 const recommendedProducts = [
   { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
   { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
@@ -12,7 +11,8 @@ const recommendedProducts = [
   { id: '5', name: 'Product 5', image: require('../assets/a5.jpeg') },
   { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
 ];
-// Dummy data for categories and products
+
+// Dummy data for categories
 const categories = [
   { name: 'Fruits', screen: 'Fruit' },
   { name: 'Vegetables', screen: 'Vegetable' },
@@ -21,8 +21,7 @@ const categories = [
   { name: 'Snacks', screen: 'Snack' },
 ];
 
-
-export default function CategoriesScreen({navigation}) {
+export default function CategoriesScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Top Section with Search and Chat */}
@@ -45,8 +44,12 @@ export default function CategoriesScreen({navigation}) {
         {/* Categories */}
         <View style={styles.categoriesContainer}>
           {categories.map((category, index) => (
-            <TouchableOpacity key={index} style={styles.categoryItem}   onPress={() => navigation.navigate(category.screen)} >
-            // Navigate to respective screen
+            <TouchableOpacity
+              key={index}
+              style={styles.categoryItem}
+              onPress={() => navigation.navigate(category.screen)}
+            >
+              {/* Navigate to respective screen */}
               <Text>{category.name}</Text>
             </TouchableOpacity>
           ))}
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
   },
   headerSection: {
     flexDirection: 'row',
-    color: "green",
+    color: 'green',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     marginBottom: 5,
@@ -115,12 +118,11 @@ const styles = StyleSheet.create({
     color: 'green',
   },
   contentSection: {
-  contentSection: {
     flex: 1,
     flexDirection: 'row',
   },
   categoriesContainer: {
-    width:'34%',
+    width: '34%',
     padding: 10,
     backgroundColor: '#f0f0f0', // Gray background that starts from the bottom of header and stretches to the bottom
     justifyContent: 'flex-start',
@@ -131,11 +133,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#fff',
     backgroundColor: '#d3d3d3',
     marginBottom: 10,
-    color: "orange",
-    
   },
   productsContainer: {
-    width:'66%',
+    width: '66%',
     padding: 10,
   },
   productCard: {
@@ -155,5 +155,3 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 });
-
-//Refactor this to reflect the theme of the brand
