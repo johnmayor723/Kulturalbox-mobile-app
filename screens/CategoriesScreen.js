@@ -1,141 +1,142 @@
 import React from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
+// Dummy data for categories and products
 const categories = ['Fruits', 'Vegetables', 'Dairy', 'Meat', 'Snacks'];
 const recommendedProducts = [
-    { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
-    { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
-    { id: '3', name: 'Product 3', image: require('../assets/a3.jpeg') },
-    { id: '4', name: 'Product 4', image: require('../assets/a4.jpeg') },
-    { id: '5', name: 'Product 5', image: require('../assets/a5.jpeg') },
-    { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
-    { id: '7', name: 'Product 7', image: require('../assets/a7.jpeg') },
-    { id: '8', name: 'Product 8', image: require('../assets/a8.jpg') },
-    { id: '9', name: 'Product 9', image: require('../assets/a9.jpg') },
+  { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
+  { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
+  { id: '3', name: 'Product 3', image: require('../assets/a3.jpeg') },
+  { id: '4', name: 'Product 4', image: require('../assets/a4.jpeg') },
+  { id: '5', name: 'Product 5', image: require('../assets/a5.jpeg') },
+  { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
 ];
 
-const CategoriesScreen = () => {
-    return (
-        <ScrollView style={styles.container}>
-            {/* Search and Chat Section */}
-            <View style={styles.searchContainer}>
-                <TextInput placeholder="Search" style={styles.searchInput} />
-                <TouchableOpacity style={styles.chatIcon}>
-                    <Text>Chat</Text>
+export default function CategoriesScreen() {
+  return (
+    <View style={styles.container}>
+      {/* Top Section with Search and Chat */}
+      <View style={styles.searchSection}>
+        <TextInput placeholder="Search..." style={styles.searchInput} />
+        <Ionicons name="chatbubbles-outline" size={24} color="gray" style={styles.chatIcon} />
+      </View>
+
+      {/* Horizontal Line */}
+      <View style={styles.horizontalLine} />
+
+      {/* Header Section */}
+      <View style={styles.headerSection}>
+        <Text style={styles.sectionHeader}>Categories</Text>
+        <Text style={styles.sectionHeader}>Recommended Products</Text>
+      </View>
+
+      {/* Content Section */}
+      <View style={styles.contentSection}>
+        {/* Categories */}
+        <View style={styles.categoriesContainer}>
+          {categories.map((category, index) => (
+            <TouchableOpacity key={index} style={styles.categoryItem}>
+              <Text>{category}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Recommended Products */}
+        <View style={styles.productsContainer}>
+          <FlatList
+            data={recommendedProducts}
+            numColumns={3}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.productCard}>
+                <TouchableOpacity>
+                  <Image source={item.image} style={styles.productImage} />
+                  <Text style={styles.productName}>{item.name}</Text>
                 </TouchableOpacity>
-            </View>
-
-            {/* Divider */}
-            <View style={styles.horizontalLine}></View>
-
-            {/* Header Section */}
-            <View style={styles.headerSection}>
-                <Text style={styles.headerTitle}>Categories</Text>
-                <Text style={styles.headerTitle}>Recommended Products</Text>
-            </View>
-
-            {/* Categories and Recommended Products */}
-            <View style={styles.contentSection}>
-                {/* Categories */}
-                <View style={styles.categoriesContainer}>
-                    {categories.map((category, index) => (
-                        <TouchableOpacity key={index} style={styles.categoryBox}>
-                            <Text>{category}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-
-                {/* Recommended Products */}
-                <FlatList
-                    data={recommendedProducts}
-                    keyExtractor={(item) => item.id}
-                    numColumns={3}
-                    renderItem={({ item }) => (
-                        <View style={styles.productCard}>
-                            <TouchableOpacity>
-                                <Image source={item.image} style={styles.productImage} />
-                                <Text style={styles.productTitle}>{item.name}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-            </View>
-        </ScrollView>
-    );
-};
+              </View>
+            )}
+          />
+        </View>
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    searchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderBottomColor: 'grey',
-        borderBottomWidth: 1,
-        marginBottom: 10, // Small space between search form and horizontal line
-    },
-    searchInput: {
-        flex: 1,
-        height: 35,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingLeft: 10,
-    },
-    chatIcon: {
-        marginLeft: 10,
-    },
-    horizontalLine: {
-        height: 2,
-        backgroundColor: 'grey',
-        marginBottom: 10,
-    },
-    headerSection: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-        marginBottom: 10,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    contentSection: {
-        flexDirection: 'row',
-    },
-    categoriesContainer: {
-        width: '25%',
-        padding: 10,
-        backgroundColor: '#f0f0f0',
-    },
-    categoryBox: {
-        padding: 10,
-        backgroundColor: '#ddd',
-        marginBottom: 10,
-    },
-    productCard: {
-        width: '30%',
-        margin: 5,
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        padding: 5,
-        elevation: 2, // For shadow on Android
-    },
-    productImage: {
-        width: 80,
-        height: 80,
-        marginBottom: 5,
-    },
-    productTitle: {
-        fontSize: 14,
-        textAlign: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  searchSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+  },
+  searchInput: {
+    flex: 1,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 8,
+    marginRight: 10,
+    backgroundColor: '#F5F5F5',
+  },
+  chatIcon: {
+    padding: 10,
+  },
+  horizontalLine: {
+    height: 1,
+    backgroundColor: '#d3d3d3',
+    marginVertical: 5,
+  },
+  headerSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    marginBottom: 5,
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  contentSection: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  categoriesContainer: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#f0f0f0', // Gray background that starts from the bottom of header and stretches to the bottom
+    justifyContent: 'flex-start',
+  },
+  categoryItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff',
+    backgroundColor: '#d3d3d3',
+    marginBottom: 10,
+  },
+  productsContainer: {
+    flex: 2,
+    padding: 10,
+  },
+  productCard: {
+    flex: 1,
+    margin: 5,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    elevation: 2,
+  },
+  productImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
+  },
+  productName: {
+    textAlign: 'center',
+    padding: 5,
+  },
 });
-
-export default CategoriesScreen;
