@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#D3D3D3', // Gray line
+        marginBottom: 10;
     },
     searchInput: {
         flex: 1,
