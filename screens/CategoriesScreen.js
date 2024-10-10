@@ -1,9 +1,17 @@
 import React from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+//mport { useNavigation } from '@react-navigation/native';
 
 // Dummy data for categories and products
-const categories = ['Fruits', 'Vegetables', 'Dairy', 'Meat', 'Snacks'];
+const categories = [
+  { name: 'Fruits', screen: 'Fruit' },
+  { name: 'Vegetables', screen: 'Vegetable' },
+  { name: 'Dairy', screen: 'Dairy' },
+  { name: 'Meat', screen: 'Meat' },
+  { name: 'Snacks', screen: 'Snack' },
+];
+
 const recommendedProducts = [
   { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
   { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
@@ -13,7 +21,9 @@ const recommendedProducts = [
   { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
 ];
 
-export default function CategoriesScreen() {
+export default function CategoriesScreen({navigation}) {
+ //const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       {/* Top Section with Search and Chat */}
@@ -36,8 +46,12 @@ export default function CategoriesScreen() {
         {/* Categories */}
         <View style={styles.categoriesContainer}>
           {categories.map((category, index) => (
-            <TouchableOpacity key={index} style={styles.categoryItem}>
-              <Text>{category}</Text>
+            <TouchableOpacity 
+              key={index} 
+              style={styles.categoryItem} 
+              onPress={() => navigation.navigate(category.screen)} // Navigate to respective screen
+            >
+              <Text style={styles.categoryText}>{category.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    borderColor: 'gray',
+    borderColor: 'green',
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
@@ -89,12 +103,11 @@ const styles = StyleSheet.create({
   },
   horizontalLine: {
     height: 1,
-    backgroundColor: '#d3d3d3',
+    backgroundColor: 'lightgrey',
     marginVertical: 5,
   },
   headerSection: {
     flexDirection: 'row',
-    color: "green",
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     marginBottom: 5,
@@ -102,28 +115,29 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: 'green',
   },
   contentSection: {
     flex: 1,
     flexDirection: 'row',
   },
   categoriesContainer: {
-    width:'34%',
+    width: '34%',
     padding: 10,
-    backgroundColor: '#f0f0f0', // Gray background that starts from the bottom of header and stretches to the bottom
-    justifyContent: 'flex-start',
+    backgroundColor: '#F5F5F5',
   },
   categoryItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#fff',
-    backgroundColor: '#d3d3d3',
+    borderBottomColor: '#d3d3d3',
+    backgroundColor: '#FFF',
     marginBottom: 10,
-    color: "orange",
-    
+  },
+  categoryText: {
+    color: 'green',
   },
   productsContainer: {
-    width:'66%',
+    width: '66%',
     padding: 10,
   },
   productCard: {
@@ -132,6 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     elevation: 2,
+    alignItems: 'center',
   },
   productImage: {
     width: '100%',
@@ -141,5 +156,6 @@ const styles = StyleSheet.create({
   productName: {
     textAlign: 'center',
     padding: 5,
+    color: '#FF7E00',
   },
 });
