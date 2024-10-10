@@ -37,7 +37,7 @@ export default function CategoriesScreen({ navigation }) {
       {/* Header Section */}
       <View style={styles.headerSection}>
         <Text style={styles.sectionHeader}>Categories</Text>
-        <Text style={styles.sectionHeader}>Vegetables</Text>
+        <Text style={styles.sectionHeader2}>Vegetables</Text>
       </View>
 
       {/* Content Section */}
@@ -117,6 +117,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'green',
+  },
+  sectionHeader2: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'green',
+    marginRight: 110,
   },
   contentSection: {
     flex: 1,
