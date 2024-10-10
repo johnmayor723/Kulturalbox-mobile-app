@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   categoriesContainer: {
-    flex: 1,
+    width:'34%',
     padding: 10,
     backgroundColor: '#f0f0f0', // Gray background that starts from the bottom of header and stretches to the bottom
     justifyContent: 'flex-start',
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   productsContainer: {
-    flex: 2,
+    width:'66%',
     padding: 10,
   },
   productCard: {
