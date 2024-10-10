@@ -1,104 +1,117 @@
 import React from 'react';
-import { View, Text, TextInput, Button, FlatList, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-const TrackingScreen = ({ navigation }) => {
-  // Dummy data for recommended products
-  const products = [
-    { id: '1', image: require('../assets/a1.jpeg') },
-    { id: '2', image: require('../assets/a2.jpeg') },
-    { id: '3', image: require('../assets/a3.jpeg') },
-    { id: '4', image: require('../assets/a4.jpeg') },
-    { id: '5', image: require('../assets/a5.jpeg') },
-    { id: '6', image: require('../assets/a6.jpeg') },
-    { id: '7', image: require('../assets/a7.jpeg') },
-    { id: '8', image: require('../assets/a8.jpg') },
-    { id: '9', image: require('../assets/a9.jpg') },
-    { id: '10', image: require('../assets/a10.jpg') },
-  ];
+const recommendedProducts = [
+  { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
+  { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
+  { id: '3', name: 'Product 3', image: require('../assets/a3.jpeg') },
+  { id: '4', name: 'Product 4', image: require('../assets/a4.jpeg') },
+  { id: '5', name: 'Product 5', image: require('../assets/a5.jpeg') },
+  { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
+];
 
-  // Render individual product in grid
-  const renderProduct = ({ item }) => (
-    <View style={styles.productContainer}>
-      <Image source={item.image} style={styles.productImage} />
-    </View>
-  );
-
+export default function TrackingScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      {/* First Section - Tracking Form */}
-      <View style={styles.trackingFormSection}>
-        <Text style={styles.sectionHeader}>Track Your Order</Text>
-        <TextInput 
-          placeholder="Enter Tracking Number" 
-          style={styles.input} 
-        />
-        <Button 
-          title="Track Order" 
-          color="#FF7E00" // Amber button color
-          onPress={() => navigation.navigate('TrackingResult')}
-        />
+      {/* Top Section with Tracking Form and Submit Button */}
+      <View style={styles.topSection}>
+        <TextInput placeholder="Enter Tracking Number..." style={styles.trackingInput} />
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => navigation.navigate('TrackingResult')}  // Navigate to TrackingResult page
+        >
+          <Text style={styles.submitButtonText}>Submit</Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Second Section - Recommended Products */}
-      <View >
-        <Text style={styles.sectionHeader}>Products You May Like</Text>
+      {/* Horizontal Line */}
+      <View style={styles.horizontalLine} />
+
+      {/* Recommended Products Section */}
+      <Text style={styles.sectionHeader}>Products You May Like</Text>
+      <View style={styles.productsContainer}>
         <FlatList
-          data={products}
-          renderItem={renderProduct}
+          data={recommendedProducts}
+          numColumns={3}
           keyExtractor={(item) => item.id}
-          numColumns={3} // Three items per row
-          columnWrapperStyle={styles.columnWrapper} // Ensure proper spacing
+          renderItem={({ item }) => (
+            <View style={styles.productCard}>
+              <TouchableOpacity>
+                <Image source={item.image} style={styles.productImage} />
+              </TouchableOpacity>
+              <Text style={styles.productName}>{item.name}</Text>
+            </View>
+          )}
         />
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
-    backgroundColor: '#f5f5f5',
-  },
-  trackingFormSection: {
     backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
+    padding: 10,
+  },
+  topSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+  },
+  trackingInput: {
+    flex: 1,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 8,
+    marginRight: 10,
+    backgroundColor: '#F5F5F5',
+  },
+  submitButton: {
+    backgroundColor: '#FF7E00',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  horizontalLine: {
+    height: 1,
+    backgroundColor: '#d3d3d3',
+    marginVertical: 5,
   },
   sectionHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#4CAF50', // Green for the header
-    marginBottom: 10,
+    marginVertical: 10,
+    paddingHorizontal: 10,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
+  productsContainer: {
     padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
   },
-  recommendedSection: {
+  productCard: {
+    flex: 1,
+    margin: 5,
     backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    flex: 1,
-  },
-  columnWrapper: {
-    justifyContent: 'space-between', // Spacing between products
-    marginBottom: 15,
-  },
-  productContainer: {
-    flex: 1,
-    marginHorizontal: 5, // Add horizontal margin for spacing
-    alignItems: 'center',
+    borderRadius: 8,
+    elevation: 2,
+    padding: 10,
   },
   productImage: {
     width: '100%',
     height: 100,
-    borderRadius: 10,
+    borderRadius: 8,
+  },
+  productName: {
+    textAlign: 'center',
+    padding: 5,
   },
 });
-
-export default TrackingScreen;
