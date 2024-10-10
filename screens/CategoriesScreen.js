@@ -46,7 +46,7 @@ export default function CategoriesScreen() {
         <View style={styles.productsContainer}>
           <FlatList
             data={recommendedProducts}
-            numColumns={3}
+            numColumns={2}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.productCard}>
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   },
   headerSection: {
     flexDirection: 'row',
+    color: "green",
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     marginBottom: 5,
@@ -118,6 +119,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#fff',
     backgroundColor: '#d3d3d3',
     marginBottom: 10,
+    color: "orange",
+    
   },
   productsContainer: {
     width:'66%',
