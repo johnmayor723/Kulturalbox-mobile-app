@@ -3,7 +3,7 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } 
 import { Ionicons } from '@expo/vector-icons';
 
 // Dummy data for categories and products
-const categories = ['Fruits', 'Vegetables', 'Dairy', 'Meat', 'Snacks'];
+//const categories = ['Fruits', 'Vegetables', 'Dairy', 'Meat', 'Snacks'];
 const recommendedProducts = [
   { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
   { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
@@ -47,7 +47,7 @@ export default function CategoriesScreen({navigation}) {
           {categories.map((category, index) => (
             <TouchableOpacity key={index} style={styles.categoryItem}   onPress={() => navigation.navigate(category.screen)} >
             // Navigate to respective screen
-              <Text>{category}</Text>
+              <Text>{category.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
