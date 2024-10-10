@@ -42,7 +42,7 @@ function BottomTabNavigator() {
                     let iconName;
                     if (route.name === 'TabHome') {
                         iconName = 'home';
-                    } else if (route.name === 'Categories') {
+                    } else if (route.name === 'TabCategories') {
                        iconName = 'grid-outline';
                     } else if (route.name === 'TabProfile') {
                         iconName = 'person';
