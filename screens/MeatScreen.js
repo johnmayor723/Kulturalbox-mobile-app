@@ -54,7 +54,7 @@ export default function CategoriesScreen({ navigation }) {
 
         {/* Recommended Products */}
         <View style={styles.productsContainer}>
-          <Text style={styles.sectionHeader2}>Meat</Text>
+          <Text style={styles.sectionHeader}>Meat</Text>
           <FlatList
             data={recommendedProducts}
             numColumns={2}
