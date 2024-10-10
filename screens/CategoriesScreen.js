@@ -1,8 +1,17 @@
 import React from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-//mport { useNavigation } from '@react-navigation/native';
 
+// Dummy data for categories and products
+const categories = ['Fruits', 'Vegetables', 'Dairy', 'Meat', 'Snacks'];
+const recommendedProducts = [
+  { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
+  { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
+  { id: '3', name: 'Product 3', image: require('../assets/a3.jpeg') },
+  { id: '4', name: 'Product 4', image: require('../assets/a4.jpeg') },
+  { id: '5', name: 'Product 5', image: require('../assets/a5.jpeg') },
+  { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
+];
 // Dummy data for categories and products
 const categories = [
   { name: 'Fruits', screen: 'Fruit' },
@@ -12,18 +21,8 @@ const categories = [
   { name: 'Snacks', screen: 'Snack' },
 ];
 
-const recommendedProducts = [
-  { id: '1', name: 'Product 1', image: require('../assets/a1.jpeg') },
-  { id: '2', name: 'Product 2', image: require('../assets/a2.jpeg') },
-  { id: '3', name: 'Product 3', image: require('../assets/a3.jpeg') },
-  { id: '4', name: 'Product 4', image: require('../assets/a4.jpeg') },
-  { id: '5', name: 'Product 5', image: require('../assets/a5.jpeg') },
-  { id: '6', name: 'Product 6', image: require('../assets/a6.jpeg') },
-];
 
 export default function CategoriesScreen({navigation}) {
- //const navigation = useNavigation();
-
   return (
     <View style={styles.container}>
       {/* Top Section with Search and Chat */}
@@ -46,12 +45,9 @@ export default function CategoriesScreen({navigation}) {
         {/* Categories */}
         <View style={styles.categoriesContainer}>
           {categories.map((category, index) => (
-            <TouchableOpacity 
-              key={index} 
-              style={styles.categoryItem} 
-              onPress={() => navigation.navigate(category.screen)} // Navigate to respective screen
-            >
-              <Text style={styles.categoryText}>{category.name}</Text>
+            <TouchableOpacity key={index} style={styles.categoryItem}   onPress={() => navigation.navigate(category.screen)} >
+            // Navigate to respective screen
+              <Text>{category}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -91,7 +87,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    borderColor: 'green',
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
@@ -103,11 +99,12 @@ const styles = StyleSheet.create({
   },
   horizontalLine: {
     height: 1,
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#d3d3d3',
     marginVertical: 5,
   },
   headerSection: {
     flexDirection: 'row',
+    color: "green",
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     marginBottom: 5,
@@ -118,26 +115,27 @@ const styles = StyleSheet.create({
     color: 'green',
   },
   contentSection: {
+  contentSection: {
     flex: 1,
     flexDirection: 'row',
   },
   categoriesContainer: {
-    width: '34%',
+    width:'34%',
     padding: 10,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#f0f0f0', // Gray background that starts from the bottom of header and stretches to the bottom
+    justifyContent: 'flex-start',
   },
   categoryItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#d3d3d3',
-    backgroundColor: '#FFF',
+    borderBottomColor: '#fff',
+    backgroundColor: '#d3d3d3',
     marginBottom: 10,
-  },
-  categoryText: {
-    color: 'green',
+    color: "orange",
+    
   },
   productsContainer: {
-    width: '66%',
+    width:'66%',
     padding: 10,
   },
   productCard: {
@@ -146,7 +144,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     elevation: 2,
-    alignItems: 'center',
   },
   productImage: {
     width: '100%',
@@ -156,6 +153,7 @@ const styles = StyleSheet.create({
   productName: {
     textAlign: 'center',
     padding: 5,
-    color: '#FF7E00',
   },
 });
+
+//Refactor this to reflect the theme of the brand
