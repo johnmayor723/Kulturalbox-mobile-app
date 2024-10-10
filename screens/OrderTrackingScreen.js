@@ -1,169 +1,176 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, ScrollView } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // Using FontAwesome icons
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-const OrderTrackingScreen = () => {
-  const [status] = useState('Shipped'); // Change this value to 'Processing', 'Shipped', or 'Delivered' to test different status visuals
-
-  // Dummy product data
-  const products = [
-    { id: 1, image: require('../assets/a1.jpeg'), name: 'Product 1', price: '$10' },
-    { id: 2, image: require('../assets/a2.jpeg'), name: 'Product 2', price: '$15' },
-    { id: 3, image: require('../assets/a3.jpeg'), name: 'Product 3', price: '$20' },
-    { id: 4, image: require('../assets/a4.jpeg'), name: 'Product 4', price: '$25' },
-    { id: 5, image: require('../assets/a5.jpeg'), name: 'Product 5', price: '$30' },
-    { id: 6, image: require('../assets/a6.jpeg'), name: 'Product 6', price: '$35' },
-    { id: 7, image: require('../assets/a7.jpeg'), name: 'Product 7', price: '$40' },
-    { id: 8, image: require('../assets/a8.jpg'), name: 'Product 8', price: '$45' },
-    { id: 9, image: require('../assets/a9.jpg'), name: 'Product 9', price: '$50' },
-    { id: 10, image: require('../assets/a10.jpg'), name: 'Product 10', price: '$55' },
-  ];
-
-  // Define colors for status steps based on tracking status
-  const getCircleColor = (step) => {
-    if (status === 'Delivered') return '#4CAF50'; // All green
-    if (status === 'Shipped' && step < 3) return '#4CAF50'; // First two green, last one orange
-    if (status === 'Processing' && step < 2) return '#4CAF50'; // Only first green, others orange
-    return '#FF7E00'; // Amber orange
+const OrderTrackingScreen = ({ navigation }) => {
+  // Dummy data for the activity indicator
+  const orderStatus = "Shipped"; // Can be 'Processing', 'Shipped', 'Delivered'
+  
+  // Dummy data for order details
+  const orderDetails = {
+    orderId: '12345',
+    orderDate: '2024-10-10',
+    items: 3,
   };
 
-  // Render product item function
-  const renderProductItem = ({ item }) => (
-    <View style={styles.productItem}>
-      <Image source={item.image} style={styles.productImage} />
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>{item.price}</Text>
+  // Dummy data for recommended products
+  const recommendedProducts = [
+    { id: '1', name: 'Product 1', price: '$10', image: require('../assets/a1.jpeg') },
+    { id: '2', name: 'Product 2', price: '$15', image: require('../assets/a2.jpeg') },
+    { id: '3', name: 'Product 3', price: '$12', image: require('../assets/a3.jpeg') },
+    { id: '4', name: 'Product 4', price: '$20', image: require('../assets/a4.jpeg') },
+    { id: '5', name: 'Product 5', price: '$18', image: require('../assets/a5.jpeg') },
+  ];
+
+  // Function to navigate to individual product page
+  const navigateToProduct = (id) => {
+    navigation.navigate('Single Product', { productId: id });
+  };
+
+  // Render product cards
+  const renderProductCard = ({ item }) => (
+    <View style={styles.productCard}>
+      <TouchableOpacity onPress={() => navigateToProduct(item.id)}>
+        <Text style={styles.productName}>{item.name}</Text>
+        <Text style={styles.productPrice}>{item.price}</Text>
+        <Ionicons name="heart-outline" size={20} color="black" style={styles.wishlistIcon} />
+        <TouchableOpacity style={styles.addToCartButton}>
+          <Text style={styles.addToCartText}>Add to Cart</Text>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </View>
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Tracking Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>Tracking Details</Text>
-
-        {/* Status Indicator */}
-        <View style={styles.statusContainer}>
-          <View style={styles.statusItem}>
-            <FontAwesome name="hourglass-start" size={24} color={getCircleColor(1)} />
-            <View style={[styles.circle, { backgroundColor: getCircleColor(1) }]} />
-            <Text style={styles.statusText}>Processing</Text>
-          </View>
-          <View style={[styles.pipe, { backgroundColor: getCircleColor(1) }]} />
-          <View style={styles.statusItem}>
-            <FontAwesome name="truck" size={24} color={getCircleColor(2)} />
-            <View style={[styles.circle, { backgroundColor: getCircleColor(2) }]} />
-            <Text style={styles.statusText}>Shipped</Text>
-          </View>
-          <View style={[styles.pipe, { backgroundColor: getCircleColor(2) }]} />
-          <View style={styles.statusItem}>
-            <FontAwesome name="check-circle" size={24} color={getCircleColor(3)} />
-            <View style={[styles.circle, { backgroundColor: getCircleColor(3) }]} />
-            <Text style={styles.statusText}>Delivered</Text>
-          </View>
-        </View>
-
-        {/* Order Details Section */}
-        <View style={styles.orderDetails}>
-          <Text style={styles.orderDetailHeader}>Order Details</Text>
-          <Text style={styles.orderDetailText}>Order Number: 123456789</Text>
-          <Text style={styles.orderDetailText}>Order Date: 01-10-2024</Text>
-          <Text style={styles.orderDetailText}>Total Amount: $100.00</Text>
+    <View style={styles.container}>
+      {/* Activity Indicator Section */}
+      <View style={styles.activityIndicatorContainer}>
+        <Text style={styles.activityText}>Order Status: {orderStatus}</Text>
+        {/* Add your activity indicator here (e.g., three circles and pipes logic) */}
+        <View style={styles.statusIndicator}>
+          {/* Replace with your custom logic for activity indicator */}
+          <View style={styles.circleActive} />
+          <View style={styles.pipe} />
+          <View style={orderStatus === "Delivered" ? styles.circleActive : styles.circleInactive} />
+          <View style={styles.pipe} />
+          <View style={orderStatus === "Shipped" ? styles.circleActive : styles.circleInactive} />
         </View>
       </View>
 
-      {/* Products Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>Products You Might Like</Text>
-        <FlatList
-          data={products}
-          renderItem={renderProductItem}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal={false}
-          numColumns={3} // Adjust number of columns here
-          contentContainerStyle={styles.productGrid}
-        />
+      <View style={styles.separator} />
+
+      {/* Order Details Section */}
+      <View style={styles.orderDetailsContainer}>
+        <Text style={styles.orderDetailsHeader}>Order Details</Text>
+        <Text>Order ID: {orderDetails.orderId}</Text>
+        <Text>Order Date: {orderDetails.orderDate}</Text>
+        <Text>Items in Order: {orderDetails.items}</Text>
       </View>
-    </ScrollView>
+
+      <View style={styles.separator} />
+
+      {/* Recommended Products Section */}
+      <Text style={styles.recommendedHeader}>Recommended Products</Text>
+      <FlatList
+        data={recommendedProducts}
+        renderItem={renderProductCard}
+        keyExtractor={item => item.id}
+        horizontal={false}
+        numColumns={3}  // Change to 3 columns
+        contentContainerStyle={styles.productsContainer}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: '#D3D3D3', // Light grey background
-    paddingVertical: 20,
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 16,
   },
-  section: {
-    backgroundColor: '#fff', // White background for sections
-    borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
-  },
-  sectionHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  statusContainer: {
-    flexDirection: 'row',
+  activityIndicatorContainer: {
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 16,
   },
-  statusItem: {
-    alignItems: 'center',
-  },
-  circle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  pipe: {
-    width: 50,
-    height: 5,
-    backgroundColor: '#FF7E00', // Default to orange
-  },
-  statusText: {
-    marginTop: 5,
-    fontSize: 14,
-    color: '#333',
-  },
-  orderDetails: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#F5F5F5', // Light background for order details
-    borderRadius: 8,
-  },
-  orderDetailHeader: {
+  activityText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
   },
-  orderDetailText: {
-    fontSize: 14,
-    color: '#333',
-  },
-  productGrid: {
+  statusIndicator: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
   },
-  productItem: {
-    width: '30%',
-    marginBottom: 20,
-  },
-  productImage: {
-    width: '100%',
-    height: 100,
+  circleActive: {
+    width: 20,
+    height: 20,
     borderRadius: 10,
+    backgroundColor: 'green',
+  },
+  circleInactive: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#FF7E00',
+  },
+  pipe: {
+    height: 2,
+    width: 40,
+    backgroundColor: '#FF7E00',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: 'lightgray',
+    marginVertical: 16,
+  },
+  orderDetailsContainer: {
+    marginBottom: 16,
+  },
+  orderDetailsHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  recommendedHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  productsContainer: {
+    paddingBottom: 16,
+  },
+  productCard: {
+    flex: 1,
+    margin: 8,
+    padding: 16,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    alignItems: 'center',
   },
   productName: {
-    fontSize: 14,
-    marginTop: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   productPrice: {
-    fontSize: 12,
-    color: '#FF7E00',
+    fontSize: 14,
+    marginVertical: 4,
+  },
+  wishlistIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },
+  addToCartButton: {
+    marginTop: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: '#FF7E00',
+    borderRadius: 4,
+  },
+  addToCartText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 
