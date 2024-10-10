@@ -40,7 +40,7 @@ export default function CategoriesScreen({ navigation }) {
       {/* Content Section */}
       <View style={styles.contentSection}>
         {/* Categories */}
-        <Text style={styles.sectionHeader}>Categories</Text>
+        
         <View style={styles.categoriesContainer}>
           {categories.map((category, index) => (
             <TouchableOpacity
@@ -115,13 +115,13 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'green',
+    color: '#Ff7e00',
   },
   sectionHeader2: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'green',
-    marginRight: 120,
+    color: '#Ff7e00,
+    
   },
   contentSection: {
     flex: 1,
