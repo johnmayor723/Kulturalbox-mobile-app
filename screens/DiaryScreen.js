@@ -19,6 +19,7 @@ const categories = [
   { name: 'Dairy', screen: 'Dairy' },
   { name: 'Meat', screen: 'Meat' },
   { name: 'Snacks', screen: 'Snack' },
+  { name: 'Oil Products', screen: 'Oil Product' },
 ];
 
 export default function CategoriesScreen({ navigation }) {
