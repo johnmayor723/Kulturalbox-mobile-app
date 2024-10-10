@@ -35,14 +35,12 @@ export default function CategoriesScreen({ navigation }) {
       <View style={styles.horizontalLine} />
 
       {/* Header Section */}
-      <View style={styles.headerSection}>
-        <Text style={styles.sectionHeader}>Categories</Text>
-        <Text style={styles.sectionHeader2}>Dairy Products</Text>
-      </View>
+      
 
       {/* Content Section */}
       <View style={styles.contentSection}>
         {/* Categories */}
+        <Text style={styles.sectionHeader}>Categories</Text>
         <View style={styles.categoriesContainer}>
           {categories.map((category, index) => (
             <TouchableOpacity
@@ -58,6 +56,7 @@ export default function CategoriesScreen({ navigation }) {
 
         {/* Recommended Products */}
         <View style={styles.productsContainer}>
+          <Text style={styles.sectionHeader}>Dairy Products</Text>
           <FlatList
             data={recommendedProducts}
             numColumns={2}
