@@ -21,6 +21,12 @@ import HelpScreen from "./screens/HelpScreen";
 import TrackingScreen from "./screens/TrackingScreen";
 import ItemScreen from "./screens/ItemScreen.js";
 import CategoriesScreen from "./screens/CategoriesScreen.js";
+import FruitsScreen from "./screens/FruitsScreen.js";
+import VegetablesScreen from "./screens/VegetablesScreen.js";
+import DairyScreen from "./screens/DairyScreen.js";
+import MeatScreen from "./screens/MeatScreen.js";
+import OilProductsScreen from "./screens/OilProductsScreen.js";
+import SnacksScreen from "./screens/SnacksScreen.js";
 
 
 
@@ -137,6 +143,36 @@ export default function App() {
                 <Stack.Screen
                     name="TrackingResult"
                     component={OrderTrackingScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Fruit"
+                    component={FruitsScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Vegetable"
+                    component={VegetablesScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Meat"
+                    component={MeatScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Snack"
+                    component={SnacksScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Oil Product"
+                    component={OilProductsScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+                <Stack.Screen
+                    name="Dairy"
+                    component={DairyScreen}
                     options={{ headerShown:true }}  // Hides the header
                 />
                 <Stack.Screen
