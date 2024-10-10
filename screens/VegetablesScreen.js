@@ -34,11 +34,7 @@ export default function CategoriesScreen({ navigation }) {
       {/* Horizontal Line */}
       <View style={styles.horizontalLine} />
 
-      {/* Header Section */}
-      <View style={styles.headerSection}>
-        <Text style={styles.sectionHeader}>Categories</Text>
-        <Text style={styles.sectionHeader2}>Vegetables</Text>
-      </View>
+
 
       {/* Content Section */}
       <View style={styles.contentSection}>
@@ -58,6 +54,7 @@ export default function CategoriesScreen({ navigation }) {
 
         {/* Recommended Products */}
         <View style={styles.productsContainer}>
+          <Text style={styles.sectionHeader}>Fruits</Text>
           <FlatList
             data={recommendedProducts}
             numColumns={2}
@@ -116,7 +113,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'green',
+    color: '#Ff7e00,
   },
   sectionHeader2: {
     fontSize: 18,
