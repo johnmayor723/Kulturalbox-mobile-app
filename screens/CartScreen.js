@@ -34,16 +34,6 @@ const CartScreen = ({ navigation }) => {
     { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
   ]);
 
-  // Enquiry form state
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-
-  // Handle enquiry form submission
-  const handleEnquirySubmit = () => {
-    console.log('Enquiry Submitted:', { name, email, message });
-  };
-
   // Calculate total amount
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
@@ -74,23 +64,24 @@ const CartScreen = ({ navigation }) => {
         {/* Products You May Like */}
         <View style={styles.suggestedProductsSection}>
           <Text style={styles.sectionTitle}>Products You May Like</Text>
-          {suggestedProducts.map(product => (
-            <TouchableOpacity key={product.id} style={styles.suggestedProduct}>
-              <Image source={product.image} style={styles.productImage} />
-              <View style={styles.productDetails}>
-                <Text>{product.name}</Text>
-                <Text>${product.price.toFixed(2)}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          <View style={styles.suggestedProductsGrid}>
+            {suggestedProducts.map(product => (
+              <TouchableOpacity key={product.id} style={styles.suggestedProduct}>
+                <Image source={product.image} style={styles.suggestedProductImage} />
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.productPrice}>${product.price.toFixed(2)}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-
       </ScrollView>
 
       {/* Fixed Bottom Tab */}
       <View style={styles.bottomTab}>
         <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
-        <Button  title="Proceed to Payment" onPress={handleCheckout} style={styles.bottomTabBtn} />
+        <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
+          <Text style={styles.checkoutText}>Proceed to Payment</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -100,14 +91,16 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   heroSection: {
     height: 50,
-    backgroundColor: 'green',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
     marginBottom: 10,
   },
   heroText: {
     fontSize: 24,
-    color: '#fff',
+    color: 'green',
     fontWeight: 'bold',
   },
   scrollContainer: {
@@ -146,28 +139,61 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  suggestedProduct: {
+  suggestedProductsGrid: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
-  productDetails: {
-    marginLeft: 10,
+  suggestedProduct: {
+    width: '48%', // Adjusting for two columns with margin
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    alignItems: 'center',
+  },
+  suggestedProductImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
+  },
+  productName: {
+    fontWeight: 'bold',
+    marginVertical: 5,
+  },
+  productPrice: {
+    color: '#555',
   },
   bottomTab: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderTopWidth: 1,
     borderColor: '#ccc',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  bottomTabBtn:{
-    backgroundColor:'green',
-},
   totalText: {
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+  checkoutButton: {
+    backgroundColor: '#FF7E00', // Amber orange for checkout button
+    borderRadius: 5,
+    padding: 10,
+    width: '50%', // Adjust width to fit nicely
+    alignItems: 'center',
+  },
+  checkoutText: {
+    color: 'white',
     fontWeight: 'bold',
   },
 });
