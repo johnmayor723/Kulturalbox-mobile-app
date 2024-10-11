@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#Ff7e00,
+    color: '#Ff7e00',
   },
   sectionHeader2: {
     fontSize: 18,
