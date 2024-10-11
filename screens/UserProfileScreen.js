@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
-export default function UserProfileScreen({ user, orderStatus }) {
+export default function UserProfileScreen() {
+  // Dummy user and order status data
+  const [user, setUser] = useState({
+    name: 'John Doe',
+    profileImage: 'https://via.placeholder.com/150', // Dummy profile image URL
+  });
+
+  const [orderStatus, setOrderStatus] = useState('shipped'); // This would dynamically come from the backend
+
+  // Function to get status icon based on the current order status
   const getStatusIcon = (status) => {
     switch (status) {
       case 'pending':
@@ -72,15 +81,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   heroSection: {
-    height: 180, // Keep the height manageable
+    height: 180, // Smaller height
     backgroundColor: '#FF7E00',
-    borderBottomLeftRadius: 80, // Smaller slope in original direction
+    borderBottomLeftRadius: 80, // Smaller slope in the original direction
     borderBottomRightRadius: 80,
     justifyContent: 'center',
     alignItems: 'center',
   },
   heroContent: {
-    width: '85%', // Keep the width increased as requested
+    width: '85%', // Increased width
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
@@ -106,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   orderSection: {
-    marginTop: 60, // Maintain separation from hero section
+    marginTop: 60, // Separate from hero section
     paddingHorizontal: 20,
     paddingBottom: 20,
     borderBottomWidth: 2,
