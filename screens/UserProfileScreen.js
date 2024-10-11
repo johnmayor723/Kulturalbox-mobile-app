@@ -1,94 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons'; // Ensure you have installed these: expo install @expo/vector-icons
+import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
-export default function UserProfileScreen({navigation}) {
-  const [orderStatus, setOrderStatus] = useState('pending'); // Example of order status coming from backend ('pending', 'shipped', 'delivered', etc.)
-
-  // Logic to change icon colors based on order status
-  const getOrderIconColor = (status) => {
-    if (status === 'pending') return 'orange';
-    if (status === 'shipped') return '#FF7E00'; // Amber orange
-    if (status === 'delivered') return 'green';
-    if (status === 'returned' || status === 'problem') return 'red'; // Problem status
-    return 'gray';
+export default function UserProfileScreen({ user, orderStatus }) {
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'pending':
+        return <MaterialIcons name="hourglass-empty" size={24} color="orange" />;
+      case 'shipped':
+        return <FontAwesome name="truck" size={24} color="orange" />;
+      case 'delivered':
+        return <Ionicons name="checkmark-circle-outline" size={24} color="green" />;
+      case 'returned':
+        return <MaterialIcons name="rotate-left" size={24} color="red" />;
+      case 'failed':
+        return <Ionicons name="close-circle-outline" size={24} color="red" />;
+      default:
+        return null;
+    }
   };
-
-  // Simulate getting order status from backend
-  useEffect(() => {
-    // Fetch order status from the backend here
-    // Example: setOrderStatus(response.data.orderStatus);
-  }, []);
 
   return (
     <View style={styles.container}>
       {/* Hero Section */}
       <View style={styles.heroSection}>
-        <View style={styles.profileContent}>
-          <View style={styles.profileHeader}>
-            {/* Profile Image and Icon */}
-            <View style={styles.profileImageWrapper}>
-              <Image
-                source={{ uri: 'https://via.placeholder.com/100' }} // Dummy profile image URL
-                style={styles.profileImage}
-              />
-              <TouchableOpacity style={styles.editIcon}>
-                <Ionicons name="camera" size={20} color="white" />
-              </TouchableOpacity>
-            </View>
-            {/* User's Name and Edit Icon */}
-            <Text style={styles.userName}>John Doe</Text>
+        <View style={styles.heroContent}>
+          <TouchableOpacity>
+            <Image source={{ uri: user.profileImage }} style={styles.profileImage} />
+          </TouchableOpacity>
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{user.name}</Text>
             <TouchableOpacity>
-              <MaterialIcons name="edit" size={24} color="gray" style={styles.editProfileIcon} />
+              <Ionicons name="pencil-outline" size={20} color="gray" />
             </TouchableOpacity>
           </View>
         </View>
       </View>
 
-      {/* My Order Section */}
-      <View style={styles.myOrderSection}>
-        <Text style={styles.sectionTitle}>My Order</Text>
-        <View style={styles.orderTracking}>
-          <TouchableOpacity>
-            <FontAwesome
-              name="hourglass-half"
-              size={24}
-              color={getOrderIconColor(orderStatus === 'pending' ? 'pending' : 'gray')}
-            />
-            <Text>Pending Payment</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome
-              name="truck"
-              size={24}
-              color={getOrderIconColor(orderStatus === 'shipped' ? 'shipped' : 'gray')}
-            />
-            <Text>Shipped</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              name={orderStatus === 'delivered' ? 'checkmark-circle' : 'close-circle'}
-              size={24}
-              color={getOrderIconColor(orderStatus === 'delivered' ? 'delivered' : 'returned')}
-            />
-            <Text>{orderStatus === 'returned' ? 'Returned' : 'Delivered'}</Text>
-          </TouchableOpacity>
+      {/* Order Tracking Section */}
+      <View style={styles.orderSection}>
+        <Text style={styles.sectionTitle}>My Orders</Text>
+        <View style={styles.trackingSection}>
+          <View>{getStatusIcon(orderStatus)}</View>
+          <View>{getStatusIcon('shipped')}</View>
+          <View>{getStatusIcon('delivered')}</View>
         </View>
       </View>
 
-      {/* Wishlist, Recently Viewed, and Address Management Section */}
-      <View style={styles.extraSection}>
-        <TouchableOpacity style={styles.extraItem}>
+      {/* Wishlist, Recently Viewed, Address Management */}
+      <View style={styles.otherSection}>
+        <TouchableOpacity style={styles.iconText}>
           <Ionicons name="heart-outline" size={24} color="gray" />
-          <Text>Wishlist</Text>
+          <Text style={styles.iconTextLabel}>Wishlist</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.extraItem}>
+        <TouchableOpacity style={styles.iconText}>
           <Ionicons name="eye-outline" size={24} color="gray" />
-          <Text>Recently Viewed</Text>
+          <Text style={styles.iconTextLabel}>Recently Viewed</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.extraItem}>
+        <TouchableOpacity style={styles.iconText}>
           <Ionicons name="location-outline" size={24} color="gray" />
-          <Text>Address Management</Text>
+          <Text style={styles.iconTextLabel}>Address Management</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -98,83 +69,71 @@ export default function UserProfileScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   heroSection: {
-    backgroundColor: '#FF7E00', // Amber orange
-    height: 200,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
+    height: 180, // Keep the height manageable
+    backgroundColor: '#FF7E00',
+    borderBottomLeftRadius: 80, // Smaller slope in original direction
+    borderBottomRightRadius: 80,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  profileContent: {
-    backgroundColor: 'white',
-    width: '70%',
-    padding: 20,
+  heroContent: {
+    width: '85%', // Keep the width increased as requested
+    backgroundColor: '#fff',
     borderRadius: 10,
+    padding: 20,
     position: 'absolute',
-    top: '60%',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  profileHeader: {
+    bottom: -40, // Positioned below the arch
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  profileImageWrapper: {
-    position: 'relative',
   },
   profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
-  editIcon: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'green',
-    borderRadius: 20,
-    padding: 5,
+  userInfo: {
+    flex: 1,
+    marginLeft: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   userName: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 10,
   },
-  editProfileIcon: {
-    marginLeft: 10,
-  },
-  myOrderSection: {
-    backgroundColor: 'white',
-    padding: 20,
-    margin: 10,
+  orderSection: {
+    marginTop: 60, // Maintain separation from hero section
+    paddingHorizontal: 20,
+    paddingBottom: 20,
     borderBottomWidth: 2,
-    borderBottomColor: '#d3d3d3',
+    borderBottomColor: 'lightgray',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  orderTracking: {
+  trackingSection: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  extraSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: 'white',
-    padding: 20,
-    margin: 10,
+  otherSection: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+    flex: 1,
+    justifyContent: 'space-between', // Stack last items
   },
-  extraItem: {
+  iconText: {
+    flexDirection: 'row',
     alignItems: 'center',
+    marginVertical: 15,
+  },
+  iconTextLabel: {
+    marginLeft: 10,
+    fontSize: 16,
   },
 });
