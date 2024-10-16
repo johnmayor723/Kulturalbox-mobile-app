@@ -12,7 +12,7 @@ const SignupScreen = ({ navigation }) => {
   
   const handleSignup = async () => {
   try {
-    const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/signup';
+    const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/register';
     const payload = { name, email, password };
 
     // Make the API request using axios
