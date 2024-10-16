@@ -1,14 +1,34 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Alert, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignup = () => {
-    navigation.navigate('Main'); // Navigate to Home on signup
-  };
+  
+  const handleSignup = async () => {
+  try {
+    const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/signup';
+    const payload = { name, email, password };
+
+    // Make the API request using axios
+    const response = await axios.post(endpoint, payload);
+
+    const { token, user } = response.data;
+
+    // If response is successful, store the token and user in AsyncStorage
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('user', JSON.stringify(user));
+
+    Alert.alert(isLogin ? 'Login successful!' : 'Signup successful!', `Welcome ${user.name}`);
+    navigation.navigate('Home'); // Navigate to Home or another screen after auth
+  } catch (error) {
+    console.error(error);
+    Alert.alert(isLogin ? 'Login failed' : 'Signup failed', error.response?.data?.message || 'Something went wrong');
+  }
+};
+
 
   return (
     <View style={styles.container}>
