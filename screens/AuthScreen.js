@@ -8,13 +8,13 @@ import axios from 'axios';
 const AuthScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState(''); // Only needed for signup
+  //const [name, setName] = useState(''); // Only needed for signup
   const [isLogin, setIsLogin] = useState(true); // Toggle between login/signup
   
   const handleLogin = async () => {
   try {
     const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/login';
-    const payload = { name, email, password };
+    const payload = { email, password };
 
     // Make the API request using axios
     const response = await axios.post(endpoint, payload);
