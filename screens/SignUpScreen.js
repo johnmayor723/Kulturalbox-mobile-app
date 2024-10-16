@@ -24,11 +24,11 @@ const SignupScreen = ({ navigation }) => {
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('user', JSON.stringify(user));
 
-    Alert.alert(isLogin ? 'Login successful!' : 'Signup successful!', `Welcome ${user.name}`);
+    Alert.alert('Signup successful!', `Welcome ${user.name}`);
     navigation.navigate('Home'); // Navigate to Home or another screen after auth
   } catch (error) {
     console.error(error);
-    Alert.alert(isLogin ? 'Login failed' : 'Signup failed', error.response?.data?.message || 'Something went wrong');
+    Alert.alert( 'Something went wrong');
   }
 };
 
