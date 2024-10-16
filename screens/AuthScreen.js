@@ -12,29 +12,26 @@ const AuthScreen = ({ navigation }) => {
   const [isLogin, setIsLogin] = useState(true); // Toggle between login/signup
   
   const handleLogin = async () => {
-    try {
-      const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/login'
-      const payload = {name, email, password}
+  try {
+    const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/login';
+    const payload = { name, email, password };
 
-         // Make the API request using axios
-      const response = await axios.post(endpoint, payload);
+    // Make the API request using axios
+    const response = await axios.post(endpoint, payload);
 
-      const { token, user } = response.data;
+    const { token, user } = response.data;
 
-      // If response is successful, store the token and user in AsyncStorage
-      await AsyncStorage.setItem('token', token);
-      await AsyncStorage.setItem('user', JSON.stringify(user));
+    // If response is successful, store the token and user in AsyncStorage
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('user', JSON.stringify(user));
 
-      Alert.alert(isLogin ? 'Login successful!' : 'Signup successful!', `Welcome ${user.name}`);
-      navigation.navigate('Home'); // Navigate to Home or another screen after auth
-
-    } catch (error) {
-      console.error(error);
-      Alert.alert(isLogin ? 'Login failed' : 'Signup failed', error.response?.data?.message || 'Something went wrong');
-    }
-  
-    //navigation.navigate('Main'); // Navigate to Home on login
-  };
+    Alert.alert(isLogin ? 'Login successful!' : 'Signup successful!', `Welcome ${user.name}`);
+    navigation.navigate('Home'); // Navigate to Home or another screen after auth
+  } catch (error) {
+    console.error(error);
+    Alert.alert(isLogin ? 'Login failed' : 'Signup failed', error.response?.data?.message || 'Something went wrong');
+  }
+};
 
   return (
     <View style={styles.container}>
