@@ -20,7 +20,7 @@ const HomeScreen = () => {
     // Render each product item
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Single Product', { product: item })}>
-            <Image source={{item.imageUrl}} style={styles.cardImage} />
+            <Image source={item.imageUrl} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{item.title}</Text>
             <Text style={styles.cardPrice}>₦{item.price}</Text>
             <TouchableOpacity style={styles.addButton}>
@@ -37,7 +37,9 @@ const HomeScreen = () => {
       try {
         const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
         setProducts(response.data);
-          console.log(products);
+          products.forEach(product => {
+          console.log(product.imageUrl);
+        });
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
