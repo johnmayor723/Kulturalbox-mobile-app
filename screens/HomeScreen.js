@@ -20,7 +20,7 @@ const HomeScreen = () => {
     // Render each product item
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Single Product', { product: item })}>
-            <Image source={item.image} style={styles.cardImage} />
+            <Image source={item.imageUrl} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{item.title}</Text>
             <Text style={styles.cardPrice}>₦{item.price}</Text>
             <TouchableOpacity style={styles.addButton}>
