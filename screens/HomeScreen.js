@@ -1,20 +1,8 @@
-import React from 'react';
+import  React, {useState, useEffect} from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-// Dummy product data
-const dummyProducts = [
-    { id: '1', title: 'Apple', price: '500', image: require('../assets/a1.jpeg') },
-    { id: '2', title: 'Tomato', price: '200', image: require('../assets/a2.jpeg') },
-    { id: '3', title: 'Pepper', price: '800', image: require('../assets/a3.jpeg') },
-    { id: '4', title: 'Ugu', price: '300', image: require('../assets/a4.jpeg') },
-    { id: '5', title: 'Beef', price: '1000', image: require('../assets/a5.jpeg') },
-    { id: '6', title: 'Onions', price: '400', image: require('../assets/a6.jpeg') },
-    { id: '7', title: 'Ponmo', price: '600', image: require('../assets/a7.jpeg') },
-    { id: '8', title: 'Tete', price: '700', image: require('../assets/a8.jpg') },
-    { id: '9', title: 'Beans', price: '900', image: require('../assets/a9.jpg') },
-    { id: '10', title: 'Yam', price: '150', image: require('../assets/a10.jpg') }
-];
 
 // Categories Data
 const categories = [
@@ -26,6 +14,8 @@ const categories = [
 
 const HomeScreen = () => {
     const navigation = useNavigation();
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     // Render each product item
     const renderItem = ({ item }) => (
@@ -38,6 +28,32 @@ const HomeScreen = () => {
             </TouchableOpacity>
         </TouchableOpacity>
     );
+
+
+// fetching products 
+  useEffect(() => {
+    // Fetch products from the API
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </View>
+    );
+  }
 
     // Render categories
     const renderCategory = ({ item }) => (
@@ -69,7 +85,7 @@ const HomeScreen = () => {
 
             {/* Products Section */}
             <FlatList
-                data={dummyProducts}
+                data={products}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
                 numColumns={2}
