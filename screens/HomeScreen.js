@@ -37,6 +37,7 @@ const HomeScreen = () => {
       try {
         const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
         setProducts(response.data);
+          console.log(products);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
