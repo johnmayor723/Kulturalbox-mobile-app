@@ -12,15 +12,11 @@ const ItemScreen = ({ route }) => {
     const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
 
-    const handlePay = () => {
-        Alert.alert("Make Payment", `Proceed to pay ₦${product.price}`);
-    };
-
     const handleAddToCart = async () => {
         try {
             await axios.post(`https://pantry-hub-server.onrender.com/api/carts/${product.id}`, {
                 productId: product.id,
-                quantity: quantity,
+                qty: quantity,
             });
             Alert.alert("Success", "Product added to cart!");
         } catch (error) {
@@ -93,10 +89,7 @@ const ItemScreen = ({ route }) => {
                     <Text style={styles.cartButtonText}>Add to Cart</Text>
                 </TouchableOpacity>
 
-                {/* Buy Now Button */}
-                <TouchableOpacity style={styles.buyButton} onPress={handlePay}>
-                    <Text style={styles.buyButtonText}>Buy Now</Text>
-                </TouchableOpacity>
+                
             </View>
         </View>
     );
