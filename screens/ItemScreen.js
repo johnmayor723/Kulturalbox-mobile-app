@@ -42,7 +42,7 @@ const ItemScreen = ({ route }) => {
 
             {/* Product Image with Add to Wishlist button */}
             <View style={styles.imageSection}>
-                <Image source={{ uri: product.image }} style={styles.productImage} />
+                <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
                 <TouchableOpacity style={styles.wishlistButton}>
                     <Text style={styles.wishlistText}>Add to Wishlist</Text>
                 </TouchableOpacity>
