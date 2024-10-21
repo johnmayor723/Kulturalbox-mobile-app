@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, Image, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import axios from 'axios';
 
-// Dummy recommended products data (You can replace this with data fetched from the backend later)
 const recommendedProducts = [
     { id: '1', title: 'Carrots', price: '200', image: require('../assets/a3.jpeg') },
     { id: '2', title: 'Cabbage', price: '300', image: require('../assets/a4.jpeg') },
@@ -10,6 +10,24 @@ const recommendedProducts = [
 
 const ItemScreen = ({ route }) => {
     const { product } = route.params;
+    const [quantity, setQuantity] = useState(1); // Manage quantity
+
+    const handlePay = () => {
+        Alert.alert("Make Payment", `Proceed to pay ₦${product.price}`);
+    };
+
+    const handleAddToCart = async () => {
+        try {
+            await axios.post(`https://pantry-hub-server.onrender.com/api/carts/${product.id}`, {
+                productId: product.id,
+                quantity: quantity,
+            });
+            Alert.alert("Success", "Product added to cart!");
+        } catch (error) {
+            console.error(error);
+            Alert.alert("Error", "Failed to add product to cart");
+        }
+    };
 
     const renderRecommendedItem = ({ item }) => (
         <View style={styles.recommendedCard}>
@@ -28,7 +46,7 @@ const ItemScreen = ({ route }) => {
 
             {/* Product Image with Add to Wishlist button */}
             <View style={styles.imageSection}>
-                <Image source={product.image} style={styles.productImage} />
+                <Image source={{ uri: product.image }} style={styles.productImage} />
                 <TouchableOpacity style={styles.wishlistButton}>
                     <Text style={styles.wishlistText}>Add to Wishlist</Text>
                 </TouchableOpacity>
@@ -40,7 +58,6 @@ const ItemScreen = ({ route }) => {
                 <Text style={styles.description}>
                     This is the detailed description of the product {product.title}. You can later replace this with dynamic content from your backend.
                 </Text>
-                {/* Product Rating (You can implement real star ratings later) */}
                 <Text style={styles.rating}>⭐⭐⭐⭐⭐ (5.0)</Text>
             </View>
 
@@ -59,10 +76,25 @@ const ItemScreen = ({ route }) => {
             {/* Fixed Bottom Bar */}
             <View style={styles.bottomBar}>
                 <Text style={styles.totalPrice}>Total: ₦{product.price}</Text>
-                <TouchableOpacity style={styles.cartButton}>
+
+                {/* Quantity Management */}
+                <View style={styles.quantitySection}>
+                    <TouchableOpacity onPress={() => setQuantity(quantity > 1 ? quantity - 1 : 1)} style={styles.quantityButton}>
+                        <Text style={styles.quantityText}>-</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.quantityValue}>{quantity}</Text>
+                    <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={styles.quantityButton}>
+                        <Text style={styles.quantityText}>+</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {/* Add to Cart Button */}
+                <TouchableOpacity style={styles.cartButton} onPress={handleAddToCart}>
                     <Text style={styles.cartButtonText}>Add to Cart</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buyButton}>
+
+                {/* Buy Now Button */}
+                <TouchableOpacity style={styles.buyButton} onPress={handlePay}>
                     <Text style={styles.buyButtonText}>Buy Now</Text>
                 </TouchableOpacity>
             </View>
@@ -164,6 +196,24 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: 'green',
+    },
+    quantitySection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    quantityButton: {
+        backgroundColor: '#FF7E00',
+        padding: 10,
+        borderRadius: 5,
+        marginHorizontal: 5,
+    },
+    quantityText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    quantityValue: {
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     cartButton: {
         backgroundColor: '#2D7B30',
