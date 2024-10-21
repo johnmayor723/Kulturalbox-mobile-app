@@ -16,7 +16,7 @@ const ItemScreen = ({ route }) => {
         try {
             await axios.post(`https://pantry-hub-server.onrender.com/api/carts/${product.id}`, {
                 productId: product.id,
-                qty: quantity,
+                quantity: quantity,
             });
             Alert.alert("Success", "Product added to cart!");
         } catch (error) {
