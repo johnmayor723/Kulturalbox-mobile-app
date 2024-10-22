@@ -1,45 +1,38 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { deleteItem } from '../services/cartService'; // Import deleteItem function
 
-// Importing images from the assets folder
-const images = {
-  a1: require('../assets/a1.jpeg'),
-  a2: require('../assets/a2.jpeg'),
-  a3: require('../assets/a3.jpeg'),
-  a4: require('../assets/a4.jpeg'),
-  a5: require('../assets/a5.jpeg'),
-  a6: require('../assets/a6.jpeg'),
-  a7: require('../assets/a7.jpeg'),
-  a8: require('../assets/a8.jpg'),
-  a9: require('../assets/a9.jpg'),
-  a10: require('../assets/a10.jpg'),
-};
+const CartScreen = ({ route, navigation }) => {
+  const { cart } = route.params; // Get cart data from route parameters
+  const [cartItems, setCartItems] = useState(cart); // Set cart items using passed data
 
-const CartScreen = ({ navigation }) => {
-  // Sample cart items with images
-  const [cartItems] = useState([
-    { id: 1, name: 'Apples', price: 2.99, quantity: 2, image: images.a1 },
-    { id: 2, name: 'Bananas', price: 1.99, quantity: 5, image: images.a2 }
-  ]);
-
-  // Suggested products with images
-  const [suggestedProducts] = useState([
-    { id: 3, name: 'Oranges', price: 3.99, image: images.a3 },
-    { id: 4, name: 'Grapes', price: 4.99, image: images.a4 },
-    { id: 5, name: 'Mangoes', price: 5.99, image: images.a5 },
-    { id: 6, name: 'Pineapples', price: 3.49, image: images.a6 },
-    { id: 7, name: 'Strawberries', price: 4.99, image: images.a7 },
-    { id: 8, name: 'Blueberries', price: 6.99, image: images.a8 },
-    { id: 9, name: 'Watermelons', price: 7.99, image: images.a9 },
-    { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
-  ]);
+  // Function to update the quantity of a cart item
+  const updateQuantity = (id, type) => {
+    const updatedCart = cartItems.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          quantity: type === 'increase' ? item.quantity + 1 : Math.max(item.quantity - 1, 1) // Prevent quantity from going below 1
+        };
+      }
+      return item;
+    });
+    setCartItems(updatedCart);
+  };
 
   // Calculate total amount
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
+  // Handle item deletion
+  const handleDelete = (id) => {
+    const updatedCart = cartItems.filter(item => item.id !== id);
+    setCartItems(updatedCart);
+    deleteItem(id); // Trigger the deleteItem function
+  };
+
   // Navigate to Payment screen
   const handleCheckout = () => {
-    navigation.navigate('Payment');
+    navigation.navigate('Payment', { cartItems });
   };
 
   return (
@@ -55,24 +48,27 @@ const CartScreen = ({ navigation }) => {
           {cartItems.map(item => (
             <View key={item.id} style={styles.cartItem}>
               <Image source={item.image} style={styles.productImage} />
-              <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
+              <Text style={styles.itemText}>{item.name}</Text>
+
+              {/* Quantity Adjustment Buttons */}
+              <View style={styles.quantityContainer}>
+                <TouchableOpacity onPress={() => updateQuantity(item.id, 'decrease')} style={styles.quantityButton}>
+                  <Text style={styles.quantityText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{item.quantity}</Text>
+                <TouchableOpacity onPress={() => updateQuantity(item.id, 'increase')} style={styles.quantityButton}>
+                  <Text style={styles.quantityText}>+</Text>
+                </TouchableOpacity>
+              </View>
+
               <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+
+              {/* Delete Button */}
+              <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteButton}>
+                <Text style={styles.deleteText}>Delete</Text>
+              </TouchableOpacity>
             </View>
           ))}
-        </View>
-
-        {/* Products You May Like */}
-        <View style={styles.suggestedProductsSection}>
-          <Text style={styles.sectionTitle}>Products You May Like</Text>
-          <View style={styles.suggestedProductsGrid}>
-            {suggestedProducts.map(product => (
-              <TouchableOpacity key={product.id} style={styles.suggestedProduct}>
-                <Image source={product.image} style={styles.suggestedProductImage} />
-                <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productPrice}>${product.price.toFixed(2)}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
         </View>
       </ScrollView>
 
@@ -127,50 +123,33 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  quantityButton: {
+    backgroundColor: '#FF7E00', // Amber orange for buttons
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+  },
+  quantityText: {
+    fontSize: 16,
+    marginHorizontal: 10,
+  },
   itemPrice: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  suggestedProductsSection: {
-    marginVertical: 20,
+  deleteButton: {
+    backgroundColor: '#ff4d4d',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
   },
-  sectionTitle: {
-    fontSize: 18,
+  deleteText: {
+    color: 'white',
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  suggestedProductsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  suggestedProduct: {
-    width: '48%', // Adjusting for two columns with margin
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    alignItems: 'center',
-  },
-  suggestedProductImage: {
-    width: '100%',
-    height: 100,
-    borderRadius: 8,
-  },
-  productName: {
-    fontWeight: 'bold',
-    marginVertical: 5,
-  },
-  productPrice: {
-    color: '#555',
   },
   bottomTab: {
     padding: 20,
@@ -189,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF7E00', // Amber orange for checkout button
     borderRadius: 5,
     padding: 10,
-    width: '50%', // Adjust width to fit nicely
+    width: '50%',
     alignItems: 'center',
   },
   checkoutText: {
