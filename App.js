@@ -90,11 +90,7 @@ function DrawerNavigator() {
                 component={UserProfileScreen} 
                 options={{ title: "Profile", headerShown: true }}  // Keep header with hamburger menu
             />
-            <Drawer.Screen 
-                name="DrawerCart" 
-                component={CartScreen} 
-                options={{ title: "Cart", headerShown: true }}  // Keep header with hamburger menu
-            />
+            
              <Drawer.Screen 
                 name="DrawerContact" 
                 component={HelpScreen} 
@@ -133,6 +129,11 @@ export default function App() {
                 <Stack.Screen
                     name="Single Product"
                     component={ItemScreen}
+                    options={{ headerShown:true }}  // Hides the header
+                />
+               <Stack.Screen
+                    name="Cart"
+                    component={CartScreen}
                     options={{ headerShown:true }}  // Hides the header
                 />
                  <Stack.Screen
