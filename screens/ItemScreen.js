@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
-import {addToCart} from "services/cartServices"
+import {addToCart} from "services/cartService"
 
 const recommendedProducts = [
     { id: '1', title: 'Carrots', price: '200', image: require('../assets/a3.jpeg') },
