@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import {addToCart} from "services/cartServices"
 
