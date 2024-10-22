@@ -17,7 +17,7 @@ const ItemScreen = ({ route }) => {
         product.price = price*quantity;
         product.qty = quantity;
         Alert.alert(`Added products to cart.\n Cart detatails ${product} `)
-        AddToCart(product)
+        addToCart(product)
         navigation.navigate("Cart",{product})
     };
 
