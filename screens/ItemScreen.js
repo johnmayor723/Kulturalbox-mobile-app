@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Alert, View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
+import {addToCart} from "services/cartServices"
 
 const recommendedProducts = [
     { id: '1', title: 'Carrots', price: '200', image: require('../assets/a3.jpeg') },
@@ -11,18 +12,13 @@ const recommendedProducts = [
 const ItemScreen = ({ route }) => {
     const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
-
+    const price = product.price
     const handleAddToCart = async () => {
-        try {
-            await axios.post(`https://pantry-hub-server.onrender.com/api/carts/${product.id}`, {
-                productId: product.id,
-                quantity: quantity,
-            });
-            Alert.alert("Success", "Product added to cart!");
-        } catch (error) {
-            console.error(error);
-            Alert.alert("Error", "Failed to add product to cart");
-        }
+        product.price = price*quantity;
+        product.qty = quantity;
+        Alert.alert(`Added products to cart.\n Cart detatails ${product} `)
+        AddToCart(product)
+        navigation.navigate("Cart",{product})
     };
 
     const renderRecommendedItem = ({ item }) => (
