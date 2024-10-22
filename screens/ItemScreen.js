@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 import {addToCart} from "../services/cartService"
 
 const recommendedProducts = [
@@ -10,6 +11,7 @@ const recommendedProducts = [
 ];
 
 const ItemScreen = ({ route }) => {
+    const navigation = useNavigation();
     const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
     const price = product.price
