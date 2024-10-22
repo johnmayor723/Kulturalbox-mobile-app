@@ -1,25 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deleteItem } from '../services/cartService'; // Assuming deleteItem is imported correctly
+
+// Importing images from the assets folder
+const images = {
+  a1: require('../assets/a1.jpeg'),
+  a2: require('../assets/a2.jpeg'),
+  a3: require('../assets/a3.jpeg'),
+  a4: require('../assets/a4.jpeg'),
+  a5: require('../assets/a5.jpeg'),
+  a6: require('../assets/a6.jpeg'),
+  a7: require('../assets/a7.jpeg'),
+  a8: require('../assets/a8.jpg'),
+  a9: require('../assets/a9.jpg'),
+  a10: require('../assets/a10.jpg'),
+};
 
 const CartScreen = ({ navigation }) => {
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  // Fetch cart items from AsyncStorage
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const storedCartItems = await AsyncStorage.getItem('cartItems');
-        const parsedCartItems = storedCartItems ? JSON.parse(storedCartItems) : [];
-        setCartItems(parsedCartItems);
-        calculateTotal(parsedCartItems);
-      } catch (error) {
-        console.log('Error fetching cart items:', error);
-      }
-    };
+  // Fetch cart from AsyncStorage
+  const fetchCartItems = async () => {
+    try {
+      let cart = await AsyncStorage.getItem('cart');
+      cart = cart ? JSON.parse(cart) : [];
+      setCartItems(cart);
+      calculateTotal(cart);
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchCartItems();
   }, []);
 
@@ -29,48 +43,36 @@ const CartScreen = ({ navigation }) => {
     setTotalAmount(total);
   };
 
-  // Increase quantity
-  const increaseQuantity = (id) => {
-    const updatedItems = cartItems.map(item => {
+  // Increase quantity of item
+  const increaseQuantity = async (id) => {
+    const updatedCart = cartItems.map((item) => {
       if (item.id === id) {
-        item.quantity += 1;
+        return { ...item, quantity: item.quantity + 1 };
       }
       return item;
     });
-    setCartItems(updatedItems);
-    calculateTotal(updatedItems);
-    saveCartToStorage(updatedItems);
+    setCartItems(updatedCart);
+    await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+    calculateTotal(updatedCart);
   };
 
-  // Decrease quantity
-  const decreaseQuantity = (id) => {
-    const updatedItems = cartItems.map(item => {
+  // Decrease quantity of item
+  const decreaseQuantity = async (id) => {
+    const updatedCart = cartItems.map((item) => {
       if (item.id === id && item.quantity > 1) {
-        item.quantity -= 1;
+        return { ...item, quantity: item.quantity - 1 };
       }
       return item;
     });
-    setCartItems(updatedItems);
-    calculateTotal(updatedItems);
-    saveCartToStorage(updatedItems);
+    setCartItems(updatedCart);
+    await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+    calculateTotal(updatedCart);
   };
 
-  // Delete an item
+  // Delete item from cart
   const handleDelete = async (id) => {
-    const updatedItems = cartItems.filter(item => item.id !== id);
-    setCartItems(updatedItems);
-    calculateTotal(updatedItems);
-    saveCartToStorage(updatedItems);
-    await deleteItem(id); // Call the deleteItem service
-  };
-
-  // Save cart data to AsyncStorage
-  const saveCartToStorage = async (items) => {
-    try {
-      await AsyncStorage.setItem('cartItems', JSON.stringify(items));
-    } catch (error) {
-      console.log('Error saving cart to storage:', error);
-    }
+    await deleteItem(id);
+    fetchCartItems(); // Refresh the cart after deletion
   };
 
   // Navigate to Payment screen
@@ -80,7 +82,7 @@ const CartScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Fixed Top Bar */}
+      {/* Hero Section */}
       <View style={styles.heroSection}>
         <Text style={styles.heroText}>Your Cart</Text>
       </View>
@@ -88,25 +90,29 @@ const CartScreen = ({ navigation }) => {
       {/* Cart Items Section */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cartItemsSection}>
-          {cartItems.map(item => (
+          {cartItems.map((item) => (
             <View key={item.id} style={styles.cartItem}>
               <Image source={item.image} style={styles.productImage} />
-              <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
-              <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
-
-              {/* Quantity Buttons */}
-              <View style={styles.quantityContainer}>
-                <TouchableOpacity onPress={() => decreaseQuantity(item.id)}>
-                  <Text style={styles.quantityButton}>-</Text>
-                </TouchableOpacity>
-                <Text style={styles.quantityText}>{item.quantity}</Text>
-                <TouchableOpacity onPress={() => increaseQuantity(item.id)}>
-                  <Text style={styles.quantityButton}>+</Text>
-                </TouchableOpacity>
+              <View style={styles.itemDetails}>
+                <Text style={styles.itemText}>{item.name}</Text>
+                <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+                <View style={styles.quantityControls}>
+                  <TouchableOpacity
+                    style={styles.quantityButton}
+                    onPress={() => decreaseQuantity(item.id)}
+                  >
+                    <Text style={styles.quantityButtonText}>-</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.quantityText}>{item.quantity}</Text>
+                  <TouchableOpacity
+                    style={styles.quantityButton}
+                    onPress={() => increaseQuantity(item.id)}
+                  >
+                    <Text style={styles.quantityButtonText}>+</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-
-              {/* Delete Button */}
-              <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteButton}>
+              <TouchableOpacity onPress={() => handleDelete(item.id)}>
                 <Text style={styles.deleteText}>Delete</Text>
               </TouchableOpacity>
             </View>
@@ -161,33 +167,37 @@ const styles = StyleSheet.create({
     height: 50,
     marginRight: 10,
   },
-  itemText: {
+  itemDetails: {
     flex: 1,
+  },
+  itemText: {
     fontSize: 16,
   },
   itemPrice: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  quantityContainer: {
+  quantityControls: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 10,
   },
   quantityButton: {
-    fontSize: 18,
+    backgroundColor: '#FF7E00', // Amber orange
+    padding: 5,
+    borderRadius: 3,
+  },
+  quantityButtonText: {
+    color: 'white',
+    fontSize: 16,
     fontWeight: 'bold',
-    paddingHorizontal: 10,
   },
   quantityText: {
     marginHorizontal: 10,
-  },
-  deleteButton: {
-    backgroundColor: '#FF7E00', // Amber orange
-    padding: 5,
-    borderRadius: 5,
+    fontSize: 16,
   },
   deleteText: {
-    color: 'white',
+    color: 'red',
     fontWeight: 'bold',
   },
   bottomTab: {
@@ -204,10 +214,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   checkoutButton: {
-    backgroundColor: '#FF7E00', // Amber orange for checkout button
+    backgroundColor: '#FF7E00',
     borderRadius: 5,
     padding: 10,
-    width: '50%', // Adjust width to fit nicely
+    width: '50%',
     alignItems: 'center',
   },
   checkoutText: {
