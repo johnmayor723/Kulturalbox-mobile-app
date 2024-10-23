@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Button, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import axios from "axios"
 // Importing images from the assets folder
 const images = {
   a1: require('../assets/a1.jpeg'),
@@ -18,7 +18,37 @@ const images = {
 
 const CartScreen = ({ navigation }) => {
   const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(null);
   const [cartTotal, setCartTotal] = useState(0);
+  const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+    // Fetch products from the API
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
+        setProducts(response.data);                            
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </View>
+    );
+});
+
+useEffect(() => {
+  fetchCartFromStorage();
+  }, [cart]);
 
   // Suggested products with images
   const [suggestedProducts] = useState([
@@ -32,24 +62,41 @@ const CartScreen = ({ navigation }) => {
     { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
   ]);
 
-  useEffect(() => {
-    fetchCartFromStorage();
-  }, []);
-
+  
   useEffect(() => {
     calculateTotal();
   }, [cart]);
 
-  const fetchCartFromStorage = async () => {
+   //get data from local DB by ID
+  const getDataFromDB = async () => {
+    let items = await AsyncStorage.getItem('cartItems');
+    items = JSON.parse(items);
+    let productData = [];
+    if (items) {
+      Items.forEach(data => {
+        if (items.includes(data.id)) {
+          productData.push(data);
+          return;
+        }
+      });
+      setProduct(productData);
+      getTotal(productData);
+    } else {
+      setProduct(false);
+      getTotal(false);
+    }
+  };
+
+  /*const fetchCartFromStorage = async () => {
     try {
-      const savedCart = await AsyncStorage.getItem('cart');
+      const savedCart = await AsyncStorage.getItem('id');
       if (savedCart !== null) {
         setCart(JSON.parse(savedCart));
       }
     } catch (error) {
       console.log('Error fetching cart from storage:', error);
     }
-  };
+  };*/
 
   const saveCartToStorage = async (updatedCart) => {
     try {
