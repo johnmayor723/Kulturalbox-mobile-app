@@ -64,9 +64,7 @@ useEffect(() => {
   ]);
 
   
-  useEffect(() => {
-    calculateTotal();
-  }, [cart]);
+
 
    //get data from local DB by ID
   const getDataFromDB = async () => {
