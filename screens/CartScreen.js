@@ -17,35 +17,36 @@ const images = {
 };
 
 const CartScreen = ({ navigation }) => {
-  const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState(null);
-  const [cartTotal, setCartTotal] = useState(0);
-  const [products, setProducts] = useState([]);
-  //const [products2, setProducts2] = useState([]);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-    // Fetch products from the API
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
-        setProducts(response.data);                            
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+const [cart, setCart] = useState([]);
+const [total, setTotal] = useState(null);
+const [cartTotal, setCartTotal] = useState(0);
+const [products, setProducts] = useState([]);
+//const [products2, setProducts2] = useState([]);
+const [loading, setLoading] = useState(true);
 
-    fetchProducts();
-  }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#00ff00" />
-      </View>
-    );
-});
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []); // Dependency array is left empty to run the effect once when the component mounts.
+
+if (loading) {
+  return (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color="#00ff00" />
+    </View>
+  );
+}
 
 useEffect(() => {
   const unsubscribe = navigation.addListener('focus', () => {
@@ -58,7 +59,7 @@ useEffect(() => {
   };
 }, [navigation]);
   // Suggested products with images
-  const [suggestedProducts] = useState([
+const [suggestedProducts] = useState([
     { id: 3, name: 'Oranges', price: 3.99, image: images.a3 },
     { id: 4, name: 'Grapes', price: 4.99, image: images.a4 },
     { id: 5, name: 'Mangoes', price: 5.99, image: images.a5 },
