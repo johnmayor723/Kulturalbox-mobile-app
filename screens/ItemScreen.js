@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { addToCart} from '../services/cartService';
 
 const recommendedProducts = [
     { id: '1', title: 'Carrots', price: '200', image: require('../assets/a3.jpeg') },
@@ -42,7 +43,7 @@ const ItemScreen = ({ route }) => {
             console.error('Error adding product to cart:', error);
             Alert.alert('Error', 'Could not add product to cart');
         }
-    };*/
+    };
     const handleAddToCart = async () => {
     try {
         const cartItems = await AsyncStorage.getItem('cart');
@@ -75,7 +76,14 @@ const ItemScreen = ({ route }) => {
     } catch (error) {
         console.error('Error adding product to cart:', error);
         Alert.alert('Error', 'Could not add product to cart');
-    }
+    }*/
+    const handleAddToCart = () => {
+    
+    product.quantity = quantity;
+   
+    addToCartItem(product);
+    navigation.navigate("Cart")
+  };
 };
     const renderRecommendedItem = ({ item }) => (
         <View style={styles.recommendedCard}>
