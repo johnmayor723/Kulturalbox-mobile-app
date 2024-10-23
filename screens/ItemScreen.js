@@ -2,14 +2,48 @@ import React, { useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { addToCart} from '../services/cartService';
+//import { addToCart} from '../services/cartService';
 
 const recommendedProducts = [
     { id: '1', title: 'Carrots', price: '200', image: require('../assets/a3.jpeg') },
     { id: '2', title: 'Cabbage', price: '300', image: require('../assets/a4.jpeg') },
     { id: '3', title: 'Onions', price: '100', image: require('../assets/a6.jpeg') },
 ];
+const addToCart = async id => {
+    let itemArray = await AsyncStorage.getItem('cart');
+    itemArray = JSON.parse(itemArray);
+    if (itemArray) {
+      let array = itemArray;
+      array.push(id);
 
+      try {
+        await AsyncStorage.setItem('cart', JSON.stringify(array));
+        /*ToastAndroid.show(
+          'Item Added Successfully to cart',
+          ToastAndroid.SHORT,
+        );*/
+        Alert.alert("Item Added To Cart")
+        navigation.navigate('Cart');
+      } catch (error) {
+        return error;
+      }
+    } else {
+      let array = [];
+      array.push(id);
+      try {
+        await AsyncStorage.setItem('cart', JSON.stringify(array));
+        /*ToastAndroid.show(
+          'Item Added Successfully to cart',
+          ToastAndroid.SHORT,
+        );*/
+        Alert.alert("Item Added To Cart")
+        navigation.navigate('Cart');
+        //navigation.navigate('Cart');
+      } catch (error) {
+        return error;
+      }
+    }
+  };
 const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
     const { product } = route.params;
@@ -79,9 +113,9 @@ const ItemScreen = ({ route }) => {
     }*/
     const handleAddToCart = () => {
     
-    product.quantity = quantity;
+   //product.quantity = quantity;
    
-    addToCart(product);
+    addToCart(product.id);
     navigation.navigate("Cart")
   };
 
