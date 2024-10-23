@@ -17,7 +17,7 @@ const addToCart = async id => {
       array.push(id);
 
       try {
-        await AsyncStorage.setItem('cartItem, JSON.stringify(array));
+        await AsyncStorage.setItem('cartItem', JSON.stringify(array));
         /*ToastAndroid.show(
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
