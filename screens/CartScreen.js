@@ -21,6 +21,7 @@ const CartScreen = ({ navigation }) => {
   const [total, setTotal] = useState(null);
   const [cartTotal, setCartTotal] = useState(0);
   const [products, setProducts] = useState([]);
+  //const [products2, setProducts2] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
     // Fetch products from the API
@@ -47,7 +48,7 @@ const CartScreen = ({ navigation }) => {
 });
 
 useEffect(() => {
-  fetchCartFromStorage();
+  getDataFromDb();
   }, [cart]);
 
   // Suggested products with images
@@ -69,23 +70,34 @@ useEffect(() => {
 
    //get data from local DB by ID
   const getDataFromDB = async () => {
-    let items = await AsyncStorage.getItem('cartItems');
+    let items = await AsyncStorage.getItem('cartItem');
     items = JSON.parse(items);
     let productData = [];
     if (items) {
-      Items.forEach(data => {
+      products.forEach(data => {
         if (items.includes(data.id)) {
           productData.push(data);
           return;
         }
       });
-      setProduct(productData);
+      setCart(productData);
       getTotal(productData);
     } else {
-      setProduct(false);
+      setCart(false);
       getTotal(false);
     }
   };
+
+       //get total price of all items in the cart
+  const getTotal = productData => {
+    let total = 0;
+    for (let index = 0; index < productData.length; index++) {
+      let productPrice = productData[index].productPrice;
+      total = total + productPrice;
+    }
+    setTotal(total);
+  };
+
 
   /*const fetchCartFromStorage = async () => {
     try {
