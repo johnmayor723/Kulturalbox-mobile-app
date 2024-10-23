@@ -16,6 +16,19 @@ const images = {
   a10: require('../assets/a10.jpg'),
 };
 
+const suggestedProducts = [
+  { id: 1, name: 'Product 1', price: 19.99, image: require('../assets/a1.jpeg') },
+  { id: 2, name: 'Product 2', price: 29.99, image: require('../assets/a2.jpeg') },
+  { id: 3, name: 'Product 3', price: 39.99, image: require('../assets/a3.jpeg') },
+  { id: 4, name: 'Product 4', price: 49.99, image: require('../assets/a4.jpeg') },
+  { id: 5, name: 'Product 5', price: 59.99, image: require('../assets/a5.jpeg') },
+  { id: 6, name: 'Product 6', price: 69.99, image: require('../assets/a6.jpeg') },
+  { id: 7, name: 'Product 7', price: 79.99, image: require('../assets/a7.jpeg') },
+  { id: 8, name: 'Product 8', price: 89.99, image: require('../assets/a8.jpg') },
+  { id: 9, name: 'Product 9', price: 99.99, image: require('../assets/a9.jpg') },
+  { id: 10, name: 'Product 10', price: 109.99, image: require('../assets/a10.jpg') }
+];
+
 const CartScreen = ({ navigation }) => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(null);
