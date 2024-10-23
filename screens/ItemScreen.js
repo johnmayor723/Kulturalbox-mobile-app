@@ -10,14 +10,14 @@ const recommendedProducts = [
     { id: '3', title: 'Onions', price: '100', image: require('../assets/a6.jpeg') },
 ];
 const addToCart = async id => {
-    let itemArray = await AsyncStorage.getItem('cart');
+    let itemArray = await AsyncStorage.getItem('cartItem');
     itemArray = JSON.parse(itemArray);
     if (itemArray) {
       let array = itemArray;
       array.push(id);
 
       try {
-        await AsyncStorage.setItem('cart', JSON.stringify(array));
+        await AsyncStorage.setItem('cartItem, JSON.stringify(array));
         /*ToastAndroid.show(
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
