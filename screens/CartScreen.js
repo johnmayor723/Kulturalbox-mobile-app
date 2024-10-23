@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteItem } from '../services/cartService'; // Assuming deleteItem is imported correctly
 
 // Importing images from the assets folder
 const images = {
@@ -18,71 +17,74 @@ const images = {
 };
 
 const CartScreen = ({ navigation }) => {
-  const [cartItems, setCartItems] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
+  const [cart, setCart] = useState([]);
+  const [cartTotal, setCartTotal] = useState(0);
 
-  // Fetch cart from AsyncStorage
-  const fetchCartItems = async () => {
+  // Suggested products with images
+  const [suggestedProducts] = useState([
+    { id: 3, name: 'Oranges', price: 3.99, image: images.a3 },
+    { id: 4, name: 'Grapes', price: 4.99, image: images.a4 },
+    { id: 5, name: 'Mangoes', price: 5.99, image: images.a5 },
+    { id: 6, name: 'Pineapples', price: 3.49, image: images.a6 },
+    { id: 7, name: 'Strawberries', price: 4.99, image: images.a7 },
+    { id: 8, name: 'Blueberries', price: 6.99, image: images.a8 },
+    { id: 9, name: 'Watermelons', price: 7.99, image: images.a9 },
+    { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
+  ]);
+
+  useEffect(() => {
+    fetchCartFromStorage();
+  }, []);
+
+  useEffect(() => {
+    calculateTotal();
+  }, [cart]);
+
+  const fetchCartFromStorage = async () => {
     try {
-      let cart = await AsyncStorage.getItem('cart');
-      cart = cart ? JSON.parse(cart) : [];
-      setCartItems(cart);
-      calculateTotal(cart);
+      const savedCart = await AsyncStorage.getItem('cart');
+      if (savedCart !== null) {
+        setCart(JSON.parse(savedCart));
+      }
     } catch (error) {
-      console.error('Error fetching cart items:', error);
+      console.log('Error fetching cart from storage:', error);
     }
   };
 
-  useEffect(() => {
-    fetchCartItems();
-  }, []);
-
-  // Calculate total price
-  const calculateTotal = (items) => {
-    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    setTotalAmount(total);
+  const saveCartToStorage = async (updatedCart) => {
+    try {
+      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+    } catch (error) {
+      console.log('Error saving cart to storage:', error);
+    }
   };
 
-  // Increase quantity of item
-  const increaseQuantity = async (id) => {
-    const updatedCart = cartItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, quantity: item.quantity + 1 };
-      }
-      return item;
-    });
-    setCartItems(updatedCart);
-    await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
-    calculateTotal(updatedCart);
+  const removeItemFromCart = (itemId) => {
+    const updatedCart = cart.filter((cartItem) => cartItem.id !== itemId);
+    setCart(updatedCart);
+    saveCartToStorage(updatedCart);
   };
 
-  // Decrease quantity of item
-  const decreaseQuantity = async (id) => {
-    const updatedCart = cartItems.map((item) => {
-      if (item.id === id && item.quantity > 1) {
-        return { ...item, quantity: item.quantity - 1 };
-      }
-      return item;
-    });
-    setCartItems(updatedCart);
-    await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
-    calculateTotal(updatedCart);
+  const updateQuantity = (itemId, quantity) => {
+    const updatedCart = cart.map((cartItem) =>
+      cartItem.id === itemId ? { ...cartItem, quantity } : cartItem
+    );
+    setCart(updatedCart);
+    saveCartToStorage(updatedCart);
   };
 
-  // Delete item from cart
-  const handleDelete = async (id) => {
-    await deleteItem(id);
-    fetchCartItems(); // Refresh the cart after deletion
+  const calculateTotal = () => {
+    const total = cart.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+    setCartTotal(total);
   };
 
-  // Navigate to Payment screen
   const handleCheckout = () => {
     navigation.navigate('Payment');
   };
 
   return (
     <View style={styles.container}>
-      {/* Hero Section */}
+      {/* Fixed Top Bar */}
       <View style={styles.heroSection}>
         <Text style={styles.heroText}>Your Cart</Text>
       </View>
@@ -90,39 +92,42 @@ const CartScreen = ({ navigation }) => {
       {/* Cart Items Section */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cartItemsSection}>
-          {cartItems.map((item) => (
-            <View key={item.id} style={styles.cartItem}>
-              <Image source={item.image} style={styles.productImage} />
-              <View style={styles.itemDetails}>
-                <Text style={styles.itemText}>{item.name}</Text>
-                <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
-                <View style={styles.quantityControls}>
-                  <TouchableOpacity
-                    style={styles.quantityButton}
-                    onPress={() => decreaseQuantity(item.id)}
-                  >
-                    <Text style={styles.quantityButtonText}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.quantityText}>{item.quantity}</Text>
-                  <TouchableOpacity
-                    style={styles.quantityButton}
-                    onPress={() => increaseQuantity(item.id)}
-                  >
-                    <Text style={styles.quantityButtonText}>+</Text>
-                  </TouchableOpacity>
+          {cart.length > 0 ? (
+            cart.map(item => (
+              <View key={item.id} style={styles.cartItem}>
+                <Image source={images[`a${item.id}`]} style={styles.productImage} />
+                <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
+                <Text style={styles.itemPrice}>${(item.unitPrice * item.quantity).toFixed(2)}</Text>
+                <View style={styles.actions}>
+                  <Button title="+" onPress={() => updateQuantity(item.id, item.quantity + 1)} />
+                  <Button title="-" onPress={() => item.quantity > 1 ? updateQuantity(item.id, item.quantity - 1) : removeItemFromCart(item.id)} />
+                  <Button title="Remove" onPress={() => removeItemFromCart(item.id)} />
                 </View>
               </View>
-              <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                <Text style={styles.deleteText}>Delete</Text>
+            ))
+          ) : (
+            <Text>No items in your cart</Text>
+          )}
+        </View>
+
+        {/* Products You May Like */}
+        <View style={styles.suggestedProductsSection}>
+          <Text style={styles.sectionTitle}>Products You May Like</Text>
+          <View style={styles.suggestedProductsGrid}>
+            {suggestedProducts.map(product => (
+              <TouchableOpacity key={product.id} style={styles.suggestedProduct}>
+                <Image source={product.image} style={styles.suggestedProductImage} />
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.productPrice}>${product.price.toFixed(2)}</Text>
               </TouchableOpacity>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
       </ScrollView>
 
       {/* Fixed Bottom Tab */}
       <View style={styles.bottomTab}>
-        <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
+        <Text style={styles.totalText}>Total: ${cartTotal.toFixed(2)}</Text>
         <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
           <Text style={styles.checkoutText}>Proceed to Payment</Text>
         </TouchableOpacity>
@@ -167,38 +172,51 @@ const styles = StyleSheet.create({
     height: 50,
     marginRight: 10,
   },
-  itemDetails: {
-    flex: 1,
-  },
   itemText: {
+    flex: 1,
     fontSize: 16,
   },
   itemPrice: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  quantityControls: {
+  actions: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 8,
+  },
+  suggestedProductsSection: {
+    marginVertical: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  suggestedProductsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  suggestedProduct: {
+    width: '48%',
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
     alignItems: 'center',
-    marginTop: 10,
   },
-  quantityButton: {
-    backgroundColor: '#FF7E00', // Amber orange
-    padding: 5,
-    borderRadius: 3,
+  suggestedProductImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
   },
-  quantityButtonText: {
-    color: 'white',
-    fontSize: 16,
+  productName: {
     fontWeight: 'bold',
+    marginVertical: 5,
   },
-  quantityText: {
-    marginHorizontal: 10,
-    fontSize: 16,
-  },
-  deleteText: {
-    color: 'red',
-    fontWeight: 'bold',
+  productPrice: {
+    color: '#555',
   },
   bottomTab: {
     padding: 20,
