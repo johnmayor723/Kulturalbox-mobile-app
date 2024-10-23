@@ -84,7 +84,7 @@ const ItemScreen = ({ route }) => {
     addToCartItem(product);
     navigation.navigate("Cart")
   };
-};
+
     const renderRecommendedItem = ({ item }) => (
         <View style={styles.recommendedCard}>
             <Image source={item.image} style={styles.recommendedImage} />
