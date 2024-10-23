@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import axios from 'axios';
+import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import {addToCart} from "../services/cartService"
 
 const recommendedProducts = [
     { id: '1', title: 'Carrots', price: '200', image: require('../assets/a3.jpeg') },
@@ -14,13 +13,35 @@ const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
     const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
-    const price = product.price
+
     const handleAddToCart = async () => {
-        product.price = price*quantity;
-        product.qty = quantity;
-        //Alert.alert(`Added products to cart.\n Cart detatails ${product} `)
-        addToCart(product)
-        navigation.navigate("Cart",{product})
+        try {
+            const cartItems = await AsyncStorage.getItem('cart');
+            const cart = cartItems ? JSON.parse(cartItems) : [];
+            
+            // Check if the product is already in the cart
+            const existingProduct = cart.find(item => item.id === product.id);
+            
+            if (existingProduct) {
+                // Update the quantity of the existing product
+                existingProduct.quantity += quantity;
+            } else {
+                // Add new product to the cart
+                const newProduct = {
+                    ...product,
+                    quantity,
+                    total: product.price * quantity, // calculate total price
+                };
+                cart.push(newProduct);
+            }
+
+            await AsyncStorage.setItem('cart', JSON.stringify(cart));
+            Alert.alert('Success', 'Product added to cart!');
+            navigation.navigate("Cart", { product });
+        } catch (error) {
+            console.error('Error adding product to cart:', error);
+            Alert.alert('Error', 'Could not add product to cart');
+        }
     };
 
     const renderRecommendedItem = ({ item }) => (
@@ -69,7 +90,7 @@ const ItemScreen = ({ route }) => {
 
             {/* Fixed Bottom Bar */}
             <View style={styles.bottomBar}>
-                <Text style={styles.totalPrice}>Total: ₦{product.price}</Text>
+                <Text style={styles.totalPrice}>Total: ₦{product.price * quantity}</Text>
 
                 {/* Quantity Management */}
                 <View style={styles.quantitySection}>
@@ -86,8 +107,6 @@ const ItemScreen = ({ route }) => {
                 <TouchableOpacity style={styles.cartButton} onPress={handleAddToCart}>
                     <Text style={styles.cartButtonText}>Add to Cart</Text>
                 </TouchableOpacity>
-
-                
             </View>
         </View>
     );
@@ -213,15 +232,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     cartButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    buyButton: {
-        backgroundColor: '#FF7E00',
-        padding: 10,
-        borderRadius: 5,
-    },
-    buyButtonText: {
         color: '#fff',
         fontWeight: 'bold',
     },
