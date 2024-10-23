@@ -48,9 +48,15 @@ const CartScreen = ({ navigation }) => {
 });
 
 useEffect(() => {
-  getDataFromDb();
-  }, [cart]);
+  const unsubscribe = navigation.addListener('focus', () => {
+    getDataFromDB();
+  });
 
+  // Cleanup function
+  return () => {
+    unsubscribe();
+  };
+}, [navigation]);
   // Suggested products with images
   const [suggestedProducts] = useState([
     { id: 3, name: 'Oranges', price: 3.99, image: images.a3 },
