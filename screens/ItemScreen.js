@@ -81,7 +81,7 @@ const ItemScreen = ({ route }) => {
     
     product.quantity = quantity;
    
-    addToCartItem(product);
+    addToCart(product);
     navigation.navigate("Cart")
   };
 
