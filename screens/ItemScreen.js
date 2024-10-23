@@ -63,10 +63,10 @@ const ItemScreen = ({ route }) => {
             const newProduct = {
                 ...product,
                 quantity,
-                price: productPrice,
-                total: productPrice * quantity, // calculate total price
+                price: productPrice, // Ensure price is a number
+                total: productPrice * quantity, // Calculate total price
             };
-            cart.push(newProduct);
+            cart.push(newProduct); // Add new product
         }
 
         await AsyncStorage.setItem('cart', JSON.stringify(cart));
@@ -77,7 +77,6 @@ const ItemScreen = ({ route }) => {
         Alert.alert('Error', 'Could not add product to cart');
     }
 };
-
     const renderRecommendedItem = ({ item }) => (
         <View style={styles.recommendedCard}>
             <Image source={item.image} style={styles.recommendedImage} />
