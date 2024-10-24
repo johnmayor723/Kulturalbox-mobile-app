@@ -54,7 +54,7 @@ const PaymentScreen = () => {
       {/* Third Section: Bottom Tab */}
       <View style={styles.bottomTab}>
         <View style={styles.cartInfo}>
-          <Text style={styles.cartText}>Your cart has {cartItemsCount} items</Text>
+          <Text style={styles.cartText}>Your cart has {cartItemCount} items</Text>
           <Text style={styles.totalAmount}>{formattedTotalAmount}</Text>
         </View>
         <TouchableOpacity style={styles.checkoutButton}>
