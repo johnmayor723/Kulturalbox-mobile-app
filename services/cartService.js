@@ -11,6 +11,7 @@ export const addToCart = async (item) => {
   if (existingItemIndex === -1) {
     cartItems.push(item);
     await AsyncStorage.setItem("cart", JSON.stringify(cartItems));
+    console.log(cartItems);
   }
 };
 
