@@ -15,6 +15,7 @@ const addToCart = async id => {
     if (itemArray) {
       let array = itemArray;
       array.push(id);
+      console.log(array)
 
       try {
         await AsyncStorage.setItem('cartItem', JSON.stringify(array));
@@ -22,7 +23,8 @@ const addToCart = async id => {
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
         );*/
-        Alert.alert("Item Added To Cart")
+        Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
+          console.log( array )
         navigation.navigate('Cart');
       } catch (error) {
         return error;
@@ -36,7 +38,8 @@ const addToCart = async id => {
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
         );*/
-        Alert.alert("Item Added To Cart")
+        Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
+          console.log(array)
         navigation.navigate('Cart');
         //navigation.navigate('Cart');
       } catch (error) {
