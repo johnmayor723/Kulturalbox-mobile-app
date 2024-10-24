@@ -5,7 +5,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Function to add an item to the cart
 export const addToCart = async (item) => {
-  try {const addToCart = async (item) => {
   try {
     // Log the item to see if it's null or undefined
     console.log('Item to add:', item);
@@ -32,6 +31,8 @@ export const addToCart = async (item) => {
     console.log('Error adding item to cart: ', error);
   }
 };
+
+
 /*export const addToCart = async (item) => {
   let cartItems = await AsyncStorage.getItem("cart");
   cartItems = cartItems ? JSON.parse(cartItems) : [];
