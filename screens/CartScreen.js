@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-//import { View, Text, FlatList } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Importing images from the assets folder
 const images = {
@@ -17,7 +16,14 @@ const images = {
   a9: require('../assets/a9.jpg'),
   a10: require('../assets/a10.jpg'),
 };
-const [suggestedProducts] = useState([
+
+const CartScreen = ({ navigation }) => {
+  // State for products and cart items
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+
+  // Suggested products with images
+  const [suggestedProducts] = useState([
     { id: 3, name: 'Oranges', price: 3.99, image: images.a3 },
     { id: 4, name: 'Grapes', price: 4.99, image: images.a4 },
     { id: 5, name: 'Mangoes', price: 5.99, image: images.a5 },
@@ -28,15 +34,6 @@ const [suggestedProducts] = useState([
     { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
   ]);
 
-const CartScreen = () => {
-  const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
-  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-  // Navigate to Payment screen
-  const handleCheckout = () => {
-    navigation.navigate('Payment');
-  };
   // Fetch products from API
   const fetchProducts = async () => {
     try {
@@ -56,8 +53,8 @@ const CartScreen = () => {
       if (cart) {
         const cartIds = JSON.parse(cart); // Assuming cart is an array of product IDs
         console.log('Parsed cart IDs:', cartIds); // Log parsed cart item IDs
-        
-        // Make sure that the cartIds are correctly formatted and matching the _id from products
+
+        // Filter products to match cart items
         const filteredCartItems = products.filter(product => cartIds.includes(product._id));
         console.log('Filtered cart items:', filteredCartItems); // Log filtered cart items
 
@@ -80,12 +77,16 @@ const CartScreen = () => {
     }
   }, [products]);
 
-  
+  // Calculate total amount
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  // Navigate to Payment screen
+  const handleCheckout = () => {
+    navigation.navigate('Payment');
+  };
 
   return (
-    
-
-  <View style={styles.container}>
+    <View style={styles.container}>
       {/* Fixed Top Bar */}
       <View style={styles.heroSection}>
         <Text style={styles.heroText}>Your Cart</Text>
@@ -94,16 +95,19 @@ const CartScreen = () => {
       {/* Cart Items Section */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cartItemsSection}>
-          {cartItems.map(item => (
-            <View key={item._id} style={styles.cartItem}>
-              <Image source={{uri:item.image}} style={styles.productImage} />
-              <Text style={styles.itemText}>{item.name} x 2 </Text>
-              <Text style={styles.itemPrice}>${(item.price * 2).toFixed(2)}</Text>
-            </View>
-          ))}
+          {cartItems.length > 0 ? (
+            cartItems.map(item => (
+              <View key={item._id} style={styles.cartItem}>
+                <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
+                <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
+                <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+              </View>
+            ))
+          ) : (
+            <Text>No items in your cart.</Text>
+          )}
         </View>
 
- 
         {/* Products You May Like */}
         <View style={styles.suggestedProductsSection}>
           <Text style={styles.sectionTitle}>Products You May Like</Text>
@@ -130,7 +134,7 @@ const CartScreen = () => {
   );
 };
 
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   heroSection: {
     height: 50,
@@ -188,7 +192,7 @@ const CartScreen = () => {
     justifyContent: 'space-between',
   },
   suggestedProduct: {
-    width: '48%', // Adjusting for two columns with margin
+    width: '48%',
     backgroundColor: 'white',
     borderRadius: 8,
     padding: 10,
@@ -229,10 +233,10 @@ const CartScreen = () => {
     fontWeight: 'bold',
   },
   checkoutButton: {
-    backgroundColor: '#FF7E00', // Amber orange for checkout button
+    backgroundColor: '#FF7E00',
     borderRadius: 5,
     padding: 10,
-    width: '50%', // Adjust width to fit nicely
+    width: '50%',
     alignItems: 'center',
   },
   checkoutText: {
