@@ -25,7 +25,7 @@ const addToCart = async id => {
         );*/
         Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
           console.log( array )
-        navigation.navigate('Cart');
+       // navigation.navigate('Cart');
       } catch (error) {
         return error;
       }
@@ -40,7 +40,7 @@ const addToCart = async id => {
         );*/
         Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
           console.log(array)
-        navigation.navigate('Cart');
+       // navigation.navigate('Cart');
         //navigation.navigate('Cart');
       } catch (error) {
         return error;
