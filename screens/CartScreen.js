@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Button, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from "axios";
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 
+// Importing images from the assets folder
 const images = {
   a1: require('../assets/a1.jpeg'),
   a2: require('../assets/a2.jpeg'),
@@ -16,148 +15,53 @@ const images = {
   a10: require('../assets/a10.jpg'),
 };
 
-const suggestedProducts = [
-  { id: 1, name: 'Product 1', price: 19.99, image: require('../assets/a1.jpeg') },
-  { id: 2, name: 'Product 2', price: 29.99, image: require('../assets/a2.jpeg') },
-  { id: 3, name: 'Product 3', price: 39.99, image: require('../assets/a3.jpeg') },
-  { id: 4, name: 'Product 4', price: 49.99, image: require('../assets/a4.jpeg') },
-  { id: 5, name: 'Product 5', price: 59.99, image: require('../assets/a5.jpeg') },
-  { id: 6, name: 'Product 6', price: 69.99, image: require('../assets/a6.jpeg') },
-  { id: 7, name: 'Product 7', price: 79.99, image: require('../assets/a7.jpeg') },
-  { id: 8, name: 'Product 8', price: 89.99, image: require('../assets/a8.jpg') },
-  { id: 9, name: 'Product 9', price: 99.99, image: require('../assets/a9.jpg') },
-  { id: 10, name: 'Product 10', price: 109.99, image: require('../assets/a10.jpg') }
-];
-
 const CartScreen = ({ navigation }) => {
-  const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState(null);
-  const [cartTotal, setCartTotal] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Sample cart items with images
+  const [cartItems] = useState([
+    { id: 1, name: 'Apples', price: 2.99, quantity: 2, image: images.a1 },
+    { id: 2, name: 'Bananas', price: 1.99, quantity: 5, image: images.a2 }
+  ]);
 
-  // Fetch products once when the component mounts
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Suggested products with images
+  const [suggestedProducts] = useState([
+    { id: 3, name: 'Oranges', price: 3.99, image: images.a3 },
+    { id: 4, name: 'Grapes', price: 4.99, image: images.a4 },
+    { id: 5, name: 'Mangoes', price: 5.99, image: images.a5 },
+    { id: 6, name: 'Pineapples', price: 3.49, image: images.a6 },
+    { id: 7, name: 'Strawberries', price: 4.99, image: images.a7 },
+    { id: 8, name: 'Blueberries', price: 6.99, image: images.a8 },
+    { id: 9, name: 'Watermelons', price: 7.99, image: images.a9 },
+    { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
+  ]);
 
-    fetchProducts();
-  }, []); // No dependencies so it runs once on component mount
+  // Calculate total amount
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-  // Load data from AsyncStorage whenever the screen comes into focus
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      getDataFromDB();
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [navigation]); // Depend on navigation
-
-  const getDataFromDB = async () => {
-    let items = await AsyncStorage.getItem('cartItem');
-    items = JSON.parse(items);
-    let productData = [];
-    if (items) {
-      products.forEach(data => {
-        if (items.includes(data.id)) {
-          productData.push(data);
-        }
-      });
-      setCart(productData);
-      getTotal(productData);
-    } else {
-      setCart(false);
-      getTotal(false);
-    }
-  };
-
-  // Calculate total price of items in cart
-  const getTotal = productData => {
-    let total = 0;
-    for (let index = 0; index < productData.length; index++) {
-      let productPrice = productData[index].productPrice;
-      total = total + productPrice;
-    }
-    setTotal(total);
-  };
-
-  // Handle saving to storage
-  const saveCartToStorage = async (updatedCart) => {
-    try {
-      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
-    } catch (error) {
-      console.log('Error saving cart to storage:', error);
-    }
-  };
-
-  const removeItemFromCart = (itemId) => {
-    const updatedCart = cart.filter((cartItem) => cartItem.id !== itemId);
-    setCart(updatedCart);
-    saveCartToStorage(updatedCart);
-  };
-
-  const updateQuantity = (itemId, quantity) => {
-    const updatedCart = cart.map((cartItem) =>
-      cartItem.id === itemId ? { ...cartItem, quantity } : cartItem
-    );
-    setCart(updatedCart);
-    saveCartToStorage(updatedCart);
-  };
-
-  const calculateTotal = () => {
-    const total = cart.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
-    setCartTotal(total);
-  };
-
+  // Navigate to Payment screen
   const handleCheckout = () => {
     navigation.navigate('Payment');
   };
 
-  // Handle loading state before data is fetched
-  if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#00ff00" />
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
+      {/* Fixed Top Bar */}
       <View style={styles.heroSection}>
         <Text style={styles.heroText}>Your Cart</Text>
       </View>
 
+      {/* Cart Items Section */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cartItemsSection}>
-          {cart.length > 0 ? (
-            cart.map(item => (
-              <View key={item.id} style={styles.cartItem}>
-                <Image source={{uri: item.imageUrl}} style={styles.productImage} />
-                <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
-                <Text style={styles.itemPrice}>${(item.unitPrice * item.quantity).toFixed(2)}</Text>
-                <View style={styles.actions}>
-                  <Button title="+" onPress={() => updateQuantity(item.id, item.quantity + 1)} />
-                  <Button title="-" onPress={() => item.quantity > 1 ? updateQuantity(item.id, item.quantity - 1) : removeItemFromCart(item.id)} />
-                  <Button title="Remove" onPress={() => removeItemFromCart(item.id)} />
-                </View>
-              </View>
-            ))
-          ) : (
-            <Text>No items in your cart</Text>
-          )}
+          {cartItems.map(item => (
+            <View key={item.id} style={styles.cartItem}>
+              <Image source={item.image} style={styles.productImage} />
+              <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
+              <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+            </View>
+          ))}
         </View>
 
+        {/* Products You May Like */}
         <View style={styles.suggestedProductsSection}>
           <Text style={styles.sectionTitle}>Products You May Like</Text>
           <View style={styles.suggestedProductsGrid}>
@@ -172,8 +76,9 @@ const CartScreen = ({ navigation }) => {
         </View>
       </ScrollView>
 
+      {/* Fixed Bottom Tab */}
       <View style={styles.bottomTab}>
-        <Text style={styles.totalText}>Total: ${cartTotal.toFixed(2)}</Text>
+        <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
         <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
           <Text style={styles.checkoutText}>Proceed to Payment</Text>
         </TouchableOpacity>
@@ -183,7 +88,114 @@ const CartScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  // Your styles here
+  container: { flex: 1, backgroundColor: '#fff' },
+  heroSection: {
+    height: 50,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+    marginBottom: 10,
+  },
+  heroText: {
+    fontSize: 24,
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  scrollContainer: {
+    padding: 20,
+    flexGrow: 1,
+  },
+  cartItemsSection: {
+    marginBottom: 20,
+  },
+  cartItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  productImage: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  itemText: {
+    flex: 1,
+    fontSize: 16,
+  },
+  itemPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  suggestedProductsSection: {
+    marginVertical: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  suggestedProductsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  suggestedProduct: {
+    width: '48%', // Adjusting for two columns with margin
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    alignItems: 'center',
+  },
+  suggestedProductImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
+  },
+  productName: {
+    fontWeight: 'bold',
+    marginVertical: 5,
+  },
+  productPrice: {
+    color: '#555',
+  },
+  bottomTab: {
+    padding: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  checkoutButton: {
+    backgroundColor: '#FF7E00', // Amber orange for checkout button
+    borderRadius: 5,
+    padding: 10,
+    width: '50%', // Adjust width to fit nicely
+    alignItems: 'center',
+  },
+  checkoutText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
 
 export default CartScreen;
