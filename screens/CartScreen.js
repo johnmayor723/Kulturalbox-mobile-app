@@ -158,7 +158,7 @@ const CartScreen = ({ navigation }) => {
 
       {/* Fixed Bottom Tab */}
       <View style={styles.bottomTab}>
-        <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
+        <Text style={styles.totalText}>Total:₦{totalAmount.toFixed(2)}</Text>
         <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
           <Text style={styles.checkoutText}>Proceed to Payment</Text>
         </TouchableOpacity>
