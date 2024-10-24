@@ -1,11 +1,12 @@
 //App.js
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import Screens
 import SplashScreen from './screens/SplashScreen';
@@ -26,17 +27,10 @@ import VegetablesScreen from "./screens/VegetablesScreen.js";
 import DairyScreen from "./screens/DairyScreen.js";
 import MeatScreen from "./screens/MeatScreen.js";
 import OilProductsScreen from "./screens/OilProductsScreen.js";
-import SnacksScreen from "./screens/SnacksScreen.js";
+import SnacksScreen from "./screens/SnacksScreen.js';
 
-
-
-// Stack Navigator
 const Stack = createStackNavigator();
-
-// Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
-
-// Drawer Navigator
 const Drawer = createDrawerNavigator();
 
 // Bottom Tab Navigator Component
@@ -49,7 +43,7 @@ function BottomTabNavigator() {
                     if (route.name === 'TabHome') {
                         iconName = 'home';
                     } else if (route.name === 'TabCategories') {
-                       iconName = 'grid-outline';
+                        iconName = 'grid-outline';
                     } else if (route.name === 'TabProfile') {
                         iconName = 'person';
                     } else if (route.name === 'TabCart') {
@@ -66,11 +60,8 @@ function BottomTabNavigator() {
             <Tab.Screen name="TabHome" component={HomeScreen} options={{ title: "Home" }} />
             <Tab.Screen name="TabCategories" component={CategoriesScreen} options={{ title: "Categories" }} />
             <Tab.Screen name="TabProfile" component={UserProfileScreen} options={{ title: "Profile" }} />
-            <Tab.Screen name="TabCart" component={CartScreen} options={{ title: "Cart" }} 
-              />
-             
+            <Tab.Screen name="TabCart" component={CartScreen} options={{ title: "Cart" }} />
         </Tab.Navigator>
-    
     );
 }
 
@@ -78,110 +69,144 @@ function BottomTabNavigator() {
 function DrawerNavigator() {
     return (
         <Drawer.Navigator initialRouteName="DrawerHome">
-             <Drawer.Screen 
+            <Drawer.Screen 
                 name="DrawerHome" 
                 component={BottomTabNavigator} 
-                options={{ title: "Menu", headerShown: true }}  // Keep header with hamburger menu
+                options={{ title: "Menu", headerShown: true }}  
             />
-            
-            
             <Drawer.Screen 
                 name="DrawerProfile" 
                 component={UserProfileScreen} 
-                options={{ title: "Profile", headerShown: true }}  // Keep header with hamburger menu
+                options={{ title: "Profile", headerShown: true }}  
             />
-            
-             <Drawer.Screen 
+            <Drawer.Screen 
                 name="DrawerContact" 
                 component={HelpScreen} 
-                options={{ title: "Help", headerShown: true }}  // Keep header with hamburger menu
+                options={{ title: "Help", headerShown: true }}  
             />
-           <Drawer.Screen 
+            <Drawer.Screen 
                 name="DrawerTracking" 
                 component={TrackingScreen} 
-                options={{ title: "Tracking", headerShown: true }}  // Keep header with hamburger menu
+                options={{ title: "Tracking", headerShown: true }}  
             />
-            
         </Drawer.Navigator>
+    );
+}
+
+// Auth Stack Navigator
+function AuthStack() {
+    return (
+        <Stack.Navigator initialRouteName="Splash">
+            <Stack.Screen
+                name="Splash"
+                component={SplashScreen}
+                options={{ headerShown: false }}  // Hides the header
+            />
+            <Stack.Screen
+                name="Auth"
+                component={AuthScreen}
+                options={{ headerShown: false }}  // Hides the header
+            />
+            <Stack.Screen
+                name="SignUp"
+                component={SignUpScreen}
+                options={{ headerShown: false }}  // Hides the header
+            />
+        </Stack.Navigator>
+    );
+}
+
+// Home Stack Navigator
+function HomeStack() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name="Main"
+                component={DrawerNavigator}
+                options={{ headerShown: false }}  // Disable the header for the main drawer stack
+            />
+            <Stack.Screen
+                name="Single Product"
+                component={ItemScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Cart"
+                component={CartScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Payment"
+                component={PaymentScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="TrackingResult"
+                component={OrderTrackingScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Fruit"
+                component={FruitsScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Vegetable"
+                component={VegetablesScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Meat"
+                component={MeatScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Snack"
+                component={SnacksScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Oil Product"
+                component={OilProductsScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Dairy"
+                component={DairyScreen}
+                options={{ headerShown: true }}
+            />
+        </Stack.Navigator>
     );
 }
 
 // Main App Component
 export default function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+            try {
+                const user = await AsyncStorage.getItem('user');
+                if (user) {
+                    setIsAuthenticated(true);
+                }
+            } catch (error) {
+                console.error("Error fetching user from AsyncStorage:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        checkAuthStatus();
+    }, []);
+
+    if (isLoading) {
+        return <SplashScreen />; // Show a loading screen while fetching auth status
+    }
+
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Splash">
-                <Stack.Screen
-                    name="Splash"
-                    component={SplashScreen}
-                    options={{ headerShown: false }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Auth"
-                    component={AuthScreen}
-                    options={{ headerShown: false }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="SignUp"
-                    component={SignUpScreen}
-                    options={{ headerShown: false }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Single Product"
-                    component={ItemScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-               <Stack.Screen
-                    name="Cart"
-                    component={CartScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                 <Stack.Screen
-                    name="Payment"
-                    component={PaymentScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="TrackingResult"
-                    component={OrderTrackingScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Fruit"
-                    component={FruitsScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Vegetable"
-                    component={VegetablesScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Meat"
-                    component={MeatScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Snack"
-                    component={SnacksScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Oil Product"
-                    component={OilProductsScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Dairy"
-                    component={DairyScreen}
-                    options={{ headerShown:true }}  // Hides the header
-                />
-                <Stack.Screen
-                    name="Main"
-                    component={DrawerNavigator}
-                    options={{ headerShown: false }}  // Disable the header for the main drawer stack
-                />
-            </Stack.Navigator>
+            {isAuthenticated ? <HomeStack /> : <AuthStack />}
         </NavigationContainer>
     );
-        }
+                }
