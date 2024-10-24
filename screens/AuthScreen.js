@@ -1,37 +1,38 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
-
 
 const AuthScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  //const [name, setName] = useState(''); // Only needed for signup
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login/signup
-  
+  const [isLoading, setIsLoading] = useState(false); // Loading state for loader
+
   const handleLogin = async () => {
-  try {
-    const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/login';
-    const payload = { email, password };
+    setIsLoading(true); // Show loader
 
-    // Make the API request using axios
-    const response = await axios.post(endpoint, payload);
+    try {
+      const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/login';
+      const payload = { email, password };
 
-    const { token, user } = response.data;
+      // Make the API request using axios
+      const response = await axios.post(endpoint, payload);
 
-    // If response is successful, store the token and user in AsyncStorage
-    await AsyncStorage.setItem('token', token);
-    await AsyncStorage.setItem('user', JSON.stringify(user));
+      const { token, user } = response.data;
 
-    Alert.alert(isLogin ? 'Login successful!' : 'Signup successful!', `Welcome ${user.name}`);
-    navigation.navigate('Main'); // Navigate to Home or another screen after auth
-  } catch (error) {
-    console.error(error);
-    Alert.alert(isLogin ? 'Login failed' : 'Signup failed', error.response?.data?.message || 'Something went wrong');
-  }
-};
+      // Store the token and user in AsyncStorage
+      await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+
+      Alert.alert('Login successful!', `Welcome ${user.name}`);
+      setIsLoading(false); // Hide loader
+      navigation.navigate('Main'); // Navigate to Home or another screen after auth
+    } catch (error) {
+      setIsLoading(false); // Hide loader
+      console.error(error);
+      Alert.alert('Login failed', error.response?.data?.message || 'Something went wrong');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -61,8 +62,12 @@ const AuthScreen = ({ navigation }) => {
       />
 
       {/* Login Button */}
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={isLoading}>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <Text style={styles.buttonText}>Login</Text>
+        )}
       </TouchableOpacity>
 
       {/* Navigate to Signup */}
