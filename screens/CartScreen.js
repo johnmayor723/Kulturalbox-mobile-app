@@ -12,7 +12,8 @@ const CartScreen = () => {
     try {
       const response = await axios.get('https://pantry-hub-server.onrender.com/api/products'); // Replace with your API endpoint
       setProducts(response.data); // Assuming response.data contains the products array
-      console.log(products);
+       console.log('Fetched products:', response.data); 
+      // Log the products from the response
     } catch (error) {
       console.log('Error fetching products:', error);
     }
