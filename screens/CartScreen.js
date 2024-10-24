@@ -20,6 +20,7 @@ const images = {
 const CartScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   // Suggested products with images
   const [suggestedProducts] = useState([
@@ -67,6 +68,14 @@ const CartScreen = ({ navigation }) => {
       console.log('Error retrieving cart:', error);
     }
   };
+  const calculateCartItemCount = () => {
+    const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+    setCartItemCount(count);
+  };
+
+  useEffect(() => {
+    calculateCartItemCount(); // Call the function whenever cartItems change
+  }, [cartItems]);
 
   // UseEffect to fetch products on mount
   useEffect(() => {
@@ -102,7 +111,7 @@ const CartScreen = ({ navigation }) => {
 
   // Navigate to Payment screen
   const handleCheckout = () => {
-    navigation.navigate('Payment', { totalAmount }); // Pass total price to Payment screen
+    navigation.navigate('Payment', { totalAmount, cartItemCount }); // Pass total price to Payment screen
   };
 
   return (
