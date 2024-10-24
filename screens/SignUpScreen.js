@@ -1,37 +1,39 @@
 import React, { useState } from 'react';
-import { Alert, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Alert, View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Loading state for loader
 
-  
   const handleSignup = async () => {
-  try {
-    const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/register';
-    const payload = { name, email, password };
+    setIsLoading(true); // Show loader
 
-    // Make the API request using axios
-    const response = await axios.post(endpoint, payload);
+    try {
+      const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/register';
+      const payload = { name, email, password };
 
-    const { token, user } = response.data;
+      // Make the API request using axios
+      const response = await axios.post(endpoint, payload);
 
-    // If response is successful, store the token and user in AsyncStorage
-    await AsyncStorage.setItem('token', token);
-    await AsyncStorage.setItem('user', JSON.stringify(user));
+      const { token, user } = response.data;
 
-    Alert.alert('Signup successful!', `Welcome ${user.name}`);
-    navigation.navigate('Main'); // Navigate to Home or another screen after auth
-  } catch (error) {
-    console.error(error);
-    Alert.alert( 'Something went wrong');
-  }
-};
+      // Store the token and user in AsyncStorage
+      await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('user', JSON.stringify(user));
 
+      Alert.alert('Signup successful!', `Welcome ${user.name}`);
+      setIsLoading(false); // Hide loader
+      navigation.navigate('Main'); // Navigate to Home or another screen after auth
+    } catch (error) {
+      setIsLoading(false); // Hide loader
+      console.error(error);
+      Alert.alert('Signup failed', error.response?.data?.message || 'Something went wrong');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -70,8 +72,12 @@ const SignupScreen = ({ navigation }) => {
       />
 
       {/* Signup Button */}
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignup} disabled={isLoading}>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <Text style={styles.buttonText}>Sign Up</Text>
+        )}
       </TouchableOpacity>
 
       {/* Navigate to Login */}
