@@ -1,9 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-//import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// Function to add an item to the cart
 export const addToCart = async (item) => {
   try {
     // Log the item to see if it's null or undefined
@@ -16,12 +12,14 @@ export const addToCart = async (item) => {
     const cart = await AsyncStorage.getItem('cart');
     let cartItems = cart ? JSON.parse(cart) : [];
 
+    // Use _id to find the existing item in the cart
     const existingItemIndex = cartItems.findIndex(cartItem => cartItem._id === item._id);
 
     if (existingItemIndex !== -1) {
-      cartItems[existingItemIndex].quantity += 1;
+      cartItems[existingItemIndex].quantity += 1; // Increment the quantity if item exists
     } else {
-      cartItems.push({...item, quantity: 1});
+      // Add the new item to the cart with quantity set to 1
+      cartItems.push({ ...item, quantity: 1 });
     }
 
     await AsyncStorage.setItem('cart', JSON.stringify(cartItems));
@@ -31,7 +29,6 @@ export const addToCart = async (item) => {
     console.log('Error adding item to cart: ', error);
   }
 };
-
 
 /*export const addToCart = async (item) => {
   let cartItems = await AsyncStorage.getItem("cart");
