@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';import { addToCart} from '../services/cartService';
+import { useNavigation } from '@react-navigation/native';
+//import { addToCart} from '../services/cartService';
 
 const recommendedProducts = [
     { id: '1', title: 'Carrots', price: '200', image: require('../assets/a3.jpeg') },
     { id: '2', title: 'Cabbage', price: '300', image: require('../assets/a4.jpeg') },
     { id: '3', title: 'Onions', price: '100', image: require('../assets/a6.jpeg') },
 ];
-/*const addToCart = async id => {
+const addToCart = async id => {
     let itemArray = await AsyncStorage.getItem('cartItem');
     itemArray = JSON.parse(itemArray);
     if (itemArray) {
@@ -18,10 +19,10 @@ const recommendedProducts = [
 
       try {
         await AsyncStorage.setItem('cartItem', JSON.stringify(array));
-        ToastAndroid.show(
+       /* ToastAndroid.show(
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
-        );
+        );*/
         Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
           console.log( array )
         navigation.navigate('Cart');
@@ -36,7 +37,7 @@ const recommendedProducts = [
         /*ToastAndroid.show(
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
-        );
+        );*/
         Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
           console.log(array)
         navigation.navigate('Cart');
@@ -45,7 +46,7 @@ const recommendedProducts = [
         return error;
       }
     }
-  };*/
+  };
 const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
     const { product } = route.params;
@@ -119,7 +120,7 @@ const ItemScreen = ({ route }) => {
    product.quantity = quantity;
    //console.log(product.id)
    //Alert.alert(product.id)
-    addToCart(product);
+    addToCart(product._id);
     //console.log(cart)
     navigation.navigate("Cart")
   };
