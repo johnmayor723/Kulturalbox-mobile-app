@@ -9,7 +9,7 @@ export const addToCart = async (item) => {
     // Log the item to see if it's null or undefined
     console.log('Item to add:', item);
 
-    if (!item || !item.id) {
+    if (!item || !item._id) {
       throw new Error('Invalid item');
     }
 
