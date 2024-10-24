@@ -99,8 +99,8 @@ const CartScreen = ({ navigation }) => {
             cartItems.map(item => (
               <View key={item._id} style={styles.cartItem}>
                 <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
-                <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
-                <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+                <Text style={styles.itemText}>{item.name} </Text>
+                <Text style={styles.itemPrice}>${item.price }</Text>
               </View>
             ))
           ) : (
