@@ -27,7 +27,7 @@ import VegetablesScreen from "./screens/VegetablesScreen.js";
 import DairyScreen from "./screens/DairyScreen.js";
 import MeatScreen from "./screens/MeatScreen.js";
 import OilProductsScreen from "./screens/OilProductsScreen.js";
-import SnacksScreen from "./screens/SnacksScreen.js';
+import SnacksScreen from "./screens/SnacksScreen.js";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
