@@ -48,7 +48,7 @@ const recommendedProducts = [
   };*/
 const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
-    const { product } = route.params.item;
+    const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
     
   /*  const handleAddToCart = async () => {
