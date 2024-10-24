@@ -1,10 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 
 const PaymentScreen = () => {
-  const cartItemsCount = 3; // Example count of items in cart
-  const totalAmount = "$50.00"; // Example total amount
+  const route = useRoute();
+  
+  // Extracting cart items count and total amount from route params
+  const { cartItemCount = 0, totalAmount = 0 } = route.params || {};
+  
+  // Convert totalAmount to Naira format
+  const formattedTotalAmount = `₦${totalAmount.toFixed(2)}`;
 
   return (
     <View style={styles.container}>
@@ -49,7 +55,7 @@ const PaymentScreen = () => {
       <View style={styles.bottomTab}>
         <View style={styles.cartInfo}>
           <Text style={styles.cartText}>Your cart has {cartItemsCount} items</Text>
-          <Text style={styles.totalAmount}>{totalAmount}</Text>
+          <Text style={styles.totalAmount}>{formattedTotalAmount}</Text>
         </View>
         <TouchableOpacity style={styles.checkoutButton}>
           <Text style={styles.checkoutText}>Check Out</Text>
