@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Function to add an item to the cart
-const addToCart = async (item) => {
+export const addToCart = async (item) => {
   try {
     // Retrieve the existing cart from AsyncStorage
     const cart = await AsyncStorage.getItem('cart');
