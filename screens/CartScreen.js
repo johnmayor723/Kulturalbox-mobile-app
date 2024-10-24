@@ -27,7 +27,7 @@ const CartScreen = () => {
       <Text>Cart Items</Text>
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item_id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={({ item }) => (
           <View>
             <Text>{item.name}</Text>
