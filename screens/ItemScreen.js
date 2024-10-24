@@ -119,7 +119,7 @@ const ItemScreen = ({ route }) => {
    product.quantity = quantity;
    
     addToCart(product.id);
-    condole.log(cart)
+    console.log(cart)
     navigation.navigate("Cart")
   };
 
