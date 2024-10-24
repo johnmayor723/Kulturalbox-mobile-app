@@ -238,4 +238,61 @@ const styles = StyleSheet.create({
   },
   suggestedProductsGrid: {
     flexDirection: 'row',
-    flexWrap: '
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  suggestedProduct: {
+    width: '48%',
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    alignItems: 'center',
+  },
+  suggestedProductImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
+  },
+  productName: {
+    fontWeight: 'bold',
+    marginVertical: 5,
+  },
+  productPrice: {
+    color: '#555',
+  },
+  bottomTab: {
+    padding: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  checkoutButton: {
+    backgroundColor: '#FF7E00',
+    borderRadius: 5,
+    padding: 10,
+    width: '50%',
+    alignItems: 'center',
+  },
+  checkoutText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
+
+export default CartScreen;
