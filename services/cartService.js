@@ -16,7 +16,7 @@ export const addToCart = async (item) => {
     const cart = await AsyncStorage.getItem('cart');
     let cartItems = cart ? JSON.parse(cart) : [];
 
-    const existingItemIndex = cartItems.findIndex(cartItem => cartItem.id === item._id);
+    const existingItemIndex = cartItems.findIndex(cartItem => cartItem._id === item._id);
 
     if (existingItemIndex !== -1) {
       cartItems[existingItemIndex].quantity += 1;
