@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,7 +18,6 @@ const images = {
 };
 
 const CartScreen = ({ navigation }) => {
-  // State for products and cart items
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
@@ -31,7 +30,7 @@ const CartScreen = ({ navigation }) => {
     { id: 7, name: 'Strawberries', price: 4.99, image: images.a7 },
     { id: 8, name: 'Blueberries', price: 6.99, image: images.a8 },
     { id: 9, name: 'Watermelons', price: 7.99, image: images.a9 },
-    { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
+    { id: 10, name: 'Peaches', price: 5.49, image: images.a10 },
   ]);
 
   // Fetch products from API
@@ -55,7 +54,11 @@ const CartScreen = ({ navigation }) => {
         console.log('Parsed cart IDs:', cartIds); // Log parsed cart item IDs
 
         // Filter products to match cart items
-        const filteredCartItems = products.filter(product => cartIds.includes(product._id));
+        const filteredCartItems = products.filter(product => cartIds.includes(product._id)).map(product => ({
+          ...product,
+          quantity: 1 // Default quantity to 1 if not already set
+        }));
+
         console.log('Filtered cart items:', filteredCartItems); // Log filtered cart items
 
         setCartItems(filteredCartItems); // Update cart items state
@@ -77,12 +80,29 @@ const CartScreen = ({ navigation }) => {
     }
   }, [products]);
 
+  // Function to handle quantity change
+  const handleQuantityChange = (id, newQuantity) => {
+    const updatedCartItems = cartItems.map(item => {
+      if (item._id === id) {
+        return { ...item, quantity: Number(newQuantity) };
+      }
+      return item;
+    });
+    setCartItems(updatedCartItems);
+  };
+
+  // Function to delete an item from the cart
+  const handleDeleteItem = (id) => {
+    const updatedCartItems = cartItems.filter(item => item._id !== id);
+    setCartItems(updatedCartItems);
+  };
+
   // Calculate total amount
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   // Navigate to Payment screen
   const handleCheckout = () => {
-    navigation.navigate('Payment');
+    navigation.navigate('Payment', { totalAmount }); // Pass total price to Payment screen
   };
 
   return (
@@ -99,8 +119,21 @@ const CartScreen = ({ navigation }) => {
             cartItems.map(item => (
               <View key={item._id} style={styles.cartItem}>
                 <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
-                <Text style={styles.itemText}>{item.name} </Text>
-                <Text style={styles.itemPrice}>${item.price }</Text>
+                <Text style={styles.itemText}>{item.name}</Text>
+                <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+
+                {/* Quantity Input */}
+                <TextInput
+                  style={styles.quantityInput}
+                  value={item.quantity.toString()}
+                  keyboardType="numeric"
+                  onChangeText={(value) => handleQuantityChange(item._id, value)}
+                />
+
+                {/* Delete Button */}
+                <TouchableOpacity onPress={() => handleDeleteItem(item._id)} style={styles.deleteButton}>
+                  <Text style={styles.deleteText}>Delete</Text>
+                </TouchableOpacity>
               </View>
             ))
           ) : (
@@ -178,6 +211,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  quantityInput: {
+    width: 40,
+    height: 30,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    textAlign: 'center',
+    marginRight: 10,
+  },
+  deleteButton: {
+    padding: 10,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
+  deleteText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   suggestedProductsSection: {
     marginVertical: 20,
   },
@@ -188,61 +238,4 @@ const styles = StyleSheet.create({
   },
   suggestedProductsGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  suggestedProduct: {
-    width: '48%',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    alignItems: 'center',
-  },
-  suggestedProductImage: {
-    width: '100%',
-    height: 100,
-    borderRadius: 8,
-  },
-  productName: {
-    fontWeight: 'bold',
-    marginVertical: 5,
-  },
-  productPrice: {
-    color: '#555',
-  },
-  bottomTab: {
-    padding: 20,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderColor: '#ccc',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  totalText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  checkoutButton: {
-    backgroundColor: '#FF7E00',
-    borderRadius: 5,
-    padding: 10,
-    width: '50%',
-    alignItems: 'center',
-  },
-  checkoutText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-});
-
-export default CartScreen;
+    flexWrap: '
