@@ -10,7 +10,7 @@ const recommendedProducts = [
     { id: '3', title: 'Onions', price: '100', image: require('../assets/a6.jpeg') },
 ];
 const addToCart = async id => {
-    let itemArray = await AsyncStorage.getItem('cartItem');
+   /*let itemArray = await AsyncStorage.getItem('cartItem');
     itemArray = JSON.parse(itemArray);
     if (itemArray) {
       let array = itemArray;
@@ -22,13 +22,41 @@ const addToCart = async id => {
        /* ToastAndroid.show(
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
-        );*/
+        );
         Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
           console.log( array )
        // navigation.navigate('Cart');
       } catch (error) {
         return error;
-      }
+      }*/
+        let itemArray = await AsyncStorage.getItem('cartItem');
+itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
+
+console.log('Initial cart items:', itemArray); // Log the current items in the cart
+
+if (itemArray) {
+  let array = itemArray;
+  
+  // Add the new id to the array
+  array.push(id);
+  
+  console.log('Updated cart items:', array); // Log the updated array
+  
+  try {
+    // Save the updated array back to AsyncStorage
+    await AsyncStorage.setItem('cartItem', JSON.stringify(array));
+    
+    // Use alert or toast to notify the user
+    Alert.alert('Item Added To Cart', JSON.stringify(array, null, 2));
+    
+    console.log('Final cart items:', array); // Log the final array after storing
+    
+    // Optionally navigate to the Cart screen
+    // navigation.navigate('Cart');
+  } catch (error) {
+    console.error('Error saving cart items:', error); // Log any error
+    return error;
+  }
     } else {
       let array = [];
       array.push(id);
