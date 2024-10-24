@@ -12,6 +12,7 @@ const CartScreen = () => {
     try {
       const response = await axios.get('https://pantry-hub-server.onrender.com/api/products'); // Replace with your API endpoint
       setProducts(response.data); // Assuming response.data contains the products array
+      console.log(products);
     } catch (error) {
       console.log('Error fetching products:', error);
     }
@@ -21,9 +22,14 @@ const CartScreen = () => {
   const getCartItems = async () => {
     try {
       const cart = await AsyncStorage.getItem('cart');
+      console.log(cart);
       if (cart) {
         const cartIds = JSON.parse(cart).map(item => item._id); // Extract the product IDs
+        console.log(" got cardids");
+        console.log(cartIds)
         const filteredCartItems = products.filter(product => cartIds.includes(product._id));
+        console.log("filtered cart items")
+        console.log(filteredCartItems);
         setCartItems(filteredCartItems);
       }
     } catch (error) {
@@ -39,7 +45,9 @@ const CartScreen = () => {
   // UseEffect to filter cart items when products are fetched
   useEffect(() => {
     if (products.length > 0) {
-      getCartItems(); // Get cart items whenever products are updated
+      getCartItems(); 
+      console.log(cartItems)
+      // Get cart items whenever products are updated
     }
   }, [products]);
 
