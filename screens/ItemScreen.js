@@ -117,7 +117,8 @@ const ItemScreen = ({ route }) => {
   const handleAddToCart = () => {
     
    product.quantity = quantity;
-   
+   console.log(product.id)
+   Alert.alert(product.id)
     addToCart(product.id);
     //console.log(cart)
     navigation.navigate("Cart")
