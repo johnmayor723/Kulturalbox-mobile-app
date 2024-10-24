@@ -149,7 +149,7 @@ const CartScreen = ({ navigation }) => {
               <TouchableOpacity key={product.id} style={styles.suggestedProduct}>
                 <Image source={product.image} style={styles.suggestedProductImage} />
                 <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productPrice}>${product.price.toFixed(2)}</Text>
+                <Text style={styles.productPrice}>₦{product.price.toFixed(2)}</Text>
               </TouchableOpacity>
             ))}
           </View>
