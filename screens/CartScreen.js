@@ -120,7 +120,7 @@ const CartScreen = ({ navigation }) => {
               <View key={item._id} style={styles.cartItem}>
                 <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
                 <Text style={styles.itemText}>{item.name}</Text>
-                <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+                <Text style={styles.itemPrice}>₦{item.price.toFixed(2)}</Text>
 
                 {/* Quantity Input */}
                 <TextInput
