@@ -12,8 +12,7 @@ const CartScreen = () => {
     try {
       const response = await axios.get('https://pantry-hub-server.onrender.com/api/products'); // Replace with your API endpoint
       setProducts(response.data); // Assuming response.data contains the products array
-       console.log('Fetched products:', response.data); 
-      // Log the products from the response
+      console.log('Fetched products:', response.data); 
     } catch (error) {
       console.log('Error fetching products:', error);
     }
@@ -23,32 +22,31 @@ const CartScreen = () => {
   const getCartItems = async () => {
     try {
       const cart = await AsyncStorage.getItem('cartItem');
-      console.log(cart);
+      console.log('Stored cart items:', cart); // Log raw cart items from storage
       if (cart) {
-        const cartIds = JSON.parse(cart).map(item => item.id); // Extract the product IDs
-        console.log(" got cardids");
-        console.log(cartIds)
+        const cartIds = JSON.parse(cart); // Assuming cart is an array of product IDs
+        console.log('Parsed cart IDs:', cartIds); // Log parsed cart item IDs
+        
+        // Make sure that the cartIds are correctly formatted and matching the _id from products
         const filteredCartItems = products.filter(product => cartIds.includes(product._id));
-        console.log("filtered cart items")
-        console.log(filteredCartItems);
-        setCartItems(filteredCartItems);
+        console.log('Filtered cart items:', filteredCartItems); // Log filtered cart items
+
+        setCartItems(filteredCartItems); // Update cart items state
       }
     } catch (error) {
       console.log('Error retrieving cart:', error);
     }
   };
 
-  // UseEffect to fetch products and set cart items
+  // UseEffect to fetch products on mount
   useEffect(() => {
-    fetchProducts(); // Fetch products on mount
+    fetchProducts(); // Fetch products when component mounts
   }, []);
 
-  // UseEffect to filter cart items when products are fetched
+  // UseEffect to get cart items after products are fetched
   useEffect(() => {
     if (products.length > 0) {
-      getCartItems(); 
-      console.log(cartItems)
-      // Get cart items whenever products are updated
+      getCartItems(); // Get cart items after products are loaded
     }
   }, [products]);
 
@@ -57,11 +55,11 @@ const CartScreen = () => {
       <Text>Cart Items</Text>
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item.id.toString()} // Use _id for key extraction
+        keyExtractor={(item) => item._id.toString()} // Use _id for key extraction
         renderItem={({ item }) => (
           <View>
             <Text>{item.name}</Text>
-            <Text>Price: {item.price}</Text> {/* You may want to retrieve quantity from AsyncStorage or manage it elsewhere */}
+            <Text>Price: {item.price}</Text>
           </View>
         )}
       />
