@@ -8,7 +8,7 @@ const recommendedProducts = [
     { id: '2', title: 'Cabbage', price: '300', image: require('../assets/a4.jpeg') },
     { id: '3', title: 'Onions', price: '100', image: require('../assets/a6.jpeg') },
 ];
-const addToCart = async id => {
+/*const addToCart = async id => {
     let itemArray = await AsyncStorage.getItem('cartItem');
     itemArray = JSON.parse(itemArray);
     if (itemArray) {
@@ -18,10 +18,10 @@ const addToCart = async id => {
 
       try {
         await AsyncStorage.setItem('cartItem', JSON.stringify(array));
-        /*ToastAndroid.show(
+        ToastAndroid.show(
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
-        );*/
+        );
         Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
           console.log( array )
         navigation.navigate('Cart');
@@ -36,7 +36,7 @@ const addToCart = async id => {
         /*ToastAndroid.show(
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
-        );*/
+        );
         Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
           console.log(array)
         navigation.navigate('Cart');
@@ -45,7 +45,7 @@ const addToCart = async id => {
         return error;
       }
     }
-  };
+  };*/
 const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
     const { product } = route.params;
