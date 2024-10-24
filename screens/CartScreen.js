@@ -48,11 +48,11 @@ const CartScreen = () => {
       <Text>Cart Items</Text>
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item._id.toString()} // Use _id for key extraction
+        keyExtractor={(item) => item.id.toString()} // Use _id for key extraction
         renderItem={({ item }) => (
           <View>
             <Text>{item.name}</Text>
-            <Text>Quantity: {item.quantity}</Text> {/* You may want to retrieve quantity from AsyncStorage or manage it elsewhere */}
+            <Text>Price: {item.price}</Text> {/* You may want to retrieve quantity from AsyncStorage or manage it elsewhere */}
           </View>
         )}
       />
