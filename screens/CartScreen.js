@@ -21,7 +21,7 @@ const CartScreen = () => {
   // Retrieve cart items from AsyncStorage and filter products
   const getCartItems = async () => {
     try {
-      const cart = await AsyncStorage.getItem('cartItems);
+      const cart = await AsyncStorage.getItem('cartItems');
       console.log(cart);
       if (cart) {
         const cartIds = JSON.parse(cart).map(item => item._id); // Extract the product IDs
