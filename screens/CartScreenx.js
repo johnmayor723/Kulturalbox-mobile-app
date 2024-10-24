@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Importing images from the assets folder
 const images = {
@@ -16,11 +18,9 @@ const images = {
 };
 
 const CartScreen = ({ navigation }) => {
-  // Sample cart items with images
-  const [cartItems] = useState([
-    { id: 1, name: 'Apples', price: 2.99, quantity: 2, image: images.a1 },
-    { id: 2, name: 'Bananas', price: 1.99, quantity: 5, image: images.a2 }
-  ]);
+  // State for products and cart items
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
   // Suggested products with images
   const [suggestedProducts] = useState([
@@ -33,6 +33,49 @@ const CartScreen = ({ navigation }) => {
     { id: 9, name: 'Watermelons', price: 7.99, image: images.a9 },
     { id: 10, name: 'Peaches', price: 5.49, image: images.a10 }
   ]);
+
+  // Fetch products from API
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('https://pantry-hub-server.onrender.com/api/products'); // Replace with your API endpoint
+      setProducts(response.data); // Assuming response.data contains the products array
+      console.log('Fetched products:', response.data); 
+    } catch (error) {
+      console.log('Error fetching products:', error);
+    }
+  };
+
+  // Retrieve cart items from AsyncStorage and filter products
+  const getCartItems = async () => {
+    try {
+      const cart = await AsyncStorage.getItem('cartItem');
+      console.log('Stored cart items:', cart); // Log raw cart items from storage
+      if (cart) {
+        const cartIds = JSON.parse(cart); // Assuming cart is an array of product IDs
+        console.log('Parsed cart IDs:', cartIds); // Log parsed cart item IDs
+
+        // Filter products to match cart items
+        const filteredCartItems = products.filter(product => cartIds.includes(product._id));
+        console.log('Filtered cart items:', filteredCartItems); // Log filtered cart items
+
+        setCartItems(filteredCartItems); // Update cart items state
+      }
+    } catch (error) {
+      console.log('Error retrieving cart:', error);
+    }
+  };
+
+  // UseEffect to fetch products on mount
+  useEffect(() => {
+    fetchProducts(); // Fetch products when component mounts
+  }, []);
+
+  // UseEffect to get cart items after products are fetched
+  useEffect(() => {
+    if (products.length > 0) {
+      getCartItems(); // Get cart items after products are loaded
+    }
+  }, [products]);
 
   // Calculate total amount
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -52,13 +95,17 @@ const CartScreen = ({ navigation }) => {
       {/* Cart Items Section */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cartItemsSection}>
-          {cartItems.map(item => (
-            <View key={item.id} style={styles.cartItem}>
-              <Image source={item.image} style={styles.productImage} />
-              <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
-              <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
-            </View>
-          ))}
+          {cartItems.length > 0 ? (
+            cartItems.map(item => (
+              <View key={item._id} style={styles.cartItem}>
+                <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
+                <Text style={styles.itemText}>{item.name} x{item.quantity}</Text>
+                <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+              </View>
+            ))
+          ) : (
+            <Text>No items in your cart.</Text>
+          )}
         </View>
 
         {/* Products You May Like */}
@@ -145,7 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   suggestedProduct: {
-    width: '48%', // Adjusting for two columns with margin
+    width: '48%',
     backgroundColor: 'white',
     borderRadius: 8,
     padding: 10,
@@ -186,10 +233,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   checkoutButton: {
-    backgroundColor: '#FF7E00', // Amber orange for checkout button
+    backgroundColor: '#FF7E00',
     borderRadius: 5,
     padding: 10,
-    width: '50%', // Adjust width to fit nicely
+    width: '50%',
     alignItems: 'center',
   },
   checkoutText: {
