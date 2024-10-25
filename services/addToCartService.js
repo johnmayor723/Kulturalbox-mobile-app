@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
-export const addToCartService = async (productId, products, setCartItems) => {
+ const addToCartService = async (productId, products, setCartItems) => {
   try {
     // Retrieve existing cart items from AsyncStorage
     let itemArray = await AsyncStorage.getItem('cartItem');
@@ -40,3 +40,5 @@ export const addToCartService = async (productId, products, setCartItems) => {
     return error;
   }
 };
+
+export default addToCartService 
