@@ -1,12 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import { Alert } from 'react-native';
-import React, { useState } from 'react';
 
-// Define the addToCartService function
-const addToCartService = async (productId, products, setProducts, setCartItems) => {
+export const addToCartService = async (productId, products, setCartItems) => {
   try {
-    // Get the existing cart items from AsyncStorage
+    // Retrieve existing cart items from AsyncStorage
     let itemArray = await AsyncStorage.getItem('cartItem');
     itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
 
@@ -14,38 +11,32 @@ const addToCartService = async (productId, products, setProducts, setCartItems) 
     itemArray.push(productId);
     
     console.log('Updated cart items:', itemArray); // Log the updated array
-    
+
     // Save the updated array back to AsyncStorage
     await AsyncStorage.setItem('cartItem', JSON.stringify(itemArray));
 
-    // Use alert or toast to notify the user
+    // Notify the user that the item was added to the cart
     Alert.alert('Item Added To Cart', `Product ID: ${productId}`);
 
-    // Make an API call to fetch the latest products data
-    const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
-    setProducts(response.data); // Update products state with fetched data
-
-    console.log('Fetched products:', response.data); // Log fetched products
-    
-    // Filter the products to match those in the cart
-    const filteredCartItems = response.data.filter(product => itemArray.includes(product._id)).map(product => ({
+    // Filter the products to get items that match those in the cart
+    const filteredCartItems = products.filter(product => itemArray.includes(product._id)).map(product => ({
       ...product,
-      quantity: 1 // Default quantity to 1 if not already set
+      quantity: 1 // Set default quantity to 1 if not already set
     }));
-    
+
     console.log('Filtered cart items:', filteredCartItems); // Log the filtered cart items
-    
-    setCartItems(filteredCartItems); // Update cart items state
-    
-    // Calculate the cart item count based on filtered cart items
+
+    // Update the cart items state
+    setCartItems(filteredCartItems);
+
+    // Calculate and return the cart item count
     const cartItemsCount = filteredCartItems.length;
     console.log('Cart items count:', cartItemsCount);
 
     return { cartItemsCount, cartItems: filteredCartItems }; // Return count and items for further use if needed
 
   } catch (error) {
-    console.error('Error adding to cart or fetching products:', error); // Log any errors
+    console.error('Error adding to cart:', error); // Log any errors
     return error;
   }
 };
-
