@@ -11,7 +11,7 @@ const LogoutScreen = ({ navigation }) => {
                 await AsyncStorage.removeItem('user');
                 await AsyncStorage.removeItem('token');
                 // Navigate back to the AuthStack
-                navigation.replace('Auth');  // Redirect to Auth screen
+                navigation.navigate('Auth');  // Redirect to Auth screen
             } catch (error) {
                 console.error('Error logging out:', error);
             }
