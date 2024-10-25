@@ -165,6 +165,11 @@ function HomeStack() {
                 options={{ headerShown: true }}
             />
             <Stack.Screen
+                name="Auth"
+                component={AuthScreen}
+                options={{ headerShown: false }}  // Hides the header
+            />
+            <Stack.Screen
                 name="Meat"
                 component={MeatScreen}
                 options={{ headerShown: true }}
