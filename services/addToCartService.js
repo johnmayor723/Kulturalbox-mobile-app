@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
  const addToCartService = async (productId, products, setCartItems) => {
   try {
     // Retrieve existing cart items from AsyncStorage
-    let itemArray = await AsyncStorage.getItem('cartItem');
+    let itemArray = await AsyncStorage.getItem('cart');
     itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
 
     // Add the new productId to the cart array
@@ -13,7 +13,7 @@ import { Alert } from 'react-native';
     console.log('Updated cart items:', itemArray); // Log the updated array
 
     // Save the updated array back to AsyncStorage
-    await AsyncStorage.setItem('cartItem', JSON.stringify(itemArray));
+    await AsyncStorage.setItem('cart', JSON.stringify(itemArray));
 
     // Notify the user that the item was added to the cart
     Alert.alert('Item Added To Cart', `Product ID: ${productId}`);
