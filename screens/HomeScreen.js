@@ -1,8 +1,7 @@
-import  React, {useState, useEffect} from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-
 
 // Categories Data
 const categories = [
@@ -20,7 +19,7 @@ const HomeScreen = () => {
     // Render each product item
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Single Product', { product: item })}>
-            <Image source={{uri:item.imageUrl}} style={styles.cardImage} />
+            <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardPrice}>₦{item.price}</Text>
             <TouchableOpacity style={styles.addButton}>
@@ -29,34 +28,29 @@ const HomeScreen = () => {
         </TouchableOpacity>
     );
 
+    // Fetching products
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
+                setProducts(response.data);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-// fetching products 
-  useEffect(() => {
-    // Fetch products from the API
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
-        setProducts(response.data);
-          products.forEach(product => {
-          console.log(product.imageUrl);
-        });
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+        fetchProducts();
+    }, []);
 
-    fetchProducts();
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#00ff00" />
-      </View>
-    );
-  }
+    if (loading) {
+        return (
+            <View style={styles.loader}>
+                <ActivityIndicator size="large" color="#00ff00" />
+            </View>
+        );
+    }
 
     // Render categories
     const renderCategory = ({ item }) => (
@@ -110,7 +104,7 @@ const styles = StyleSheet.create({
     },
     heroImage: {
         width: '100%',
-        height: 150,
+        height: 130, // Reduced the height by 20px (was 150)
         borderRadius: 10,
     },
     categoriesContainer: {
@@ -171,6 +165,11 @@ const styles = StyleSheet.create({
     },
     row: {
         justifyContent: 'space-between',
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
