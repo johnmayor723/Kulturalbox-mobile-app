@@ -67,7 +67,10 @@ function BottomTabNavigator() {
 // Drawer Navigator Component
 function DrawerNavigator() {
     return (
-        <Drawer.Navigator initialRouteName="DrawerHome">
+        <Drawer.Navigator initialRouteName="DrawerHome"
+        drawerStyle={{
+                    backgroundColor: 'rgba(255, 126, 0, 0.5)', // Amber orange with 50% opacity
+                }}>
             <Drawer.Screen 
                 name="DrawerHome" 
                 component={BottomTabNavigator} 
