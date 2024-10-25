@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
@@ -61,7 +61,7 @@ const HomeScreen = () => {
     );
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             {/* Hero Section */}
             <View style={styles.heroSection}>
                 <Image source={require('../assets/hero.jpeg')} style={styles.heroImage} />
@@ -87,8 +87,9 @@ const HomeScreen = () => {
                 keyExtractor={item => item.id}
                 numColumns={2}
                 columnWrapperStyle={styles.row}
+                scrollEnabled={false} // Prevent internal FlatList scrolling
             />
-        </View>
+        </ScrollView>
     );
 };
 
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     heroSection: {
         alignItems: 'center',
         marginBottom: 16,
+        marginTop: 20, // Adding marginTop to keep it away from the top
     },
     heroImage: {
         width: '100%',
@@ -109,6 +111,7 @@ const styles = StyleSheet.create({
     },
     categoriesContainer: {
         paddingVertical: 10,
+        marginTop: 10, // Adding marginTop to keep the categories icons away from hero section
     },
     categoryButton: {
         backgroundColor: '#F0F0F0',
