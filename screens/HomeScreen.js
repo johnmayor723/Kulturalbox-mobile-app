@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import addToCartService from "../services/addToCartService"
 
 // Categories Data
 const categories = [
@@ -14,7 +15,16 @@ const categories = [
 const HomeScreen = () => {
     const navigation = useNavigation();
     const [products, setProducts] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    
+
+    const handleAddToCart = async (productId) => {
+    const result = await addToCartService(productId, products, setCartItems);
+    console.log('Cart items after add:', result.cartItems);
+    console.log('Number of items in cart:', result.cartItemsCount);
+  };
+ 
 
     // Render each product item
     const renderItem = ({ item }) => (
@@ -22,7 +32,7 @@ const HomeScreen = () => {
             <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardPrice}>₦{item.price}</Text>
-            <TouchableOpacity style={styles.addButton}>
+            <TouchableOpacity style={styles.addButton} onPress={()=> handleAddToCart(item._id)}>
                 <Text style={styles.buttonText}>Add to Cart</Text>
             </TouchableOpacity>
         </TouchableOpacity>
