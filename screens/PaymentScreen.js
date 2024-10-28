@@ -13,7 +13,7 @@ const PaymentScreen = () => {
   // Convert totalAmount to Naira format
   const formattedTotalAmount = `₦${totalAmount.toFixed(2)}`;
   const handleCheckout =()=> {
-    navigation.navigate("Checkout", {formatedTotalAmount})
+    navigation.navigate("Checkout", {formattedTotalAmount})
   }
   return (
     <View style={styles.container}>
