@@ -27,7 +27,7 @@ const SignupScreen = ({ navigation }) => {
 
       Alert.alert('Signup successful!', `Welcome ${user.name}`);
       setIsLoading(false); // Hide loader
-      navigation.navigate('Main'); // Navigate to Home or another screen after auth
+      navigation.replace('HomeStack); // Navigate to Home or another screen after auth
     } catch (error) {
       setIsLoading(false); // Hide loader
       console.error(error);
