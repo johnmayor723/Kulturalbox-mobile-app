@@ -5,6 +5,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 
 const PaymentScreen = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   
   // Extracting cart items count and total amount from route params
   const { cartItemCount = 0, totalAmount = 0 } = route.params || {};
@@ -59,7 +60,7 @@ const PaymentScreen = () => {
           <Text style={styles.cartText}>Your cart has {cartItemCount} items</Text>
           <Text style={styles.totalAmount}>{formattedTotalAmount}</Text>
         </View>
-        <TouchableOpacity style={styles.checkoutButton}>
+        <TouchableOpacity onClick = {()=>handleCheckout()} style={styles.checkoutButton}>
           <Text style={styles.checkoutText}>Check Out</Text>
         </TouchableOpacity>
       </View>
