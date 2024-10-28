@@ -27,6 +27,8 @@ import MeatScreen from './screens/MeatScreen.js';
 import OilProductsScreen from './screens/OilProductsScreen.js';
 import SnacksScreen from './screens/SnacksScreen.js';
 import LogoutScreen from './screens/LogoutScreen'; // New logout screen
+import CheckoutScreen from "./screens/CheckoutScreen";
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -156,6 +158,11 @@ function HomeStack() {
             <Stack.Screen
                 name="Fruit"
                 component={FruitsScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Checkout"
+                component={CheckoutScreen}
                 options={{ headerShown: true }}
             />
             <Stack.Screen
