@@ -60,7 +60,7 @@ const PaymentScreen = () => {
           <Text style={styles.cartText}>Your cart has {cartItemCount} items</Text>
           <Text style={styles.totalAmount}>{formattedTotalAmount}</Text>
         </View>
-        <TouchableOpacity onClick = {()=>handleCheckout()} style={styles.checkoutButton}>
+        <TouchableOpacity onPress={handleCheckout} style={styles.checkoutButton}>
           <Text style={styles.checkoutText}>Check Out</Text>
         </TouchableOpacity>
       </View>
