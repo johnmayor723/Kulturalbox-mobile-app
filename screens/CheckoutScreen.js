@@ -1,3 +1,4 @@
+
 // CheckoutScreen.js
 import React, { useState } from 'react';
 import {
@@ -13,7 +14,9 @@ import { WebView } from 'react-native-webview';
 import axios from 'axios';
 
 const CheckoutScreen = ({ route }) => {
-  const { totalAmount } = route.params; // Retrieve totalAmount from route
+  const { formattedTotalAmount } = route.params; // Retrieve formattedTotalAmount from route
+  const totalAmount = parseFloat(formattedTotalAmount.replace(/,/g, '')); // Convert to number if formatted with commas
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -71,7 +74,7 @@ const CheckoutScreen = ({ route }) => {
         value={address}
         onChangeText={setAddress}
       />
-      <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text> {/* Display total amount */}
+      <Text style={styles.amountText}>Amount: ₦{formattedTotalAmount}</Text> {/* Display formatted total amount */}
       
       {showWebView ? (
         <WebView
