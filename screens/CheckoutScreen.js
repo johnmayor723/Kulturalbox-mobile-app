@@ -1,4 +1,3 @@
-
 // CheckoutScreen.js
 import React, { useState } from 'react';
 import {
@@ -14,9 +13,7 @@ import { WebView } from 'react-native-webview';
 import axios from 'axios';
 
 const CheckoutScreen = ({ route }) => {
-  const { formattedTotalAmount } = route.params; // Retrieve formattedTotalAmount from route
-  const totalAmount = parseFloat(formattedTotalAmount.replace(/,/g, '')); // Convert to number if formatted with commas
-
+  const { totalAmount } = route.params; // Retrieve totalAmount from route
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -74,14 +71,14 @@ const CheckoutScreen = ({ route }) => {
         value={address}
         onChangeText={setAddress}
       />
-      <Text style={styles.amountText}>Amount: ₦{formattedTotalAmount}</Text> {/* Display formatted total amount */}
+      <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text> {/* Display total amount */}
       
       {showWebView ? (
         <WebView
           source={{
             uri: `https://paystack.com/pay?key=your-paystack-public-key&amount=${totalAmount * 100}&email=${email}`,
           }} // Replace with your Paystack URL
-          onNavigationStateChange={handlePaymentCompletion}
+          onNavigationStateChange={(webviewData) => handlePaymentCompletion(webviewData)} // Pass webviewData to handlePaymentCompletion
           style={styles.webview}
         />
       ) : (
