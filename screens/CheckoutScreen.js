@@ -3,10 +3,10 @@ import {
   View,
   Text,
   TextInput,
-  Button,
-  StyleSheet,
   Alert,
   ScrollView,
+  TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import axios from 'axios';
@@ -82,13 +82,9 @@ const CheckoutScreen = ({ route }) => {
           style={styles.webview}
         />
       ) : (
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Pay"
-            onPress={handlePayPress}
-            color="#4CAF50"
-          />
-        </View>
+        <TouchableOpacity style={styles.buttonContainer} onPress={handlePayPress}>
+          <Text style={styles.buttonText}>Pay</Text>
+        </TouchableOpacity>
       )}
     </ScrollView>
   );
@@ -101,9 +97,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
   },
   heroSection: {
-    backgroundColor: '#FF7E00', // Hero section with specified orange color
+    backgroundColor: '#FF7E00',
     padding: 20,
-    borderRadius: 5, // Reduced border radius
+    borderRadius: 5,
     marginBottom: 20,
     alignItems: 'center',
   },
@@ -116,7 +112,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5, // Reduced border radius for TextInput
+    borderRadius: 5,
     padding: 10,
     marginBottom: 15,
     backgroundColor: '#e0e0e0',
@@ -132,9 +128,17 @@ const styles = StyleSheet.create({
     height: 400,
   },
   buttonContainer: {
-    borderRadius: 5, // Reduced border radius for button container
-    overflow: 'hidden',
-    height: 50, // Same height as TextInputs
+    backgroundColor: '#4CAF50',
+    borderRadius: 5,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
