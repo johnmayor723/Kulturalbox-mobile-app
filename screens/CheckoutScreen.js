@@ -76,7 +76,7 @@ const CheckoutScreen = ({ route }) => {
       {showWebView ? (
         <WebView
           source={{
-            uri: `https://paystack.com/pay?key=your-paystack-public-key&amount=${totalAmount * 100}&email=${email}`,
+            uri: `https://paystack.com/pay?key=pk_live_5db63dff5f376c290ffe1f9dcb5c6021bb668ffb&amount=${totalAmount * 100}&email=${email}`,
           }} // Replace with your Paystack URL
           onNavigationStateChange={(webviewData) => handlePaymentCompletion(webviewData)} // Pass webviewData to handlePaymentCompletion
           style={styles.webview}
