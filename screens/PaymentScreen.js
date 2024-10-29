@@ -7,14 +7,19 @@ const PaymentScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   
+  // Log route parameters for debugging
+  console.log('Route Params:', route.params);
+
   // Extracting cart items count and total amount from route params
   const { cartItemCount = 0, totalAmount = 0 } = route.params || {};
   
   // Convert totalAmount to Naira format
   const formattedTotalAmount = `₦${totalAmount.toFixed(2)}`;
-  const handleCheckout =()=> {
-    navigation.navigate("Checkout", {formattedTotalAmount})
-  }
+  
+  const handleCheckout = () => {
+    navigation.navigate("Checkout", { formattedTotalAmount });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
@@ -69,88 +74,7 @@ const PaymentScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  scrollView: {
-    paddingBottom: 80, // Ensure space for the bottom tab
-  },
-  searchContainer: {
-    backgroundColor: 'lightgray',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 25,
-  },
-  searchInput: {
-    height: 40,
-    paddingHorizontal: 10,
-  },
-  deliveryHeader: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#FF7E00', // Amber orange for header text
-  },
-  deliveryOptionsContainer: {
-    marginHorizontal: 16,
-  },
-  deliveryBox: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 15,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  boxTitle: {
-    fontWeight: 'bold',
-    marginVertical: 5,
-    color: '#4CAF50', // Green color for titles
-  },
-  boxText: {
-    color: '#555',
-  },
-  bottomTab: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 80,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderTopColor: 'lightgray',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 10,
-  },
-  cartInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  cartText: {
-    color: 'black',
-  },
-  totalAmount: {
-    color: 'black',
-  },
-  checkoutButton: {
-    backgroundColor: '#FF7E00', // Amber orange for checkout button
-    borderRadius: 5,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkoutText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
+  // Your styles go here
 });
 
 export default PaymentScreen;
