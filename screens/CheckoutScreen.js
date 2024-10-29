@@ -1,4 +1,3 @@
-// CheckoutScreen.js
 import React, { useState } from 'react';
 import {
   View,
@@ -9,7 +8,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { WebView, Paystack } from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 import axios from 'axios';
 
 const CheckoutScreen = ({ route }) => {
@@ -51,7 +50,9 @@ const CheckoutScreen = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Payment</Text>
+      <View style={styles.heroSection}>
+        <Text style={styles.title}>Payment</Text>
+      </View>
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -81,12 +82,14 @@ const CheckoutScreen = ({ route }) => {
           style={styles.webview}
         />
       ) : (
-      
-        <Button
-          title="Pay"
-          onPress={handlePayPress}
-        />
-   )}
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Pay"
+            onPress={handlePayPress}
+            color="#4CAF50" // Green background for the button
+          />
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -97,19 +100,26 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f8f8f8',
   },
+  heroSection: {
+    backgroundColor: '#FFBF00', // Amber orange color
+    padding: 20,
+    borderRadius: 8,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    color: '#fff', // White text color for contrast
   },
   input: {
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 25, // Rounded edges
     padding: 10,
     marginBottom: 15,
+    backgroundColor: '#e0e0e0', // Gray background
   },
   amountText: {
     fontSize: 18,
@@ -120,6 +130,10 @@ const styles = StyleSheet.create({
   webview: {
     marginVertical: 20,
     height: 400,
+  },
+  buttonContainer: {
+    borderRadius: 25, // Rounded edges
+    overflow: 'hidden',
   },
 });
 
