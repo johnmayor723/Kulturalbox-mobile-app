@@ -71,14 +71,22 @@ const CheckoutScreen = ({ route }) => {
         value={address}
         onChangeText={setAddress}
       />
-      <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text> {/* Display total amount */}
-      
+      <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text> 
+      {showWebView ? (
+        <WebView
+          source={{
+            uri: `https://paystack.com/pay?key=pk_live_5db63dff5f376c290ffe1f9dcb5c6021bb668ffb&amount=${totalAmount * 100}&email=${email}`,
+          }} // Replace with your Paystack URL
+          onNavigationStateChange={(webviewData) => handlePaymentCompletion(webviewData)} // Pass webviewData to handlePaymentCompletion
+          style={styles.webview}
+        />
+      ) : (
       
         <Button
           title="Pay"
           onPress={handlePayPress}
         />
-    
+   )}
     </ScrollView>
   );
 };
