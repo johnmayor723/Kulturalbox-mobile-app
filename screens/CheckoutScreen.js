@@ -32,7 +32,7 @@ const CheckoutScreen = ({ route }) => {
 
   const handlePaymentCompletion = (webviewData) => {
     const url = webviewData.url;
-    if (url.includes('https://your-redirect-url.com')) { // Replace with your Paystack redirect URL
+    if (url.includes('https://pantry-hub-server.onrender.com')) { // Replace with your Paystack redirect URL
       const reference = new URL(url).searchParams.get('reference');
       if (reference) {
         setShowWebView(false);
