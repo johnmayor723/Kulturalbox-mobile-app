@@ -12,7 +12,7 @@ import { WebView } from 'react-native-webview';
 import axios from 'axios';
 
 const CheckoutScreen = ({ route }) => {
-  const { totalAmount } = route.params; // Retrieve totalAmount from route
+  const { totalAmount } = route.params;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -31,7 +31,7 @@ const CheckoutScreen = ({ route }) => {
 
   const handlePaymentCompletion = (webviewData) => {
     const url = webviewData.url;
-    if (url.includes('https://pantry-hub-server.onrender.com')) { // Replace with your Paystack redirect URL
+    if (url.includes('https://pantry-hub-server.onrender.com')) {
       const reference = new URL(url).searchParams.get('reference');
       if (reference) {
         setShowWebView(false);
@@ -72,13 +72,13 @@ const CheckoutScreen = ({ route }) => {
         value={address}
         onChangeText={setAddress}
       />
-      <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text> 
+      <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text>
       {showWebView ? (
         <WebView
           source={{
             uri: `https://paystack.com/pay?key=pk_live_5db63dff5f376c290ffe1f9dcb5c6021bb668ffb&amount=${totalAmount * 100}&email=${email}`,
-          }} // Replace with your Paystack URL
-          onNavigationStateChange={(webviewData) => handlePaymentCompletion(webviewData)} // Pass webviewData to handlePaymentCompletion
+          }}
+          onNavigationStateChange={(webviewData) => handlePaymentCompletion(webviewData)}
           style={styles.webview}
         />
       ) : (
@@ -86,7 +86,7 @@ const CheckoutScreen = ({ route }) => {
           <Button
             title="Pay"
             onPress={handlePayPress}
-            color="#4CAF50" // Green background for the button
+            color="#4CAF50"
           />
         </View>
       )}
@@ -101,25 +101,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
   },
   heroSection: {
-    backgroundColor: '#FFBF00', // Amber orange color
+    backgroundColor: '#FF7E00', // Hero section with specified orange color
     padding: 20,
-    borderRadius: 8,
+    borderRadius: 5, // Reduced border radius
     marginBottom: 20,
     alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff', // White text color for contrast
+    color: '#fff',
   },
   input: {
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 25, // Rounded edges
+    borderRadius: 5, // Reduced border radius for TextInput
     padding: 10,
     marginBottom: 15,
-    backgroundColor: '#e0e0e0', // Gray background
+    backgroundColor: '#e0e0e0',
   },
   amountText: {
     fontSize: 18,
@@ -132,8 +132,9 @@ const styles = StyleSheet.create({
     height: 400,
   },
   buttonContainer: {
-    borderRadius: 25, // Rounded edges
+    borderRadius: 5, // Reduced border radius for button container
     overflow: 'hidden',
+    height: 50, // Same height as TextInputs
   },
 });
 
