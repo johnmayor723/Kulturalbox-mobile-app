@@ -17,10 +17,12 @@ const CheckoutScreen = ({ route }) => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [showWebView, setShowWebView] = useState(false);
+  const [paymentUrl, setPaymentUrl] = useState('');
 
+  // Handles the order creation after successful payment
   const handleOrderCreation = async (reference) => {
     try {
-      const orderData = { name, email, address, paymentReference: reference };
+      const orderData = { name, email, address, paymentReference: reference, totalAmount };
       const response = await axios.post('https://pantry-hub-server.onrender.com/api/orders', orderData);
       Alert.alert('Order Created', `Order ID: ${response.data.id}`);
     } catch (error) {
@@ -29,23 +31,38 @@ const CheckoutScreen = ({ route }) => {
     }
   };
 
-  const handlePaymentCompletion = (webviewData) => {
-    const url = webviewData.url;
-    if (url.includes('https://pantry-hub-server.onrender.com')) {
+  // Checks if payment was completed by verifying the redirect URL in the WebView
+  const handlePaymentCompletion = (webviewState) => {
+    const { url } = webviewState;
+    if (url.includes('https://your_redirect_url.com')) { // Replace with your Paystack redirect URL
       const reference = new URL(url).searchParams.get('reference');
       if (reference) {
-        setShowWebView(false);
-        handleOrderCreation(reference);
+        setShowWebView(false);  // Hide WebView
+        handleOrderCreation(reference); // Complete the order process
       }
     }
   };
 
-  const handlePayPress = () => {
+  // Initiates payment by calling the backend to get the Paystack session URL
+  const handlePayPress = async () => {
     if (!name || !email || !address) {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-    setShowWebView(true);
+
+    try {
+      // Request to create a payment session on the server
+      const response = await axios.post('https://pantry-hub-server.onrender.com/create-paystack-session', {
+        email,
+        amount: totalAmount * 100, // Convert to kobo
+      });
+
+      setPaymentUrl(response.data.paymentUrl); // Set the payment URL received
+      setShowWebView(true); // Show WebView to initiate payment
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Failed to initiate payment.');
+    }
   };
 
   return (
@@ -75,10 +92,8 @@ const CheckoutScreen = ({ route }) => {
       <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text>
       {showWebView ? (
         <WebView
-          source={{
-            uri: `https://paystack.com/pay?key=pk_live_5db63dff5f376c290ffe1f9dcb5c6021bb668ffb&amount=${totalAmount * 100}&email=${email}`,
-          }}
-          onNavigationStateChange={(webviewData) => handlePaymentCompletion(webviewData)}
+          source={{ uri: paymentUrl }}
+          onNavigationStateChange={handlePaymentCompletion}
           style={styles.webview}
         />
       ) : (
@@ -130,7 +145,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: '#4CAF50',
     borderRadius: 5,
-    height: 50,
+    height: 60, // Increased height of button
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
