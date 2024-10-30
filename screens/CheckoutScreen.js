@@ -1,68 +1,145 @@
-import React, { useRef, useState } from 'react';
-import { Paystack, paystackProps } from 'react-native-paystack-webview';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { WebView } from 'react-native-webview';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
-function CheckoutScreen({ route }) {
-  const { totalAmount } = route.params; // Get amount from route
-  const paystackWebViewRef = useRef(paystackProps.PayStackRef);
-  const [shippingAddress, setShippingAddress] = useState('');
+export default function CheckoutScreen() {
   const [email, setEmail] = useState('');
+  const [totalAmount, setTotalAmount] = useState('');
+  const [shippingAddress, setShippingAddress] = useState('');
+  const [paymentUrl, setPaymentUrl] = useState(null);
+  const [showWebView, setShowWebView] = useState(false);
+  const [transactionReference, setTransactionReference] = useState(null);
 
-  const handleCheckout = async () => {
+  const navigation = useNavigation();
+
+  const initializeTransaction = async () => {
+    // Validate input fields
+    if (!email || !totalAmount || !shippingAddress) {
+      Alert.alert('Error', 'Please fill in all the fields.');
+      return;
+    }
+
     try {
-      const response = await axios.post('https://pantry-hub-server.onrender.com/api/orders', {
-        //status: 'processing',
-        shippingAddress,
-        email,
-        amount: totalAmount,
-      });
-      console.log('Order created:', response.data);
-      paystackWebViewRef.current.startTransaction(); // Initiate the transaction
+      const response = await axios.post(
+        'https://api.paystack.co/transaction/initialize',
+        {
+          email,
+          amount: totalAmount * 100, // Paystack expects amount in kobo
+          callback_url: 'https://yourcallback.com',
+          metadata: { cancel_action: 'https://your-cancel-url.com' }
+        },
+        {
+          headers: {
+            Authorization: 'sk_test_caf30f565f30779a789cfed46899dad43224e36b',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      const { authorization_url, reference } = response.data.data;
+      setPaymentUrl(authorization_url);
+      setTransactionReference(reference); // Store the transaction reference
+      setShowWebView(true);
     } catch (error) {
-      console.error('Error creating order:', error);
+      Alert.alert('Error', 'Failed to initialize transaction');
+      console.error(error);
+    }
+  };
+
+  const handleNavigationStateChange = (state) => {
+    const { url } = state;
+
+    if (url.includes('https://yourcallback.com')) {
+      // Extract transaction reference from URL and verify the transaction
+      const reference = new URL(url).searchParams.get('reference');
+      verifyTransaction(reference); // Call verification function
+    } else if (url.includes('https://your-cancel-url.com')) {
+      // Handle payment cancellation
+      setShowWebView(false);
+      Alert.alert('Payment Cancelled', 'You cancelled the payment.');
+    }
+  };
+
+  const verifyTransaction = async (reference) => {
+    try {
+      const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
+        headers: { Authorization: 'Bearer YOUR_SECRET_KEY' },
+      });
+
+      const { status } = response.data.data;
+      if (status === 'success') {
+        // Payment successful, now create the order
+        await createOrder();
+      } else {
+        Alert.alert('Payment Failed', 'Transaction could not be verified.');
+      }
+    } catch (error) {
+      Alert.alert('Verification Error', 'Failed to verify transaction');
+      console.error(error);
+    }
+  };
+
+  const createOrder = async () => {
+    try {
+      const orderResponse = await axios.post(
+        'https://pantry-hub-server.onrender.com/api/orders',
+        {
+          email,
+          totalAmount,
+          shippingAddress,
+        }
+      );
+
+      if (orderResponse.status === 200) {
+        setShowWebView(false);
+        Alert.alert('Order Created', 'Thank you for your payment and your order is confirmed!');
+        navigation.replace('Home'); // Navigate to Home after order creation
+      } else {
+        Alert.alert('Error', 'Failed to create the order.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to create the order.');
+      console.error(error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.heroSection}>
-        <Text style={styles.headerText}>Checkout</Text>
-        <Text style={styles.amountText}>Total: ₦{totalAmount}</Text>
-      </View>
-
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Shipping Address"
-          value={shippingAddress}
-          onChangeText={setShippingAddress}
+      {showWebView && paymentUrl ? (
+        <WebView
+          source={{ uri: paymentUrl }}
+          onNavigationStateChange={handleNavigationStateChange}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-        />
-      </View>
-
-      <Paystack
-        paystackKey="pk_test_bec2adfc8f46afff889349e2bf76e50477939d74"
-        billingEmail={email}
-        amount={totalAmount}
-        onCancel={(e) => {
-          console.log('Transaction cancelled', e);
-        }}
-        onSuccess={(res) => {
-          console.log('Transaction successful', res);
-        }}
-        ref={paystackWebViewRef}
-      />
-
-      <TouchableOpacity style={styles.payButton} onPress={handleCheckout}>
-        <Text style={styles.buttonText}>Pay Now</Text>
-      </TouchableOpacity>
+      ) : (
+        <>
+          <View style={styles.heroSection}>
+            <Text style={styles.heroText}>Complete Your Payment</Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Total Amount"
+            value={totalAmount}
+            onChangeText={setTotalAmount}
+            keyboardType="numeric"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Shipping Address"
+            value={shippingAddress}
+            onChangeText={setShippingAddress}
+          />
+          <Button title="Proceed to Pay" onPress={initializeTransaction} />
+        </>
+      )}
     </View>
   );
 }
@@ -70,50 +147,25 @@ function CheckoutScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-    paddingHorizontal: 20,
+    padding: 20,
+    justifyContent: 'center',
   },
   heroSection: {
-    backgroundColor: '#FFBF00', // Orange amber color
+    backgroundColor: 'orange',
     padding: 20,
-    borderRadius: 10,
-    marginTop: 20,
     alignItems: 'center',
+    marginBottom: 20,
   },
-  headerText: {
-    fontSize: 24,
+  heroText: {
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#fff',
-  },
-  amountText: {
-    fontSize: 18,
-    color: '#fff',
-    marginTop: 5,
-  },
-  form: {
-    marginTop: 20,
   },
   input: {
-    height: 50,
-    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-  },
-  payButton: {
-    backgroundColor: '#32CD32', // Green color
-    paddingVertical: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginVertical: 10,
   },
 });
-
-export default CheckoutScreen;
