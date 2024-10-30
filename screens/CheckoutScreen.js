@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import PaystackWebView from 'react-native-paystack-webview';
 
-const ChechoutScreen = () => {
+const CheckoutScreen = () => {
   return (
     <View>
       <PaystackWebView
