@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import PaystackWebView from 'react-native-paystack-webview';
 
-const CartScreen = () => {
+const ChechoutScreen = () => {
   return (
     <View>
       <PaystackWebView
@@ -24,4 +24,4 @@ const CartScreen = () => {
   );
 };
 
-export default CartScreen;
+export default CheckoutScreen;
