@@ -1,159 +1,107 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Alert,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import { WebView } from 'react-native-webview';
-import axios from 'axios';
+import React, { useRef, useState } from 'react';
+import { Paystack, paystackProps } from 'react-native-paystack-webview';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const CheckoutScreen = ({ route }) => {
-  const { totalAmount } = route.params;
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [showWebView, setShowWebView] = useState(false);
-  const [paymentUrl, setPaymentUrl] = useState('');
+function CheckoutScreen() {
+  const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
+  const [shippingAddress, setShippingAddress] = useState('');
 
-  // Handles the order creation after successful payment
-  const handleOrderCreation = async (reference) => {
-    try {
-      const orderData = { name, email, address, paymentReference: reference, totalAmount };
-      const response = await axios.post('https://pantry-hub-server.onrender.com/api/orders', orderData);
-      Alert.alert('Order Created', `Order ID: ${response.data.id}`);
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Failed to create order.');
-    }
-  };
-
-  // Checks if payment was completed by verifying the redirect URL in the WebView
-  const handlePaymentCompletion = (webviewState) => {
-    const { url } = webviewState;
-    if (url.includes('https://your_redirect_url.com')) { // Replace with your Paystack redirect URL
-      const reference = new URL(url).searchParams.get('reference');
-      if (reference) {
-        setShowWebView(false);  // Hide WebView
-        handleOrderCreation(reference); // Complete the order process
-      }
-    }
-  };
-
-  // Initiates payment by calling the backend to get the Paystack session URL
-  const handlePayPress = async () => {
-    if (!name || !email || !address) {
-      Alert.alert('Error', 'Please fill in all fields.');
-      return;
-    }
-
-    try {
-      // Request to create a payment session on the server
-      const response = await axios.post('https://pantry-hub-server.onrender.com/create-paystack-session', {
-        email,
-        amount: totalAmount * 100, // Convert to kobo
+  const handleCheckout = () => {
+    // Create order with status "processing" at the API endpoint
+    fetch('https://your-api-endpoint.com/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status: 'processing',
+        shippingAddress,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Order created:', data);
+        paystackWebViewRef.current.startTransaction(); // Initiate the transaction
+      })
+      .catch((error) => {
+        console.error('Error creating order:', error);
       });
-
-      setPaymentUrl(response.data.paymentUrl); // Set the payment URL received
-      setShowWebView(true); // Show WebView to initiate payment
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Failed to initiate payment.');
-    }
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.heroSection}>
-        <Text style={styles.title}>Payment</Text>
+        <Text style={styles.headerText}>Checkout</Text>
       </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Shipping Address"
-        value={address}
-        onChangeText={setAddress}
-      />
-      <Text style={styles.amountText}>Amount: ₦{totalAmount}</Text>
-      {showWebView ? (
-        <WebView
-          source={{ uri: paymentUrl }}
-          onNavigationStateChange={handlePaymentCompletion}
-          style={styles.webview}
+
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Shipping Address"
+          value={shippingAddress}
+          onChangeText={setShippingAddress}
         />
-      ) : (
-        <TouchableOpacity style={styles.buttonContainer} onPress={handlePayPress}>
-          <Text style={styles.buttonText}>Pay</Text>
-        </TouchableOpacity>
-      )}
-    </ScrollView>
+      </View>
+
+      <Paystack
+        paystackKey="pk_test_bec2adfc8f46afff889349e2bf76e50477939d74"
+        billingEmail="paystackwebview@something.com"
+        amount={'25000.00'}
+        onCancel={(e) => {
+          console.log('Transaction cancelled', e);
+        }}
+        onSuccess={(res) => {
+          console.log('Transaction successful', res);
+        }}
+        ref={paystackWebViewRef}
+      />
+
+      <TouchableOpacity style={styles.payButton} onPress={handleCheckout}>
+        <Text style={styles.buttonText}>Pay Now</Text>
+      </TouchableOpacity>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#f5f5f5',
+    paddingHorizontal: 20,
   },
   heroSection: {
-    backgroundColor: '#FF7E00',
+    backgroundColor: '#FFBF00', // Orange amber color
     padding: 20,
-    borderRadius: 5,
-    marginBottom: 20,
+    borderRadius: 10,
+    marginTop: 20,
     alignItems: 'center',
   },
-  title: {
+  headerText: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
   },
+  form: {
+    marginTop: 20,
+  },
   input: {
     height: 50,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 5,
-    padding: 10,
+    paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#fff',
   },
-  amountText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
-    textAlign: 'center',
-  },
-  webview: {
-    marginVertical: 20,
-    height: 400,
-  },
-  buttonContainer: {
-    backgroundColor: '#4CAF50',
+  payButton: {
+    backgroundColor: '#32CD32', // Green color
+    paddingVertical: 15,
     borderRadius: 5,
-    height: 60, // Increased height of button
-    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
