@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function CheckoutScreen({ route }) {
   const { totalAmount } = route.params; // Get amount from route
-  const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
+  const paystackWebViewRef = useRef(paystackProps.PayStackRef);
   const [shippingAddress, setShippingAddress] = useState('');
   const [email, setEmail] = useState('');
 
