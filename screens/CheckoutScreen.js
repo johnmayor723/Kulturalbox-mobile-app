@@ -1,4 +1,4 @@
-import PaystackWebView from 'react-native-paystack-webView'
+import PaystackWebView from 'react-native-paystack-webview'
 import React, { Component } from 'react'
 import { View } from 'react-native'
 
