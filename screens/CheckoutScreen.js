@@ -1,35 +1,34 @@
 import React, { useRef, useState } from 'react';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import axios from 'axios';
 
-function CheckoutScreen() {
+function CheckoutScreen({ route }) {
+  const { totalAmount } = route.params; // Get amount from route
   const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
   const [shippingAddress, setShippingAddress] = useState('');
+  const [email, setEmail] = useState('');
 
-  const handleCheckout = () => {
-    // Create order with status "processing" at the API endpoint
-    fetch('https://your-api-endpoint.com/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        status: 'processing',
+  const handleCheckout = async () => {
+    try {
+      const response = await axios.post('https://pantry-hub-server.onrender.com/api/orders', {
+        //status: 'processing',
         shippingAddress,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Order created:', data);
-        paystackWebViewRef.current.startTransaction(); // Initiate the transaction
-      })
-      .catch((error) => {
-        console.error('Error creating order:', error);
+        email,
+        amount: totalAmount,
       });
+      console.log('Order created:', response.data);
+      paystackWebViewRef.current.startTransaction(); // Initiate the transaction
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.heroSection}>
         <Text style={styles.headerText}>Checkout</Text>
+        <Text style={styles.amountText}>Total: ₦{totalAmount}</Text>
       </View>
 
       <View style={styles.form}>
@@ -39,12 +38,19 @@ function CheckoutScreen() {
           value={shippingAddress}
           onChangeText={setShippingAddress}
         />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
       </View>
 
       <Paystack
         paystackKey="pk_test_bec2adfc8f46afff889349e2bf76e50477939d74"
-        billingEmail="paystackwebview@something.com"
-        amount={'25000.00'}
+        billingEmail={email}
+        amount={totalAmount}
         onCancel={(e) => {
           console.log('Transaction cancelled', e);
         }}
@@ -78,6 +84,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  amountText: {
+    fontSize: 18,
+    color: '#fff',
+    marginTop: 5,
   },
   form: {
     marginTop: 20,
