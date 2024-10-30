@@ -1,171 +1,307 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { WebView } from 'react-native-webview';
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { useState } from "react";
+import { RootSiblingParent } from "react-native-root-siblings";
+import Toast from "react-native-root-toast";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  Button,
+} from "react-native";
+import { Paystack } from "react-native-paystack-webview";
+import axios from "axios";
 
-export default function CheckoutScreen() {
-  const [email, setEmail] = useState('');
-  const [totalAmount, setTotalAmount] = useState('');
-  const [shippingAddress, setShippingAddress] = useState('');
-  const [paymentUrl, setPaymentUrl] = useState(null);
-  const [showWebView, setShowWebView] = useState(false);
-  const [transactionReference, setTransactionReference] = useState(null);
+export default function App({ route, navigation }) {
+  const [pay, setPay] = useState(false);
+  const [checkoutDetails, setCheckoutDetails] = useState({
+    email: "",
+    name: "",
+    shippingAddress: "",
+  });
 
-  const navigation = useNavigation();
+  const totalAmount = route.params?.totalAmount;
 
-  const initializeTransaction = async () => {
-    // Validate input fields
-    if (!email || !totalAmount || !shippingAddress) {
-      Alert.alert('Error', 'Please fill in all the fields.');
-      return;
-    }
+  const handleOnchange = (text, field) => {
+    setCheckoutDetails((prevState) => ({ ...prevState, [field]: text }));
+  };
 
-    try {
-      const response = await axios.post(
-        'https://api.paystack.co/transaction/initialize',
-        {
-          email,
-          amount: totalAmount * 100, // Paystack expects amount in kobo
-          callback_url: 'https://yourcallback.com',
-          metadata: { cancel_action: 'https://your-cancel-url.com' }
-        },
-        {
-          headers: {
-            Authorization: 'sk_test_caf30f565f30779a789cfed46899dad43224e36b',
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      const { authorization_url, reference } = response.data.data;
-      setPaymentUrl(authorization_url);
-      setTransactionReference(reference); // Store the transaction reference
-      setShowWebView(true);
-    } catch (error) {
-      Alert.alert('Error', 'Failed to initialize transaction');
-      console.error(error);
+  const handleSubmit = () => {
+    if (checkoutDetails.email && checkoutDetails.name && checkoutDetails.shippingAddress && totalAmount) {
+      setPay(true);
+    } else {
+      Toast.show("Please fill in all fields", {
+        duration: Toast.durations.LONG,
+      });
     }
   };
 
-  const handleNavigationStateChange = (state) => {
-    const { url } = state;
-
-    if (url.includes('https://yourcallback.com')) {
-      // Extract transaction reference from URL and verify the transaction
-      const reference = new URL(url).searchParams.get('reference');
-      verifyTransaction(reference); // Call verification function
-    } else if (url.includes('https://your-cancel-url.com')) {
-      // Handle payment cancellation
-      setShowWebView(false);
-      Alert.alert('Payment Cancelled', 'You cancelled the payment.');
-    }
-  };
-
-  const verifyTransaction = async (reference) => {
-    try {
-      const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
-        headers: { Authorization: 'Bearer YOUR_SECRET_KEY' },
+  const handlePaymentSuccess = async (response) => {
+    const responseObject = response["transactionRef"]["message"];
+    if (responseObject === "Approved") {
+      Toast.show("Transaction Approved!", {
+        duration: Toast.durations.LONG,
       });
 
-      const { status } = response.data.data;
-      if (status === 'success') {
-        // Payment successful, now create the order
-        await createOrder();
-      } else {
-        Alert.alert('Payment Failed', 'Transaction could not be verified.');
-      }
-    } catch (error) {
-      Alert.alert('Verification Error', 'Failed to verify transaction');
-      console.error(error);
-    }
-  };
-
-  const createOrder = async () => {
-    try {
-      const orderResponse = await axios.post(
-        'https://pantry-hub-server.onrender.com/api/orders',
-        {
-          email,
+      // Send order details to the server
+      try {
+        await axios.post("https://pantry-hub-server.onrender.com/api/orders", {
+          email: checkoutDetails.email,
+          name: checkoutDetails.name,
+          shippingAddress: checkoutDetails.shippingAddress,
           totalAmount,
-          shippingAddress,
-        }
-      );
-
-      if (orderResponse.status === 200) {
-        setShowWebView(false);
-        Alert.alert('Order Created', 'Thank you for your payment and your order is confirmed!');
-        navigation.replace('Home'); // Navigate to Home after order creation
-      } else {
-        Alert.alert('Error', 'Failed to create the order.');
+        });
+        Toast.show("Order submitted successfully!", {
+          duration: Toast.durations.LONG,
+        });
+      } catch (error) {
+        Toast.show("Order submission failed!", {
+          duration: Toast.durations.LONG,
+        });
       }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to create the order.');
-      console.error(error);
+
+      // Redirect to Home (or Success Page when ready)
+      navigation.replace("Home");
     }
   };
 
   return (
-    <View style={styles.container}>
-      {showWebView && paymentUrl ? (
-        <WebView
-          source={{ uri: paymentUrl }}
-          onNavigationStateChange={handleNavigationStateChange}
-        />
-      ) : (
-        <>
-          <View style={styles.heroSection}>
-            <Text style={styles.heroText}>Complete Your Payment</Text>
-          </View>
+    <RootSiblingParent>
+      <ScrollView style={styles.body}>
+        <View style={styles.heroSection}>
+          <Text style={styles.heroText}>Checkout</Text>
+          <Text style={styles.amountText}>₦{totalAmount}</Text>
+        </View>
+        <View style={styles.formContainer}>
           <TextInput
             style={styles.input}
             placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
+            onChangeText={(text) => handleOnchange(text, "email")}
+            value={checkoutDetails?.email}
           />
           <TextInput
             style={styles.input}
-            placeholder="Total Amount"
-            value={totalAmount}
-            onChangeText={setTotalAmount}
-            keyboardType="numeric"
+            placeholder="Name"
+            onChangeText={(text) => handleOnchange(text, "name")}
+            value={checkoutDetails?.name}
           />
           <TextInput
             style={styles.input}
             placeholder="Shipping Address"
-            value={shippingAddress}
-            onChangeText={setShippingAddress}
+            onChangeText={(text) => handleOnchange(text, "shippingAddress")}
+            value={checkoutDetails?.shippingAddress}
           />
-          <Button title="Proceed to Pay" onPress={initializeTransaction} />
-        </>
-      )}
-    </View>
+
+          <Button
+            title="Pay Now"
+            color="green"
+            accessibilityLabel="pay now"
+            onPress={handleSubmit}
+          />
+          {pay && (
+            <View style={{ flex: 1 }}>
+              <Paystack
+                paystackKey="pk_test_bec2adfc8f46afff889349e2bf76e50477939d74"
+                amount={totalAmount}
+                billingEmail={checkoutDetails.email}
+                activityIndicatorColor="green"
+                onCancel={() => {
+                  Toast.show("Transaction Cancelled!", {
+                    duration: Toast.durations.LONG,
+                  });
+                }}
+                onSuccess={handlePaymentSuccess}
+                autoStart={pay}
+              />
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </RootSiblingParent>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
+  body: {
+    backgroundColor: "#f0f0f0",
   },
   heroSection: {
-    backgroundColor: 'orange',
+    backgroundColor: "orange",
     padding: 20,
-    alignItems: 'center',
-    marginBottom: 20,
+    alignItems: "center",
   },
   heroText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  amountText: {
+    fontSize: 20,
+    color: "#fff",
+    marginTop: 5,
+  },
+  formContainer: {
+    padding: 15,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+    borderColor: "black",
+    borderWidth: 2,
+    borderRadius: 5,
     padding: 10,
-    marginVertical: 10,
+    marginTop: 15,
+    backgroundColor: "white",
+  },
+});import { useState } from "react";
+import { RootSiblingParent } from "react-native-root-siblings";
+import Toast from "react-native-root-toast";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  Button,
+} from "react-native";
+import { Paystack } from "react-native-paystack-webview";
+import axios from "axios";
+
+export default function App({ route, navigation }) {
+  const [pay, setPay] = useState(false);
+  const [checkoutDetails, setCheckoutDetails] = useState({
+    email: "",
+    name: "",
+    shippingAddress: "",
+  });
+
+  const totalAmount = route.params?.totalAmount;
+
+  const handleOnchange = (text, field) => {
+    setCheckoutDetails((prevState) => ({ ...prevState, [field]: text }));
+  };
+
+  const handleSubmit = () => {
+    if (checkoutDetails.email && checkoutDetails.name && checkoutDetails.shippingAddress && totalAmount) {
+      setPay(true);
+    } else {
+      Toast.show("Please fill in all fields", {
+        duration: Toast.durations.LONG,
+      });
+    }
+  };
+
+  const handlePaymentSuccess = async (response) => {
+    const responseObject = response["transactionRef"]["message"];
+    if (responseObject === "Approved") {
+      Toast.show("Transaction Approved!", {
+        duration: Toast.durations.LONG,
+      });
+
+      // Send order details to the server
+      try {
+        await axios.post("https://pantry-hub-server.onrender.com/api/orders", {
+          email: checkoutDetails.email,
+          name: checkoutDetails.name,
+          shippingAddress: checkoutDetails.shippingAddress,
+          totalAmount,
+        });
+        Toast.show("Order submitted successfully!", {
+          duration: Toast.durations.LONG,
+        });
+      } catch (error) {
+        Toast.show("Order submission failed!", {
+          duration: Toast.durations.LONG,
+        });
+      }
+
+      // Redirect to Home (or Success Page when ready)
+      navigation.replace("Home");
+    }
+  };
+
+  return (
+    <RootSiblingParent>
+      <ScrollView style={styles.body}>
+        <View style={styles.heroSection}>
+          <Text style={styles.heroText}>Checkout</Text>
+          <Text style={styles.amountText}>₦{totalAmount}</Text>
+        </View>
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={(text) => handleOnchange(text, "email")}
+            value={checkoutDetails?.email}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            onChangeText={(text) => handleOnchange(text, "name")}
+            value={checkoutDetails?.name}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Shipping Address"
+            onChangeText={(text) => handleOnchange(text, "shippingAddress")}
+            value={checkoutDetails?.shippingAddress}
+          />
+
+          <Button
+            title="Pay Now"
+            color="green"
+            accessibilityLabel="pay now"
+            onPress={handleSubmit}
+          />
+          {pay && (
+            <View style={{ flex: 1 }}>
+              <Paystack
+                paystackKey="pk_test_bec2adfc8f46afff889349e2bf76e50477939d74"
+                amount={totalAmount}
+                billingEmail={checkoutDetails.email}
+                activityIndicatorColor="green"
+                onCancel={() => {
+                  Toast.show("Transaction Cancelled!", {
+                    duration: Toast.durations.LONG,
+                  });
+                }}
+                onSuccess={handlePaymentSuccess}
+                autoStart={pay}
+              />
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </RootSiblingParent>
+  );
+}
+
+const styles = StyleSheet.create({
+  body: {
+    backgroundColor: "#f0f0f0",
+  },
+  heroSection: {
+    backgroundColor: "orange",
+    padding: 20,
+    alignItems: "center",
+  },
+  heroText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  amountText: {
+    fontSize: 20,
+    color: "#fff",
+    marginTop: 5,
+  },
+  formContainer: {
+    padding: 15,
+  },
+  input: {
+    borderColor: "black",
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 15,
+    backgroundColor: "white",
   },
 });
