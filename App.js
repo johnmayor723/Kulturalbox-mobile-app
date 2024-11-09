@@ -28,7 +28,7 @@ import OilProductsScreen from './screens/OilProductsScreen.js';
 import SnacksScreen from './screens/SnacksScreen.js';
 import LogoutScreen from './screens/LogoutScreen'; // New logout screen
 import CheckoutScreen from "./screens/CheckoutScreen";
-
+import SuccessScreen from "./screens/SuccessScreen.js";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -193,6 +193,11 @@ function HomeStack() {
             <Stack.Screen
                 name="Dairy"
                 component={DairyScreen}
+                options={{ headerShown: true }}
+            />
+            <Stack.Screen
+                name="Success"
+                component={SuccessScreen}
                 options={{ headerShown: true }}
             />
         </Stack.Navigator>
