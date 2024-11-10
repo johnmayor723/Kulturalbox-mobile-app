@@ -30,7 +30,7 @@ const CheckoutScreen = () => {
         setLoading(true);
         try {
             const response = await axios.post(
-                'https://pantry-hub-server.onrender.com/api/payments/initialize',
+                'https://pantry-hub-server.onrender.com/api/orders/initialize',
                 { amount: totalAmount, email }
             );
             console.log("api call response:",response);
