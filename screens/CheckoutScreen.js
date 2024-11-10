@@ -33,6 +33,7 @@ const CheckoutScreen = () => {
                 'https://pantry-hub-server.onrender.com/api/payments/initialize',
                 { amount: totalAmount, email }
             );
+            console.log("api call response:",response);
             setAuthUrl(response.data.authUrl);
         } catch (error) {
             Alert.alert('Error', 'Failed to initialize payment');
