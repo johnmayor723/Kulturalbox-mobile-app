@@ -34,7 +34,7 @@ const initializePayment = async () => {
     try {
         const response = await axios.post(
             'https://pantry-hub-server.onrender.com/api/orders/initialize',
-            { amount:totalAmount, email }
+            { amount:totalAmount*100, email }
         );
         console.log("API call response:", response);
         setAuthUrl(response.data.authUrl);
