@@ -20,6 +20,7 @@ const CheckoutScreen = () => {
     useEffect(() => {
         const fetchData = async () => {
             setTotalAmount(route.params.totalAmount);
+            console.log("total amount:", totalAmount)
             const storedCart = await AsyncStorage.getItem('cart');
             if (storedCart) setCart(JSON.parse(storedCart));
         };
