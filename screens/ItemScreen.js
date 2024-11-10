@@ -48,7 +48,7 @@ if (itemArray) {
           'Item Added Successfully to cart',
           ToastAndroid.SHORT,
         );*/
-        Alert.alert("Item Added To Cart", JSON.stringify(array, null, 2))
+        Alert.alert("Item Added To Cart")
           console.log(array)
        // navigation.navigate('Cart');
         //navigation.navigate('Cart');
