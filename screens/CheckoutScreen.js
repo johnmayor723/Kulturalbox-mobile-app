@@ -6,7 +6,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 
 const CheckoutScreen = () => {
-    const [totalAmount, setTotalAmount] = useState();
+    //const [totalAmount, setTotalAmount] = useState();
     const [cart, setCart] = useState([]);
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -17,10 +17,11 @@ const CheckoutScreen = () => {
     const route = useRoute();
     const navigation = useNavigation();
     console.log('Route Params:', route.params);
+    const { totalAmount = 0 } = route.params || {};
 
     useEffect(() => {
         const fetchData = async () => {
-            setTotalAmount(route.params.totalAmount);
+            //setTotalAmount(route.params.totalAmount);
             console.log("total amount:", totalAmount)
             const storedCart = await AsyncStorage.getItem('cart');
             if (storedCart) setCart(JSON.parse(storedCart));
