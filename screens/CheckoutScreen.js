@@ -6,7 +6,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 
 const CheckoutScreen = () => {
-    const [totalAmount, setTotalAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState();
     const [cart, setCart] = useState([]);
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -33,7 +33,7 @@ const initializePayment = async () => {
     try {
         const response = await axios.post(
             'https://pantry-hub-server.onrender.com/api/orders/initialize',
-            { amount:route.params.totalAmount, email }
+            { amount:totalAmount, email }
         );
         console.log("API call response:", response);
         setAuthUrl(response.data.authUrl);
