@@ -17,7 +17,7 @@ const PaymentScreen = () => {
   const formattedTotalAmount = `₦${totalAmount.toFixed(2)}`;
   
   const handleCheckout = () => {
-    navigation.navigate("Checkout", { totalAmount:formattedTotalAmount });
+    navigation.navigate("Checkout", { totalAmount});
   };
 
   return (
