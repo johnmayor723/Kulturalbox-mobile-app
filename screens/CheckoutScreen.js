@@ -25,8 +25,24 @@ const CheckoutScreen = () => {
         };
         fetchData();
     }, []);
-
-    const initializePayment = async () => {
+    
+const initializePayment = async () => {
+    setLoading(true);
+    try {
+        const response = await axios.post(
+            'https://pantry-hub-server.onrender.com/api/orders/initialize',
+            { amount: totalAmount, email }
+        );
+        console.log("API call response:", response);
+        setAuthUrl(response.data.authUrl);
+    } catch (error) {
+        console.error("Error initializing payment:", error.response ? error.response.data : error.message);
+        Alert.alert('Error', 'Failed to initialize payment');
+    } finally {
+        setLoading(false);
+    }
+};
+    /*const initializePayment = async () => {
         setLoading(true);
         try {
             const response = await axios.post(
@@ -40,7 +56,7 @@ const CheckoutScreen = () => {
         } finally {
             setLoading(false);
         }
-    };
+    };*/
 
     const handleOrderCreation = async () => {
         try {
