@@ -16,6 +16,7 @@ const CheckoutScreen = () => {
     
     const route = useRoute();
     const navigation = useNavigation();
+    console.log('Route Params:', route.params);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,7 +33,7 @@ const initializePayment = async () => {
     try {
         const response = await axios.post(
             'https://pantry-hub-server.onrender.com/api/orders/initialize',
-            { amount: 5000, email }
+            { amount:route.params.totalAmount, email }
         );
         console.log("API call response:", response);
         setAuthUrl(response.data.authUrl);
