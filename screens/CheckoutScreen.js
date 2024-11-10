@@ -45,23 +45,9 @@ const initializePayment = async () => {
         setLoading(false);
     }
 };
-    /*const initializePayment = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.post(
-                'https://pantry-hub-server.onrender.com/api/orders/initialize',
-                { amount: totalAmount, email }
-            );
-            console.log("api call response:",response);
-            setAuthUrl(response.data.authUrl);
-        } catch (error) {
-            Alert.alert('Error', 'Failed to initialize payment');
-        } finally {
-            setLoading(false);
-        }
-    };*/
+    
 
-    const handleOrderCreation = async () => {
+const handleOrderCreation = async () => {
         try {
             await axios.post('https://pantry-hub-server.onrender.com/api/orders', {
                 name,
@@ -75,12 +61,13 @@ const initializePayment = async () => {
         }
     };
 
-    const handlePaymentCompletion = () => {
+const handlePaymentCompletion = () => {
         handleOrderCreation();
+    console.log("Transaction successfully processed ");
         navigation.replace('SuccessScreen');
     };
 
-    if (authUrl) {
+if (authUrl) {
         return (
             <WebView
                 source={{ uri: authUrl }}
@@ -89,9 +76,9 @@ const initializePayment = async () => {
                 }}
             />
         );
-    }
+ }
 
-    return (
+return (
         <View style={styles.container}>
             <View style={styles.topBar}>
                 <Text style={styles.topBarText}>Checkout</Text>
