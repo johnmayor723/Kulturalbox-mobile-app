@@ -9,7 +9,7 @@ const CartScreen = ({ navigation }) => {
   // Retrieve cart items from AsyncStorage
   const getCartItems = async () => {
     try {
-      const storedCart = await AsyncStorage.getItem('cart');
+      const storedCart = await AsyncStorage.getItem('CartItems');
       if (storedCart) {
         setCartItems(JSON.parse(storedCart));
       }
@@ -21,7 +21,7 @@ const CartScreen = ({ navigation }) => {
   // Save updated cart to AsyncStorage
   const updateCartInStorage = async (updatedCart) => {
     try {
-      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+      await AsyncStorage.setItem('CartItems', JSON.stringify(updatedCart));
     } catch (error) {
       console.log('Error saving cart:', error);
     }
