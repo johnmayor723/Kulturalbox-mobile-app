@@ -124,12 +124,12 @@ const ItemScreen = ({ route }) => {
         Alert.alert('Error', 'Could not add product to cart');
     }
         */
-  const handleAddToCart = (item.id) => {
+  const handleAddToCart = (itemid) => {
     
    product.quantity = quantity;
    //console.log(product.id)
    //Alert.alert(product.id)
-    addToCart(item.id);
+    addToCart(itemid);
     //console.log(cart)
     navigation.navigate("Cart")
   };
