@@ -271,6 +271,55 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
+   measurementsSection: {
+        paddingHorizontal: 15,
+        marginTop: 10,
+    },
+    measurementsTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'green',
+        marginBottom: 10,
+    },
+    measurementCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        padding: 10,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        height: 60,
+    },
+    measurementImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 5,
+    },
+    measurementDetails: {
+        flex: 1,
+        marginLeft: 10,
+    },
+    measurementName: {
+        fontSize: 12,
+        color: '#333',
+    },
+    measurementPrice: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: 'green',
+    },
+    addToCartButton: {
+        backgroundColor: '#2D7B30',
+        padding: 8,
+        borderRadius: 5,
+    },
+    addToCartText: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
 });
 
 export default ItemScreen;
