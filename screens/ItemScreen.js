@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 const addToCart = async (id) => {
-    let itemArray = await AsyncStorage.getItem('cart');
+    let itemArray = await AsyncStorage.getItem('CartItems');
     itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
 
     if (itemArray) {
@@ -33,7 +33,7 @@ const addToCart = async (id) => {
         let array = [];
         array.push(id);
         try {
-            await AsyncStorage.setItem('cart', JSON.stringify(array));
+            await AsyncStorage.setItem('CartItems', JSON.stringify(array));
             Alert.alert('Item Added To Cart');
         } catch (error) {
             console.error('Error saving cart items:', error);
