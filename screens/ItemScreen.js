@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-
+import addToCartService from "../services/addToCartService"
+/*
 const addToCart = async (id, navigation) => {
     let itemArray = await AsyncStorage.getItem('cartItem');
     itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
@@ -14,6 +15,7 @@ const addToCart = async (id, navigation) => {
 
         // Add the new id to the array
         array.push(id);
+        
 
         console.log('Updated cart items:', array); // Log the updated array
 
@@ -46,11 +48,19 @@ const addToCart = async (id, navigation) => {
             return error;
         }
     }
-};
+};*/
+
 
 const ItemScreen = ({ route }) => {
     const { product } = route.params;
+    const [cartItems, setCartItems] = useState([]);
     const navigation = useNavigation();
+    
+    const handleAddToCart = async (productId) => {
+    const result = await addToCartService(productId, product.measurements, setCartItems);
+    console.log('Cart items after add:', result.cartItems);
+    console.log('Number of items in cart:', result.cartItemsCount);
+  };
 
     const renderMeasurementCard = ({ item }) => (
         <View style={styles.measurementCard}>
@@ -61,7 +71,7 @@ const ItemScreen = ({ route }) => {
             </View>
             <TouchableOpacity
                 style={styles.addToCartButton}
-                onPress={() => addToCart(item._id, navigation)}
+                onPress={() => handleAddToCart(item._id)}
             >
                 <Text style={styles.addToCartText}>Add to Cart</Text>
             </TouchableOpacity>
