@@ -61,72 +61,10 @@ const ItemScreen = ({ route }) => {
     const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
     
-  /*  const handleAddToCart = async () => {
-        try {
-            const cartItems = await AsyncStorage.getItem('cart');
-            const cart = cartItems ? JSON.parse(cartItems) : [];
-            
-            // Check if the product is already in the cart
-            const existingProduct = cart.find(item => item.id === product.id);
-            
-            if (existingProduct) {
-                // Update the quantity of the existing product
-                existingProduct.quantity += quantity;
-            } else {
-                // Add new product to the cart
-                const newProduct = {
-                    ...product,
-                    quantity,
-                    total: product.price * quantity, // calculate total price
-                };
-                cart.push(newProduct);
-            }
-
-            await AsyncStorage.setItem('cart', JSON.stringify(cart));
-            Alert.alert('Success', 'Product added to cart!');
-            navigation.navigate("Cart", { product });
-        } catch (error) {
-            console.error('Error adding product to cart:', error);
-            Alert.alert('Error', 'Could not add product to cart');
-        }
-    };
-    const handleAddToCart = async () => {
-    try {
-        const cartItems = await AsyncStorage.getItem('cart');
-        const cart = cartItems ? JSON.parse(cartItems) : [];
-
-        // Ensure product price is a number
-        const productPrice = Number(product.price);
-
-        // Check if the product is already in the cart
-        const existingProduct = cart.find(item => item.id === product.id);
-        
-        if (existingProduct) {
-            // Update the quantity of the existing product
-            existingProduct.quantity += quantity;
-            existingProduct.total = existingProduct.quantity * productPrice;
-        } else {
-            // Add new product to the cart
-            const newProduct = {
-                ...product,
-                quantity,
-                price: productPrice, // Ensure price is a number
-                total: productPrice * quantity, // Calculate total price
-            };
-            cart.push(newProduct); // Add new product
-        }
-
-        await AsyncStorage.setItem('cart', JSON.stringify(cart));
-        Alert.alert('Success', 'Product added to cart!');
-        navigation.navigate("Cart", { product });
-    } catch (error) {
-        console.error('Error adding product to cart:', error);
-        Alert.alert('Error', 'Could not add product to cart');
-    }
-        */
+  
   const handleAddToCart = (itemid) => {
     
-   product.quantity = quantity;
+   //product.quantity = quantity;
    //console.log(product.id)
    //Alert.alert(product.id)
     addToCart(itemid);
@@ -175,15 +113,14 @@ const ItemScreen = ({ route }) => {
                 <Text style={styles.rating}>⭐⭐⭐⭐⭐ (5.0)</Text>
             </View>
 
-            {/* Products You May Like */}
-            <View style={styles.recommendedSection}>
-                <Text style={styles.recommendedTitle}>Products You May Like</Text>
+                        {/* Buying Options */}
+            <View style={styles.measurementsSection}>
+                <Text style={styles.measurementsTitle}>Buying Options</Text>
                 <FlatList
                     data={product.measurements}
                     renderItem={renderMeasurementCard}
-                    keyExtractor={item => item.id}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item) => item._id}
+                    showsVerticalScrollIndicator={false}
                 />
             </View>
 
