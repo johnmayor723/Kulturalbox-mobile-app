@@ -1,80 +1,58 @@
 import React, { useState } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+    View,
+    Text,
+    Image,
+    FlatList,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
+    ScrollView,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-//import { addToCart} from '../services/cartService';
 
+const addToCart = async (id) => {
+    let itemArray = await AsyncStorage.getItem('cartItem');
+    itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
 
+    if (itemArray) {
+        let array = itemArray;
 
+        // Add the new id to the array
+        array.push(id);
 
-
-const addToCart = async id => {
-   
-let itemArray = await AsyncStorage.getItem('cartItem');
-itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
-
-console.log('Initial cart items:', itemArray); // Log the current items in the cart
-
-if (itemArray) {
-  let array = itemArray;
-  
-  // Add the new id to the array
-  array.push(id);
-  
-  console.log('Updated cart items:', array); // Log the updated array
-  
-  try {
-    // Save the updated array back to AsyncStorage
-    await AsyncStorage.setItem('cartItem', JSON.stringify(array));
-    
-    // Use alert or toast to notify the user
-    Alert.alert('Item Added To Cart', JSON.stringify(array, null, 2));
-    
-    console.log('Final cart items:', array); // Log the final array after storing
-    
-    // Optionally navigate to the Cart screen
-    // navigation.navigate('Cart');
-  } catch (error) {
-    console.error('Error saving cart items:', error); // Log any error
-    return error;
-  }
+        try {
+            // Save the updated array back to AsyncStorage
+            await AsyncStorage.setItem('cartItem', JSON.stringify(array));
+            Alert.alert('Item Added To Cart', JSON.stringify(array, null, 2));
+        } catch (error) {
+            console.error('Error saving cart items:', error);
+        }
     } else {
-      let array = [];
-      array.push(id);
-      try {
-        await AsyncStorage.setItem('cart', JSON.stringify(array));
-        /*ToastAndroid.show(
-          'Item Added Successfully to cart',
-          ToastAndroid.SHORT,
-        );*/
-        Alert.alert("Item Added To Cart")
-          console.log(array)
-       // navigation.navigate('Cart');
-        //navigation.navigate('Cart');
-      } catch (error) {
-        return error;
-      }
+        let array = [];
+        array.push(id);
+        try {
+            await AsyncStorage.setItem('cartItem', JSON.stringify(array));
+            Alert.alert('Item Added To Cart');
+        } catch (error) {
+            console.error('Error saving cart items:', error);
+        }
     }
-  };
+};
+
 const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
     const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
-    
-  
-  const handleAddToCart = (itemid) => {
-    
-   //product.quantity = quantity;
-   //console.log(product.id)
-   //Alert.alert(product.id)
-    addToCart(itemid);
-    //console.log(cart)
-    navigation.navigate("Cart")
-  };
+
+    const handleAddToCart = (itemId) => {
+        addToCart(itemId);
+        navigation.navigate('Cart');
+    };
 
     const renderMeasurementCard = ({ item }) => (
-
-            <View style={styles.measurementCard}>
+        <View style={styles.measurementCard}>
             <Image source={{ uri: item.imageUrl }} style={styles.measurementImage} />
             <View style={styles.measurementDetails}>
                 <Text style={styles.measurementName}>{item.name}</Text>
@@ -90,13 +68,13 @@ const ItemScreen = ({ route }) => {
     );
 
     return (
-        <View style={styles.container}>
-            {/* Fixed Top Bar */}
+        <ScrollView style={styles.container}>
+            {/* Top Bar */}
             <View style={styles.topBar}>
                 <Text style={styles.topBarText}>{product.title}</Text>
             </View>
 
-            {/* Product Image with Add to Wishlist button */}
+            {/* Product Image Section */}
             <View style={styles.imageSection}>
                 <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
                 <TouchableOpacity style={styles.wishlistButton}>
@@ -104,16 +82,14 @@ const ItemScreen = ({ route }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Product Details */}
+            {/* Product Details Section */}
             <View style={styles.detailsSection}>
                 <Text style={styles.price}>₦{product.price}</Text>
-                <Text style={styles.description}>
-                    This is the detailed description of the product {product.title}. You can later replace this with dynamic content from your backend.
-                </Text>
+                <Text style={styles.description}>{product.description}</Text>
                 <Text style={styles.rating}>⭐⭐⭐⭐⭐ (5.0)</Text>
             </View>
 
-                        {/* Buying Options */}
+            {/* Measurements Section */}
             <View style={styles.measurementsSection}>
                 <Text style={styles.measurementsTitle}>Buying Options</Text>
                 <FlatList
@@ -124,27 +100,31 @@ const ItemScreen = ({ route }) => {
                 />
             </View>
 
-            {/* Fixed Bottom Bar */}
+            {/* Bottom Bar */}
             <View style={styles.bottomBar}>
                 <Text style={styles.totalPrice}>Total: ₦{product.price * quantity}</Text>
 
-                {/* Quantity Management */}
                 <View style={styles.quantitySection}>
-                    <TouchableOpacity onPress={() => setQuantity(quantity > 1 ? quantity - 1 : 1)} style={styles.quantityButton}>
+                    <TouchableOpacity
+                        onPress={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+                        style={styles.quantityButton}
+                    >
                         <Text style={styles.quantityText}>-</Text>
                     </TouchableOpacity>
                     <Text style={styles.quantityValue}>{quantity}</Text>
-                    <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={styles.quantityButton}>
+                    <TouchableOpacity
+                        onPress={() => setQuantity(quantity + 1)}
+                        style={styles.quantityButton}
+                    >
                         <Text style={styles.quantityText}>+</Text>
                     </TouchableOpacity>
                 </View>
 
-                {/* Add to Cart Button */}
-                <TouchableOpacity style={styles.cartButton} onPress={handleAddToCart}>
+                <TouchableOpacity style={styles.cartButton} onPress={() => handleAddToCart(product._id)}>
                     <Text style={styles.cartButtonText}>Add to Cart</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -165,16 +145,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imageSection: {
-        position: 'relative',
+        alignItems: 'center',
+        padding: 20,
     },
     productImage: {
-        width: '100%',
-        height: 250,
+        width: 200,
+        height: 200,
+        borderRadius: 10,
     },
     wishlistButton: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
+        marginTop: 10,
         backgroundColor: '#FF7E00',
         padding: 8,
         borderRadius: 5,
@@ -184,7 +164,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     detailsSection: {
-        padding: 20,
+        paddingHorizontal: 20,
     },
     price: {
         fontSize: 24,
@@ -201,34 +181,55 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#FFD700',
     },
-    recommendedSection: {
-        paddingHorizontal: 20,
-        paddingBottom: 120, // Extra space to accommodate the fixed bottom bar
+    measurementsSection: {
+        paddingHorizontal: 15,
+        marginTop: 10,
     },
-    recommendedTitle: {
-        fontSize: 20,
+    measurementsTitle: {
+        fontSize: 18,
         fontWeight: 'bold',
+        color: 'green',
         marginBottom: 10,
-        color: 'green',
     },
-    recommendedCard: {
-        marginRight: 10,
-        width: 120,
+    measurementCard: {
+        flexDirection: 'row',
         alignItems: 'center',
-    },
-    recommendedImage: {
-        width: 100,
-        height: 100,
+        marginBottom: 10,
+        padding: 10,
+        backgroundColor: '#f9f9f9',
         borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ddd',
     },
-    recommendedPrice: {
-        marginTop: 5,
+    measurementImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 5,
+    },
+    measurementDetails: {
+        flex: 1,
+        marginLeft: 10,
+    },
+    measurementName: {
+        fontSize: 12,
+        color: '#333',
+    },
+    measurementPrice: {
+        fontSize: 12,
+        fontWeight: 'bold',
         color: 'green',
+    },
+    addToCartButton: {
+        backgroundColor: '#2D7B30',
+        padding: 8,
+        borderRadius: 5,
+    },
+    addToCartText: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: 'bold',
     },
     bottomBar: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -265,59 +266,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#2D7B30',
         padding: 10,
         borderRadius: 5,
-        marginRight: 10,
     },
     cartButtonText: {
         color: '#fff',
-        fontWeight: 'bold',
-    },
-   measurementsSection: {
-        paddingHorizontal: 15,
-        marginTop: 10,
-    },
-    measurementsTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'green',
-        marginBottom: 10,
-    },
-    measurementCard: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-        padding: 10,
-        backgroundColor: '#f9f9f9',
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        height: 60,
-    },
-    measurementImage: {
-        width: 40,
-        height: 40,
-        borderRadius: 5,
-    },
-    measurementDetails: {
-        flex: 1,
-        marginLeft: 10,
-    },
-    measurementName: {
-        fontSize: 12,
-        color: '#333',
-    },
-    measurementPrice: {
-        fontSize: 12,
-        fontWeight: 'bold',
-        color: 'green',
-    },
-    addToCartButton: {
-        backgroundColor: '#2D7B30',
-        padding: 8,
-        borderRadius: 5,
-    },
-    addToCartText: {
-        color: '#fff',
-        fontSize: 12,
         fontWeight: 'bold',
     },
 });
