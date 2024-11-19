@@ -43,6 +43,7 @@ const ItemScreen = ({ route }) => {
   
     const handleAddToCart = async (productId) => {
       addToCartService (productId);
+      navigation.navigate('Cart');
     }
     /*const handleAddToCart = async (productId) => {
     const result = await addToCartService(productId, product.measurements, setCartItems);
