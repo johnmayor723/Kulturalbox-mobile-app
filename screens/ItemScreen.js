@@ -22,7 +22,7 @@ const addToCartService = async (productId) => {
     itemArray.push(productId);
 
     // Save the updated array back to AsyncStorage
-    await AsyncStorage.setItem('cartItem, JSON.stringify(itemArray));
+    await AsyncStorage.setItem('cartItem', JSON.stringify(itemArray));
 
     // Notify the user that the item was added to the cart
     Alert.alert('Item Added To Cart', `Product ID: ${productId}`);
