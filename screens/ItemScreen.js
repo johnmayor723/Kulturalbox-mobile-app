@@ -11,45 +11,44 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-
-const addToCart = async (id) => {
-    let itemArray = await AsyncStorage.getItem('CartItems');
+//import addToCartService from "../services/addToCartService"
+const addToCartService = async (productId) => {
+  try {
+    // Retrieve existing cart items from AsyncStorage
+    let itemArray = await AsyncStorage.getItem('cartItem');
     itemArray = JSON.parse(itemArray) || []; // Initialize as an empty array if null
 
-    if (itemArray) {
-        let array = itemArray;
+    // Add the new productId to the cart array
+    itemArray.push(productId);
 
-        // Add the new id to the array
-        array.push(id);
+    // Save the updated array back to AsyncStorage
+    await AsyncStorage.setItem('cartItem, JSON.stringify(itemArray));
 
-        try {
-            // Save the updated array back to AsyncStorage
-            await AsyncStorage.setItem('cart', JSON.stringify(array));
-            Alert.alert('Item Added To Cart', JSON.stringify(array, null, 2));
-        } catch (error) {
-            console.error('Error saving cart items:', error);
-        }
-    } else {
-        let array = [];
-        array.push(id);
-        try {
-            await AsyncStorage.setItem('CartItems', JSON.stringify(array));
-            Alert.alert('Item Added To Cart');
-        } catch (error) {
-            console.error('Error saving cart items:', error);
-        }
-    }
+    // Notify the user that the item was added to the cart
+    Alert.alert('Item Added To Cart', `Product ID: ${productId}`);
+
+  } catch (error) {
+    console.error('Error adding to cart:', error); // Log any errors
+    return error;
+  }
 };
+
+
 
 const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
     const { product } = route.params;
     const [quantity, setQuantity] = useState(1); // Manage quantity
-
-    const handleAddToCart = (itemId) => {
-        addToCart(itemId);
-        navigation.navigate('Cart');
-    };
+    const [cartItems, setCartItems] = useState([]);
+  
+    const handleAddToCart = async (productId) => {
+      addToCartService (productId);
+    }
+    /*const handleAddToCart = async (productId) => {
+    const result = await addToCartService(productId, product.measurements, setCartItems);
+    console.log('Cart items after add:', result.cartItems);
+    console.log('Number of items in cart:', result.cartItemsCount);
+  };*/
 
     const renderMeasurementCard = ({ item }) => (
         <View style={styles.measurementCard}>
