@@ -47,31 +47,48 @@ const CartScreen = ({ navigation }) => {
 
   // Retrieve cart items from AsyncStorage and filter products
   const getCartItems = async () => {
-    try {
-      const cart = await AsyncStorage.getItem('cartItem');
-      console.log('Stored cart items:', cart); // Log raw cart items from storage
-      if (cart) {
-        const cartIds = JSON.parse(cart); // Assuming cart is an array of product IDs
-        console.log('Parsed cart IDs:', cartIds); // Log parsed cart item IDs
+  try {
+    const cart = await AsyncStorage.getItem('cartItem');
+    console.log('Stored cart items:', cart); // Log raw cart items from storage
 
-        // Filter products to match cart items
-        const filteredCartItems = products.filter(product => cartIds.includes(product._id)).map(product => ({
-          ...product,
-          quantity: 1 // Default quantity to 1 if not already set
-        }));
+    if (cart) {
+      const cartIds = JSON.parse(cart); // Assuming cart is an array of measurement IDs
+      console.log('Parsed cart IDs:', cartIds); // Log parsed cart item IDs
 
-        console.log('Filtered cart items:', filteredCartItems); // Log filtered cart items
+      // Initialize an array to store filtered cart items
+      const filteredCartItems = [];
 
-        setCartItems(filteredCartItems); // Update cart items state
+      // Loop through all the cart item IDs
+      for (const cartId of cartIds) {
+        // Loop through all products and find the matching measurement by ID
+        for (const product of products) {
+          const matchingMeasurement = product.measurements.find(measurement => measurement._id === cartId);
+
+          if (matchingMeasurement) {
+            // If a match is found, add it to filteredCartItems
+            filteredCartItems.push({
+              ...product,
+              measurement: matchingMeasurement, // Include the matching measurement
+              quantity: 1 // Default quantity to 1 if not already set
+            });
+          }
+        }
       }
-    } catch (error) {
-      console.log('Error retrieving cart:', error);
+
+      console.log('Filtered cart items:', filteredCartItems); // Log filtered cart items
+
+      // Update the cart items state
+      setCartItems(filteredCartItems);
     }
-  };
-  const calculateCartItemCount = () => {
-    const count = cartItems.reduce((total, item) => total + item.quantity, 0);
-    setCartItemCount(count);
-  };
+  } catch (error) {
+    console.log('Error retrieving cart:', error);
+  }
+};
+
+const calculateCartItemCount = () => {
+  const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+  setCartItemCount(count);
+};
 
   useEffect(() => {
     calculateCartItemCount(); // Call the function whenever cartItems change
