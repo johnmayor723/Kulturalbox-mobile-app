@@ -25,7 +25,7 @@ const addToCartService = async (productId) => {
     await AsyncStorage.setItem('cartItem', JSON.stringify(itemArray));
 
     // Notify the user that the item was added to the cart
-    Alert.alert('Item Added To Cart', `Product ID: ${productId}`);
+    Alert.alert('Item Added To Cart');
 
   } catch (error) {
     console.error('Error adding to cart:', error); // Log any errors
