@@ -100,7 +100,7 @@ const ItemScreen = ({ route }) => {
 
             {/* Bottom Bar */}
             <View style={styles.bottomBar}>
-                <Text style={styles.totalPrice}>Total: ₦{product.price * quantity}</Text>
+                <Text style={styles.totalPrice}></Text>
 
                 <View style={styles.quantitySection}>
                     <TouchableOpacity
@@ -109,7 +109,7 @@ const ItemScreen = ({ route }) => {
                     >
                         <Text style={styles.quantityText}></Text>
                     </TouchableOpacity>
-                    <Text style={styles.quantityValue}>{quantity}</Text>
+                    <Text style={styles.quantityValue}></Text>
                     <TouchableOpacity
                         onPress={() => setQuantity(quantity + 1)}
                         style={styles.quantityButton}
