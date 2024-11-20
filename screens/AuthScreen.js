@@ -37,7 +37,7 @@ const AuthScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Logo */}
-      <Image source={require('../assets/Logo1.png')} style={styles.logo} />
+      <Image source={require('../assets/mainlogo.png')} style={styles.logo} />
 
       {/* Welcome text */}
       <Text style={styles.welcomeText}>Welcome to FoodDeck</Text>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   welcomeText: {
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: 'bold',
     color: '#2D7B30',
     marginBottom: 20,
