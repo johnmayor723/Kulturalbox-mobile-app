@@ -77,14 +77,12 @@ const ItemScreen = ({ route }) => {
             {/* Product Image Section */}
             <View style={styles.imageSection}>
                 <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
-                <TouchableOpacity style={styles.wishlistButton}>
-                    <Text style={styles.wishlistText}>Add to Wishlist</Text>
-                </TouchableOpacity>
+                
             </View>
 
             {/* Product Details Section */}
             <View style={styles.detailsSection}>
-                <Text style={styles.price}>₦{product.price}</Text>
+                
                 <Text style={styles.description}>{product.description}</Text>
                 <Text style={styles.rating}>⭐⭐⭐⭐⭐ (5.0)</Text>
             </View>
@@ -109,19 +107,19 @@ const ItemScreen = ({ route }) => {
                         onPress={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
                         style={styles.quantityButton}
                     >
-                        <Text style={styles.quantityText}>-</Text>
+                        <Text style={styles.quantityText}></Text>
                     </TouchableOpacity>
                     <Text style={styles.quantityValue}>{quantity}</Text>
                     <TouchableOpacity
                         onPress={() => setQuantity(quantity + 1)}
                         style={styles.quantityButton}
                     >
-                        <Text style={styles.quantityText}>+</Text>
+                        <Text style={styles.quantityText}></Text>
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.cartButton} onPress={() => handleAddToCart(product._id)}>
-                    <Text style={styles.cartButtonText}>Add to Cart</Text>
+                <TouchableOpacity style={styles.wishlistButton}>
+                    <Text style={styles.wishlistText}>Add to Wishlist</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
