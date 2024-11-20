@@ -31,7 +31,7 @@ const HomeScreen = () => {
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Single Product', { product: item })}>
             <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{item.name}</Text>
-            <Text style={styles.cardPrice}>{item.price}</Text>
+            <Text style={styles.cardPrice}>from ₦{item.price}</Text>
             <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Single Product', { product: item })}>
             <Text style={styles.buttonText}>Add to Cart</Text>
             </TouchableOpacity>
