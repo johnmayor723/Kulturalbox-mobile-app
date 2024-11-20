@@ -102,21 +102,7 @@ const ItemScreen = ({ route }) => {
             <View style={styles.bottomBar}>
                 <Text style={styles.totalPrice}></Text>
 
-                <View style={styles.quantitySection}>
-                    <TouchableOpacity
-                        onPress={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
-                        style={styles.quantityButton}
-                    >
-                        <Text style={styles.quantityText}></Text>
-                    </TouchableOpacity>
-                    <Text style={styles.quantityValue}></Text>
-                    <TouchableOpacity
-                        onPress={() => setQuantity(quantity + 1)}
-                        style={styles.quantityButton}
-                    >
-                        <Text style={styles.quantityText}></Text>
-                    </TouchableOpacity>
-                </View>
+                
 
                 <TouchableOpacity style={styles.wishlistButton}>
                     <Text style={styles.wishlistText}>Add to Wishlist</Text>
