@@ -3,7 +3,6 @@ import { View, Text, ScrollView, Image, TouchableOpacity, TextInput, StyleSheet 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Importing images from the assets folder
 const images = {
   a1: require('../assets/a1.jpeg'),
   a2: require('../assets/a2.jpeg'),
@@ -22,7 +21,6 @@ const CartScreen = ({ navigation }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartItemCount, setCartItemCount] = useState(0);
 
-  // Suggested products with images
   const [suggestedProducts] = useState([
     { id: 3, name: 'Oranges', price: 3.99, image: images.a3 },
     { id: 4, name: 'Grapes', price: 4.99, image: images.a4 },
@@ -34,82 +32,62 @@ const CartScreen = ({ navigation }) => {
     { id: 10, name: 'Peaches', price: 5.49, image: images.a10 },
   ]);
 
-  // Fetch products from API
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://pantry-hub-server.onrender.com/api/products'); // Replace with your API endpoint
-      setProducts(response.data); // Assuming response.data contains the products array
-      console.log('Fetched products:', response.data); 
+      const response = await axios.get('https://pantry-hub-server.onrender.com/api/products');
+      setProducts(response.data);
     } catch (error) {
       console.log('Error fetching products:', error);
     }
   };
 
-  // Retrieve cart items from AsyncStorage and filter products
   const getCartItems = async () => {
-  try {
-    const cart = await AsyncStorage.getItem('cartItem');
-    console.log('Stored cart items:', cart); // Log raw cart items from storage
-
-    if (cart) {
-      const cartIds = JSON.parse(cart); // Assuming cart is an array of measurement IDs
-      console.log('Parsed cart IDs:', cartIds); // Log parsed cart item IDs
-
-      // Initialize an array to store filtered cart items
-      const filteredCartItems = [];
-
-      // Loop through all the cart item IDs
-      for (const cartId of cartIds) {
-        // Loop through all products and find the matching measurement by ID
-        for (const product of products) {
-          const matchingMeasurement = product.measurements.find(measurement => measurement._id === cartId);
-
-          if (matchingMeasurement) {
-            // If a match is found, add it to filteredCartItems
-            filteredCartItems.push({
-              ...product,
-              measurement: matchingMeasurement, // Include the matching measurement
-              quantity: 1 // Default quantity to 1 if not already set
-            });
+    try {
+      const cart = await AsyncStorage.getItem('cartItem');
+      if (cart) {
+        const cartIds = JSON.parse(cart);
+        const filteredCartItems = [];
+        for (const cartId of cartIds) {
+          for (const product of products) {
+            const matchingMeasurement = product.measurements.find(measurement => measurement._id === cartId);
+            if (matchingMeasurement) {
+              filteredCartItems.push({
+                ...product,
+                measurement: matchingMeasurement,
+                quantity: 1,
+              });
+            }
           }
         }
+        setCartItems(filteredCartItems);
       }
-
-      console.log('Filtered cart items:', filteredCartItems); // Log filtered cart items
-
-      // Update the cart items state
-      setCartItems(filteredCartItems);
+    } catch (error) {
+      console.log('Error retrieving cart:', error);
     }
-  } catch (error) {
-    console.log('Error retrieving cart:', error);
-  }
-};
+  };
 
-const calculateCartItemCount = () => {
-  const count = cartItems.reduce((total, item) => total + item.quantity, 0);
-  setCartItemCount(count);
-};
+  const calculateCartItemCount = () => {
+    const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+    setCartItemCount(count);
+  };
 
   useEffect(() => {
-    calculateCartItemCount(); // Call the function whenever cartItems change
+    calculateCartItemCount();
   }, [cartItems]);
 
-  // UseEffect to fetch products on mount
   useEffect(() => {
-    fetchProducts(); // Fetch products when component mounts
+    fetchProducts();
   }, []);
 
-  // UseEffect to get cart items after products are fetched
   useEffect(() => {
     if (products.length > 0) {
-      getCartItems(); // Get cart items after products are loaded
+      getCartItems();
     }
   }, [products]);
 
-  // Function to handle quantity change
   const handleQuantityChange = (id, newQuantity) => {
     const updatedCartItems = cartItems.map(item => {
-      if (item._id === id) {
+      if (item.measurement._id === id) {
         return { ...item, quantity: Number(newQuantity) };
       }
       return item;
@@ -117,47 +95,47 @@ const calculateCartItemCount = () => {
     setCartItems(updatedCartItems);
   };
 
-  // Function to delete an item from the cart
   const handleDeleteItem = (id) => {
-    const updatedCartItems = cartItems.filter(item => item._id !== id);
+    const updatedCartItems = cartItems.filter(item => item.measurement._id !== id);
     setCartItems(updatedCartItems);
+    AsyncStorage.setItem('cartItem', JSON.stringify(updatedCartItems.map(item => item.measurement._id)));
   };
 
-  // Calculate total amount
-  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const clearCart = async () => {
+    setCartItems([]);
+    await AsyncStorage.removeItem('cartItem');
+  };
 
-  // Navigate to Payment screen
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.measurement.price * item.quantity), 0);
+
   const handleCheckout = () => {
-    navigation.navigate('Payment', { totalAmount, cartItemCount }); // Pass total price to Payment screen
+    navigation.navigate('Payment', { totalAmount, cartItemCount });
   };
 
   return (
     <View style={styles.container}>
-      {/* Fixed Top Bar */}
       <View style={styles.heroSection}>
         <Text style={styles.heroText}>Your Cart</Text>
+        <TouchableOpacity onPress={clearCart} style={styles.clearCartButton}>
+          <Text style={styles.clearCartText}>Clear Cart</Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Cart Items Section */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cartItemsSection}>
           {cartItems.length > 0 ? (
             cartItems.map(item => (
-              <View key={item._id} style={styles.cartItem}>
+              <View key={item.measurement._id} style={styles.cartItem}>
                 <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
                 <Text style={styles.itemText}>{item.name}</Text>
-                <Text style={styles.itemPrice}>₦{item.price.toFixed(2)}</Text>
-
-                {/* Quantity Input */}
+                <Text style={styles.itemPrice}>₦{item.measurement.price.toFixed(2)}</Text>
                 <TextInput
                   style={styles.quantityInput}
                   value={item.quantity.toString()}
                   keyboardType="numeric"
-                  onChangeText={(value) => handleQuantityChange(item._id, value)}
+                  onChangeText={(value) => handleQuantityChange(item.measurement._id, value)}
                 />
-
-                {/* Delete Button */}
-                <TouchableOpacity onPress={() => handleDeleteItem(item._id)} style={styles.deleteButton}>
+                <TouchableOpacity onPress={() => handleDeleteItem(item.measurement._id)} style={styles.deleteButton}>
                   <Text style={styles.deleteText}>Delete</Text>
                 </TouchableOpacity>
               </View>
@@ -166,25 +144,10 @@ const calculateCartItemCount = () => {
             <Text>No items in your cart.</Text>
           )}
         </View>
-
-        {/* Products You May Like */}
-        <View style={styles.suggestedProductsSection}>
-          <Text style={styles.sectionTitle}>Products You May Like</Text>
-          <View style={styles.suggestedProductsGrid}>
-            {suggestedProducts.map(product => (
-              <TouchableOpacity key={product.id} style={styles.suggestedProduct}>
-                <Image source={product.image} style={styles.suggestedProductImage} />
-                <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productPrice}>₦{product.price.toFixed(2)}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
       </ScrollView>
 
-      {/* Fixed Bottom Tab */}
       <View style={styles.bottomTab}>
-        <Text style={styles.totalText}>Total:₦{totalAmount.toFixed(2)}</Text>
+        <Text style={styles.totalText}>Total: ₦{totalAmount.toFixed(2)}</Text>
         <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
           <Text style={styles.checkoutText}>Proceed to Payment</Text>
         </TouchableOpacity>
@@ -196,17 +159,27 @@ const calculateCartItemCount = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   heroSection: {
-    height: 50,
+    height: 60,
     backgroundColor: 'white',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: 'lightgray',
-    marginBottom: 10,
   },
   heroText: {
     fontSize: 24,
     color: 'green',
+    fontWeight: 'bold',
+  },
+  clearCartButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+  },
+  clearCartText: {
+    color: 'white',
     fontWeight: 'bold',
   },
   scrollContainer: {
@@ -229,14 +202,8 @@ const styles = StyleSheet.create({
     height: 50,
     marginRight: 10,
   },
-  itemText: {
-    flex: 1,
-    fontSize: 16,
-  },
-  itemPrice: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+  itemText: { flex: 1, fontSize: 16 },
+  itemPrice: { fontSize: 16, fontWeight: 'bold' },
   quantityInput: {
     width: 40,
     height: 30,
@@ -250,51 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     borderRadius: 5,
   },
-  deleteText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  suggestedProductsSection: {
-    marginVertical: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  suggestedProductsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  suggestedProduct: {
-    width: '48%',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    alignItems: 'center',
-  },
-  suggestedProductImage: {
-    width: '100%',
-    height: 100,
-    borderRadius: 8,
-  },
-  productName: {
-    fontWeight: 'bold',
-    marginVertical: 5,
-  },
-  productPrice: {
-    color: '#555',
-  },
+  deleteText: { color: 'white', fontWeight: 'bold' },
   bottomTab: {
     padding: 20,
     backgroundColor: 'white',
@@ -304,10 +227,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  totalText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+  totalText: { fontSize: 18, fontWeight: 'bold' },
   checkoutButton: {
     backgroundColor: '#FF7E00',
     borderRadius: 5,
@@ -315,10 +235,7 @@ const styles = StyleSheet.create({
     width: '50%',
     alignItems: 'center',
   },
-  checkoutText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
+  checkoutText: { color: 'white', fontWeight: 'bold' },
 });
 
 export default CartScreen;
