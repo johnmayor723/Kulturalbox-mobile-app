@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     cartButton: {
-        backgroundColor: '#2D7B30',
+        backgroundColor: 'white',
         padding: 10,
         borderRadius: 5,
     },
