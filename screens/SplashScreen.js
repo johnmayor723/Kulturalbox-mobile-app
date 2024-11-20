@@ -18,7 +18,7 @@ const SplashScreen = ({ navigation }) => {
                 source={require('../assets/Logo1.png')} // Make sure you have a logo in the assets folder
                 style={styles.logo}
             />
-            <Text style={styles.title}>Welcome to FoodDeck</Text>
+            <Text style={styles.title}>Welcome to FoodDeck-pro</Text>
         </View>
     );
 };
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 24,
+        fontSize: 34,
         fontWeight: 'bold',
         color: '#FF7E00', // Customize the text color
     },
