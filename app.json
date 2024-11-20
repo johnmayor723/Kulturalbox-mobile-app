@@ -4,10 +4,10 @@
     "slug": "FoodDeck",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Logo1.png",
+    "icon": "./assets/appicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Logo1.png",
+      "image": "./assets/mainlogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#fff"
     },
