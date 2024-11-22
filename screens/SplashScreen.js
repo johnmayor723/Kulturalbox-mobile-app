@@ -18,7 +18,7 @@ const SplashScreen = ({ navigation }) => {
                 source={require('../assets/Logo2.png')} // Make sure you have a logo in the assets folder
                 style={styles.logo}
             />
-            <Text style={styles.title}>Welcome to FoodDeck-pro</Text>
+            <Text style={styles.title}>Welcome to KulturalBox</Text>
         </View>
     );
 };
