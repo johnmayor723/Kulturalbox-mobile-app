@@ -12,7 +12,7 @@ const AuthScreen = ({ navigation }) => {
     setIsLoading(true); // Show loader
 
     try {
-      const endpoint = 'https://pantry-hub-server.onrender.com/api/auth/login';
+      const endpoint = 'https://kulturalbox-server.onrender.com/api/auth/login';
       const payload = { email, password };
 
       // Make the API request using axios
@@ -37,10 +37,10 @@ const AuthScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Logo */}
-      <Image source={require('../assets/mainlogo.png')} style={styles.logo} />
+      <Image source={require('../assets/Logo2.png')} style={styles.logo} />
 
       {/* Welcome text */}
-      <Text style={styles.welcomeText}>Welcome to FoodDeck</Text>
+      <Text style={styles.welcomeText}>Welcome to KulturalBox</Text>
 
       {/* Email Input */}
       <TextInput
