@@ -13,7 +13,7 @@ const SignupScreen = ({ navigation }) => {
     setIsLoading(true); // Show loader
 
     try {
-      const endpoint =   "https://kulturalbox-server.onrender.com/api/auth/register';
+      const endpoint =   'https://kulturalbox-server.onrender.com/api/auth/register';
       const payload = { name, email, password };
 
       // Make the API request using axios
