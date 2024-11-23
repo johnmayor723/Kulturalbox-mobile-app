@@ -3,7 +3,7 @@ import { Alert, View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Acti
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext'; // Import the AuthContext
-const { login } = useContext(AuthContext); // Access the login function from the AuthContext
+//const { login } = useContext(AuthContext); // Access the login function from the AuthContext
 
 
 
@@ -12,7 +12,7 @@ const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Loading state for loader
-
+  const { login } = useContext(AuthContext); // Access the login function from the AuthContext
   const handleSignup = async () => {
     setIsLoading(true); // Show loader
 
