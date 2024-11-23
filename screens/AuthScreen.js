@@ -77,7 +77,7 @@ const AuthScreen = ({ navigation }) => {
       {/* Navigate to Signup */}
       <TouchableOpacity onPress={() => 
         //navigation.navigate('SignUp')}
-        navigation.dispatch(StackActions.navigate("SignUp"));
+        navigation.dispatch(StackActions.navigate("SignUp"))};
         >
         <Text style={styles.signupText}>Don't have an account? Sign up here</Text>
       </TouchableOpacity>
