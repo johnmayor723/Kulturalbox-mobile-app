@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext, AuthProvider } from './contexts/AuthContext'; // Import AuthContext
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
 
 // Import Screens
 import SplashScreen from './screens/SplashScreen';
@@ -203,9 +212,42 @@ function HomeStack() {
         </Stack.Navigator>
     );
 }
+const AppContent = () => {
+  const { isAuthenticated, setIsAuthenticated  } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const user = await AsyncStorage.getItem('user');
+        if (user) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Error fetching user from AsyncStorage:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkAuthStatus();
+  }, []);
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
+
+
+  
+  return (
+    <NavigationContainer key={isAuthenticated ? 'auth' : 'home'}>
+  {isAuthenticated ? <HomeStack /> : <AuthStack />}
+</NavigationContainer>
+  );
+};
+
 
 // Main App Component
-export default function App() {
+ /*function AppContent() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -234,4 +276,4 @@ export default function App() {
             {isAuthenticated ? <HomeStack /> : <AuthStack />}
         </NavigationContainer>
     );
-  }
+  }*/
