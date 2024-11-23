@@ -4,7 +4,7 @@
     "slug": "KulturalBox",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/appicon.png",
+    "icon": "./assets/Logo2.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/Logo2.png",
