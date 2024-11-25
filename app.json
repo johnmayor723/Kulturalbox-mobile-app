@@ -9,25 +9,28 @@
     "splash": {
       "image": "./assets/Logo2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#fff"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.johnmayor1582.KulturalBox",
+      "version": "1.0.0",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We need your location to show nearby places."
-      },
-      "buildNumber": "1.0.0"
+      }
     },
     "android": {
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#fff"
       },
-      "permissions": ["ACCESS_FINE_LOCATION"],
-      "package": "com.johnmayor1582.KulturalBox",
-      "version": "1.0.0"
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.johnmayor1582.KulturalBox"
     },
     "web": {
       "favicon": "./assets/favicon.png"
