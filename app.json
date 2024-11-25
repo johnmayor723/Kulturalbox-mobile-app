@@ -9,30 +9,25 @@
     "splash": {
       "image": "./assets/Logo2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#fff"
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.johnmayor1582.KulturalBox",
       "infoPlist": {
-        "NSCameraUsageDescription": "We need access to your camera to take photos.",
-        "NSLocationWhenInUseUsageDescription": "We need your location to show nearby places.",
-        "NSMicrophoneUsageDescription": "We need access to your microphone to record audio."
-      }
+        "NSLocationWhenInUseUsageDescription": "We need your location to show nearby places."
+      },
+      "buildNumber": "1.0.0"
     },
     "android": {
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#fff"
+        "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "ACCESS_FINE_LOCATION"
-      ],
-      "package": "com.johnmayor1582.KulturalBox"
+      "permissions": ["ACCESS_FINE_LOCATION"],
+      "package": "com.johnmayor1582.KulturalBox",
+      "version": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
