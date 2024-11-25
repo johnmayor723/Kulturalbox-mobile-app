@@ -13,7 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "1",
+      "bundleIdentifier": "com.johnmayor1582.KulturalBox",
       "infoPlist": {
         "NSCameraUsageDescription": "We need access to your camera to take photos.",
         "NSLocationWhenInUseUsageDescription": "We need your location to show nearby places.",
