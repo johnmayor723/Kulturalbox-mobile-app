@@ -30,7 +30,7 @@ const AuthScreen = ({ navigation }) => {
       Alert.alert('Login successful!', `Welcome ${user.name}`);
       setIsLoading(false); // Hide loader
       login()
-      navigation.replace('Main'); // Navigate to Home or another screen after auth
+      //navigation.replace('Main'); // Navigate to Home or another screen after auth
     } catch (error) {
       setIsLoading(false); // Hide loader
       console.error(error);
